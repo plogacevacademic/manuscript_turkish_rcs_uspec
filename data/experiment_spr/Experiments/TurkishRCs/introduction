@@ -1,0 +1,77 @@
+instruct {
+Okuma ile ilgili olan araştırmamıza hoşgeldiniz. Çalışmamıza katıldığınız için teşekkür ederiz.
+
+Bu çalışmada yaklaşık olarak 100 tane Türkçe cümle okuyacaksınız. Cümlelerin herbiri ayrı ayrı gösterilecektir. Cümleler birbiri ile ilişkili değildir. Her denemenin başında ekranda cümlenin sözcüklerini temsil eden aşağıdaki gibi çizgiler göreceksiniz.   	
+
+---- -------- --------- -- -------- ------ --------------- -----
+
+Bir sonraki sözcüğü görmek için “space” tuşuna basmanız gerekmektedir. Cümlenin ilk sözcüğü açıldığında aşağıdaki gibi bir görüntü göreceksiniz.
+
+Bir -------- --------- -- -------- ------ --------------- -----
+
+“Space” tuşuna tekrar bastığınızda açılmış olan sözcük kapanacak ve bir sonraki sözcük açılacaktır. Aşağıda ilk sözcük olan “bir” kapanmış ve ikinci sözcük olan “çocuk” açılmıştır.
+
+---- çocuk --------- -- -------- ------ --------------- -----
+
+Lütfen cümleleri normal zamanda okuduğunuz gibi ve içinizden, sessizce okuyun. Cümlelerde ne dendiğini anlamanız gerekmektedir. Cümlenin son sözcüğünü okuduktan sonra tekrar “space” tuşuna basın. Tüm çizgiler kaybolacak ve bazı cümlelerin sonunda sorular göreceksiniz. “Evet” için lütfen “K” tuşuna, “Hayır” içinse “D” tuşuna basın. Cümleyle ilgili her soru geldiğinde basmanız gereken tuşlar size ekranın alt kısmında hatırlatılacaktır. Lütfen soruları doğru ve olabildiğince hızlı olarak cevaplayın. Hızlı olabilmeniz için lütfen başparmaklarınız “space” tuşunun üzerinde, işaret parmaklarınızı “D” ve “K” tuşlarında olsun. 
+
+Sorulara cevap verirken, eğer durum cümlede belirtilmemişse “Hayır” seçeneğini tıklayın. Örneğin: “Elçin elma aldı.” -- Soru: “Elçin armut mu aldı?” -- Doğru Cevap: “Hayır”.
+
+Eğer ara vermek isterseniz lütfen cümlelerin başında, ekranda sadece çizgileri gördüğünüzde ara verin. 
+
+Başlamadan önce lütfen cep telefonunuzu kapayın!!!
+}
+
+instruct {
+Özetle:
+1. Ekranda çizgileri gördüğünüzde bir sonraki sözcüğü görmek için “Space” tuşuna basın.
+2. Okuduğunuzu anlamak için normal bir hızda okuyun.
+3. Bir soru gördüğünüzde “Evet” için “K”, “Hayır” için “D” tuşuna olabildiğince hızlı basarak doğru cevabı işaretleyin.
+4. Sadece cümlelere başlamadan önce, ekranda çizgiler varken mola verin.
+
+Uygulamanın bittiğini bilgisayar size haber verecektir. Lütfen bitirdiğinizi uygulamacıya söyleyin.
+Şimdi uygulamaya alışmanız için birkaç örnek cümle göreceksiniz. Sormak istediğiniz bir soru varsa lütfen başlamadan önce uygulamacıya sorun.
+
+İyi eğlenceler!		
+}
+
+command {Şimdi beş örnek cümle ile deneme yapacağız.}
+
+createItem {# practice 1 -
+Ev arkadaşının bütün ısrarlarına rağmen hiç ders çalışmadı.
+? Cümleyi anladınız mı? Y
+}
+presentItem practice:1:-
+
+createItem {# practice 2 -
+Kız elindeki fincanı tabağına dikkatle yerleştirdi.
+}
+presentItem practice:2:-
+
+createItem {# practice 3 -
+Heykelleri büyük bir dikkatle incelediler ama aralarında bir fark göremediler.
+? Aralarında bir fark bulundu mu? N
+}
+presentItem practice:3:-
+
+createItem {# practice 4 -
+O adam tekrar karşılarına çıkınca yine iş istediğini anladılar.
+? Bir adamdan bahsedildi mi? Y
+}
+presentItem practice:4:-
+
+createItem {# practice 5 -
+İçi rahatlayan bahçıvan huzurla sarayı gezmeye çıkmış.
+}
+presentItem practice:5:-
+
+
+
+instruct {Denemeler sona ermiştir. 
+
+Eğer bir sorunuz varsa lütfen şimdi sorun. 
+
+Eğer sorunuz yoksa uygulamaya başlayalım.
+}
+
+

@@ -1,0 +1,35 @@
+[BeGaze]
+Converted from:	C:\Program Files\SMI\Experiment Suite 360\Experiment Center 2\Results\RC-Attachment-Exp\P16-eye_data.idf
+Date:	18.03.2012 20:11:59
+Version:	BeGaze 3.0.181
+Sample Rate:	500
+Subject:	P16
+Description:	Run21
+
+Table Header for Fixations:
+Event Type	Trial	Number	Start	End	Duration	Location X	Location Y	Dispersion X	Dispersion Y	Plane	Avg. Pupil Size X	Avg. Pupil Size Y
+
+Table Header for Saccades:
+Event Type	Trial	Number	Start	End	Duration	Start Loc.X	Start Loc.Y	End Loc.X	End Loc.Y	Amplitude	Peak Speed	Peak Speed At	Average Speed	Peak Accel.	Peak Decel.	Average Accel.
+
+Table Header for Blinks:
+Event Type	Trial	Number	Start	End	Duration
+
+Table Header for User Events:
+Event Type	Trial	Number	Start	Description
+
+UserEvent	1	1	1269164448	# Message: intro-3.jpg
+Fixation L	1	1	1269165757	1269396423	230666	442.03	433.76	24	21	-1	10.00	10.00
+Fixation R	1	1	1269165757	1269396423	230666	442.03	433.76	24	21	-1	10.19	10.19
+Saccade L	1	1	1269396423	1269420424	24001	445.49	423.71	519.15	441.66	1.56	112.78	0.50	65.11	4435.25	-4151.27	3084.05
+Saccade R	1	1	1269396423	1269420424	24001	445.49	423.71	519.15	441.66	1.56	112.78	0.50	65.11	4435.25	-4151.27	3084.05
+Fixation L	1	2	1269420424	1269560432	140008	515.46	434.27	23	15	-1	10.11	10.11
+Fixation R	1	2	1269420424	1269560432	140008	515.46	434.27	23	15	-1	10.42	10.42
+Saccade L	1	2	1269560432	1269636534	76102	513.68	427.50	927.83	849.90	13.76	278.74	0.50	180.86	10295.84	-9591.92	5809.16
+Saccade R	1	2	1269560432	1269636534	76102	513.68	427.50	927.83	849.90	13.76	278.74	0.50	180.86	10295.84	-9591.92	5809.16
+Fixation L	1	3	1269636534	1269780529	143995	936.15	856.06	28	21	-1	10.24	10.24
+Fixation R	1	3	1269636534	1269780529	143995	936.15	856.06	28	21	-1	10.63	10.63
+Saccade L	1	3	1269780529	1269810527	29998	947.69	849.58	920.72	930.19	1.81	107.29	0.61	60.36	4444.07	-4085.41	3143.56
+Saccade R	1	3	1269780529	1269810527	29998	947.69	849.58	920.72	930.19	1.81	107.29	0.61	60.36	4444.07	-4085.41	3143.56
+Fixation L	1	4	1269810527	1270320901	510374	916.04	929.12	46	22	-1	10.39	10.39
+Fixation R	1	4	1269810527	1270320901	510374	916.04	929.12	46	22	-1	10.81	10.81

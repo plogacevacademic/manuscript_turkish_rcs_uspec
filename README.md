@@ -1,1 +1,0 @@
-# manuscript_turkish_rcs_uspec

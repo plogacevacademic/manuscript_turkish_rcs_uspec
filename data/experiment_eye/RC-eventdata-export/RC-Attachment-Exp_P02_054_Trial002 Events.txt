@@ -1,0 +1,33 @@
+[BeGaze]
+Converted from:	C:\Program Files\SMI\Experiment Suite 360\Experiment Center 2\Results\RC-Attachment-Exp\P02-eye_data.idf
+Date:	18.03.2012 20:02:59
+Version:	BeGaze 3.0.181
+Sample Rate:	500
+Subject:	P02
+Description:	Run2
+
+Table Header for Fixations:
+Event Type	Trial	Number	Start	End	Duration	Location X	Location Y	Dispersion X	Dispersion Y	Plane	Avg. Pupil Size X	Avg. Pupil Size Y
+
+Table Header for Saccades:
+Event Type	Trial	Number	Start	End	Duration	Start Loc.X	Start Loc.Y	End Loc.X	End Loc.Y	Amplitude	Peak Speed	Peak Speed At	Average Speed	Peak Accel.	Peak Decel.	Average Accel.
+
+Table Header for Blinks:
+Event Type	Trial	Number	Start	End	Duration
+
+Table Header for User Events:
+Event Type	Trial	Number	Start	Description
+
+UserEvent	1	1	3027499766	# Message: int-1.jpg
+Fixation L	1	1	3027511822	3027748624	236802	847.52	973.73	913	1100	-1	13.40	13.40
+Fixation R	1	1	3027511822	3027748624	236802	847.52	973.73	913	1100	-1	14.11	14.11
+Saccade L	1	1	3027748624	3027794807	46183	908.05	1041.43	904.97	1044.72	3.50	162.55	0.59	75.70	4661.22	-3742.86	2473.56
+Saccade R	1	1	3027748624	3027794807	46183	908.05	1041.43	904.97	1044.72	3.50	162.55	0.59	75.70	4661.22	-3742.86	2473.56
+Saccade L	1	2	3027794807	3027822775	27968	904.97	1044.72	939.68	976.19	1.90	117.45	0.57	68.11	3292.74	-3912.47	2687.64
+Saccade R	1	2	3027794807	3027822775	27968	904.97	1044.72	939.68	976.19	1.90	117.45	0.57	68.11	3292.74	-3912.47	2687.64
+Saccade L	1	3	3027830785	3027888744	57959	933.29	975.78	902.53	1039.28	2.70	117.58	0.69	46.66	2428.14	-4172.26	1680.76
+Saccade R	1	3	3027830785	3027888744	57959	933.29	975.78	902.53	1039.28	2.70	117.58	0.69	46.66	2428.14	-4172.26	1680.76
+Fixation L	1	2	3027888744	3027940741	51997	907.07	1034.97	9	44	-1	14.21	14.21
+Fixation R	1	2	3027888744	3027940741	51997	907.07	1034.97	9	44	-1	15.10	15.10
+Saccade L	1	4	3027940741	3027974799	34058	912.93	1036.87	854.68	1008.68	1.52	77.49	0.35	44.73	2652.48	-2412.90	1693.59
+Saccade R	1	4	3027940741	3027974799	34058	912.93	1036.87	854.68	1008.68	1.52	77.49	0.35	44.73	2652.48	-2412.90	1693.59

@@ -1,0 +1,33 @@
+[BeGaze]
+Converted from:	C:\Program Files\SMI\Experiment Suite 360\Experiment Center 2\Results\RC-Attachment-Exp\P21-eye_data.idf
+Date:	18.03.2012 20:16:09
+Version:	BeGaze 3.0.181
+Sample Rate:	500
+Subject:	P21
+Description:	Run26
+
+Table Header for Fixations:
+Event Type	Trial	Number	Start	End	Duration	Location X	Location Y	Dispersion X	Dispersion Y	Plane	Avg. Pupil Size X	Avg. Pupil Size Y
+
+Table Header for Saccades:
+Event Type	Trial	Number	Start	End	Duration	Start Loc.X	Start Loc.Y	End Loc.X	End Loc.Y	Amplitude	Peak Speed	Peak Speed At	Average Speed	Peak Accel.	Peak Decel.	Average Accel.
+
+Table Header for Blinks:
+Event Type	Trial	Number	Start	End	Duration
+
+Table Header for User Events:
+Event Type	Trial	Number	Start	Description
+
+UserEvent	1	1	19672178259	# Message: intro-3.jpg
+Fixation L	1	1	19672178921	19672899106	720185	454.55	458.67	47	66	-1	16.13	16.13
+Fixation R	1	1	19672178921	19672899106	720185	454.55	458.67	47	66	-1	16.47	16.47
+Saccade L	1	1	19672899106	19672963215	64109	462.06	478.45	942.46	1047.10	17.46	458.73	0.47	272.29	19056.30	-17093.27	11954.50
+Saccade R	1	1	19672899106	19672963215	64109	462.06	478.45	942.46	1047.10	17.46	458.73	0.47	272.29	19056.30	-17093.27	11954.50
+Saccade L	1	2	19672969216	19673021220	52004	942.20	1044.19	910.23	966.92	1.84	62.34	0.23	35.38	2090.60	-1473.40	876.06
+Saccade R	1	2	19672969216	19673021220	52004	942.20	1044.19	910.23	966.92	1.84	62.34	0.23	35.38	2090.60	-1473.40	876.06
+Fixation L	1	2	19673021220	19673143204	121984	878.37	943.43	46	57	-1	16.34	16.34
+Fixation R	1	2	19673021220	19673143204	121984	878.37	943.43	46	57	-1	16.73	16.73
+Blink L	1	1	19673143204	19673325319	182115
+Blink R	1	1	19673143204	19673325319	182115
+Fixation L	1	3	19673325319	19673753571	428252	893.93	925.79	25	114	-1	16.22	16.22
+Fixation R	1	3	19673325319	19673753571	428252	893.93	925.79	25	114	-1	16.50	16.50

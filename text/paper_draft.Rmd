@@ -1,0 +1,1325 @@
+---
+title             : "Incrementality in Pre-nominal Relative Clause Attachment"
+shorttitle        : "Pre-nominal Clause Attachment"
+author: 
+  - name          : "Pavel Logačev"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "Postal address"
+    email         : "pavel.logacev@boun.edu.tr"
+  - name          : "Özgur Aydın"
+    affiliation   : "2"
+  - name          : "Müge Tuncer"
+    affiliation   : "3"
+affiliation:
+  - id            : "1"
+    institution   : "Boğaziçi University University, Istanbul, Turkey"
+  - id            : "2"
+    institution   : "Ankara University, Ankara, Turkey"
+  - id            : "3"
+    institution   : "Anadolu University, Eskişehir, Turkey"
+authornote: |
+  Add complete departmental affiliations for each author here. Each new line herein must be indented, like this line.
+  Enter author note here.
+abstract: |
+  One or two sentences providing a **basic introduction** to the field,  comprehensible to a scientist in any discipline.
+  
+  Two to three sentences of **more detailed background**, comprehensible  to scientists in related disciplines.
+  
+  One sentence clearly stating the **general problem** being addressed by  this particular study.
+  
+  One sentence summarizing the main result (with the words "**here we show**" or their equivalent).
+  
+  Two or three sentences explaining what the **main result** reveals in direct comparison to what was thought to be the case previously, or how the  main result adds to previous knowledge.
+  
+  One or two sentences to put the results into a more **general context**.
+  
+  Two or three sentences to provide a **broader perspective**, readily comprehensible to a scientist in any discipline.
+  
+  
+  <!-- https://tinyurl.com/ybremelq -->
+keywords          : "keywords"
+wordcount         : "X"
+bibliography      : ["library.bib", "r-references.bib"]
+floatsintext      : no
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+linenumbers       : no
+mask              : no
+draft             : no
+documentclass     : "apa6"
+classoption       : "doc"
+output:
+  papaja::apa6_pdf:
+    keep_md: yes 
+    keep_tex: yes
+    includes:
+        in_header: paper_draft_preamble.tex
+  html_document:
+    keep_md: yes 
+  papaja::apa6_word:
+    fig_caption: yes
+editor_options: 
+  chunk_output_type: console
+---
+<!-- 
+-->
+<!-- 
+to-do:
+- cite papaja
+-->
+```{r setup, include = FALSE}
+library("papaja")
+```
+
+```{r analysis-preferences, echo = FALSE}
+# Seed for random number generation
+set.seed(42)
+knitr::opts_chunk$set(encoding = 'UTF-8',
+                      cache.extra = knitr::rand_seed,
+                      echo = FALSE,
+                      results = 'hide',
+                      cache = './cache/')
+```
+
+
+```{r init, message=FALSE, warning=FALSE}
+library(plyr)
+library(dplyr)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+theme_set(theme_bw())
+
+library(car, warn.conflicts = FALSE)
+library(MASS)
+library(brms)
+library(xtable)
+library(ggpubr)
+library(knitcitations)
+
+
+source("../../../Code/plmisc/R/misc.R")
+
+```
+
+One important question in human sentence comprehension has always been how the human parser deals with ambiguity. A central phenomenon in that regard is the ambiguity advantage, first reported by @TraxlerEtAl:1998, who found that sentences with globally ambiguous relative clause attachment such as (\ref{Traxler98}a) were read faster than their locally ambiguous counterparts, such as (\ref{Traxler98}b) and (\ref{Traxler98}c). @vanGompelEtAl:2000 proposed a variable-choice two-stage model of ambiguity resolution to explain this finding: According to their unrestricted race model (URM), the parser uses all available information to immediately resolve the attachment ambiguity as early as possible – in this case, at the first word of the relative clause in (\ref{Traxler98}). It does so by attempting to compute all possible structures simultaneously when it encounters an ambiguity, and choosing the structure which is completed first. When faced with a relative clause (RC) attachment ambiguity, such as in (\ref{Traxler98}), the parser tries to attach the relative clause to each of the two available noun phrases simultaneously: NP1 (headed by *son*) and NP2 (headed by *driver). The URM further assumes that the time required to attach the relative clause to either noun phrase varies from trial to trial and depends on a variety of factors, such as the frequency of modification of NP1 and NP2, discourse-level information, and world knowledge. In consequence, when the parser encounters an ambiguity, it forms an N1 attachment when it is computed the fastest, or an N2 attachment when it is computed the fastest.
+
+
+
+ \begin{exe}
+ 	\ex \label{Traxler98}
+ 	  \begin{xlist}
+ 		\ex \textsc{globally ambiguous} \\ 
+ 		    The son of the driver \textit{that had the moustache} was pretty cool.
+ 		\ex \textsc{locally ambiguous, N1 attachment} \\ 
+ 		     The car of the driver \textit{that had the moustache} was pretty cool.
+ 		\ex \textsc{locally ambiguous, N2 attachment} \\
+ 		    The driver of the car \textit{that had the moustache} was pretty cool.
+		\end{xlist}
+ \end{exe}
+
+Because this local ambiguity is sometimes resolved towards one reading and sometimes towards the other in all attachment conditions, disambiguation of the local ambiguity at *moustache* results in occasional reanalysis in both unambiguous conditions, (\ref{Traxler98}b) and (\ref{Traxler98}c). Since globally ambiguous sentences like (\ref{Traxler98}a) are never disambiguated, reanalysis is never required. Therefore, on a certain proportion of occasions, locally ambiguous sentences cause reanalysis-related slowdowns, while globally ambiguous sentences do not, resulting in an ambiguity advantage. The ambiguity advantage effect has been replicated in multiple experiments [@vanGompelEtAl:2001; @vanGompelEtAl:2005; @vonderMalsburgVasishth:2013, @DillonEtAl:2019].
+
+Multiple alternative explanations of the ambiguity advantage, such as Surprisal [@Levy:2008], and constraint-based models [@GreenMitchell:2006; @VosseKempen:2009] have been proposed. Importantly, there are alternative explanations for this finding. For instance, Levy’s (2008) independently motivated surprisal account (cf. also @Hale:2001) posits that the processing difficulty at each word is proportional to the word’s surprisal value, that is, to its negative conditional log-probability, given the context. According to the surprisal account, the potentially disambiguating word “moustache” is associated with higher surprisal in locally ambiguous sentences such as (\ref{Traxler98}b) and (\ref{Traxler98}c) than in globally ambiguous sentences such as (\ref{Traxler98}a) because it is compatible with both possible structures in ambiguous sentences, but with only one structure in unambiguous sentences. Thus, the potentially disambiguating word has a higher conditional probability in ambiguous sentences than in unambiguous sentences. Because higher conditional probability corresponds to lower surprisal, the lower reading times in globally ambiguous conditions compared to the locally ambiguous conditions are explained by the lower surprisal in ambiguous sentences.
+
+Another influential alternative account has been the underspecification account [@SwetsEtAl:2008], which posits that the parser may underspecify ambiguities if their disambiguation is not required by the task. They argue that because participants in the studies by Traxler et al., as well as Van Gompel et al. were asked fairly superficial questions about the sentences they read, they decided that ambiguous sentences don’t need to be disambiguated as they knew that they wouldn’t be asked comprehension questions about the ambiguous grammatical relation. In other words, readers underspecify RC attachment when they believe that it is irrelevant. For example, RCs with ambiguous attachment such as in sentence (\ref{Traxler98}a) are not attached to NP1 or NP2, but instead are associated with the entire complex NP indicating attachment to any constituent within the complex NP.
+Swets et al. further postulate that underspecification of ambiguous relative clause attachment saves time, which explains the ambiguity advantage attested in the abovementioned studies. Importantly, underspecification is assumed to be a viable strategy only when tasks demands do not require disambiguation. Swets et al. tested this explanation by conducting a self-paced reading study in which participants read sentences such as in (\ref{Swets08}) and were asked either (i) superficial questions such as *'Was anyone humiliated/proud?'* or (ii) questions about the RC attachment ambiguity *'Did the maid/princess/son scratch in public?'*. They found an ambiguity advantage effect in the reading time data of participants in the superficial questions group, while the RC questions group did not display such an effect. Based on these findings, Swets et al. argue that the type of questions asked modulates task demands and thus switches underspecification on and off.
+
+ \begin{exe}
+ 	\ex \label{Swets08}
+ 	  \begin{xlist}
+ 		\ex \textsc{globally ambiguous} \\ 
+ 		     The maid of the princess who scratched herself in public was terribly humiliated.
+ 		\ex \textsc{locally ambiguous, N1 attachment} \\ The son of the princess who scratched himself in public was terribly humiliated. 
+ 		\ex \textsc{locally ambiguous, N2 attachment} \\ The son of the princess who scratched herself in public was terribly humiliated.
+		\end{xlist}
+ \end{exe}
+
+While Swets et al.’s findings do constitute evidence for a certain degree of influence of task-demands in reading, they do not necessarily constitute evidence for underspecification. @LogacevVasishth:2016 have demonstrated that Swets et al.’s findings are compatible with a race-based account as well, under the assumption that relative clauses are attached only after they have been processed, which is also a necessary assumption of the underspecification account. According to their proposal, called *SMCM* (*stochastic multiple channel model*), the ambiguity advantage arises as a result of so-called statistical facilitation (@Raab:1962) due to a race between two independent attachment processes. Because ambiguous sentences have two possible readings while unambiguous sentences have only one, a race between two independent attachment processes executed in parallel leads to a decrease in average processing times because the probability that a race between two independent processes of approximately the same speed terminates quickly is higher than the probability that a specific process will do so. Using a computational implementation of the SMCM model, Logačev and Vasishth demonstrate that the Swets et al. findings are compatible with a race model like the SMCM, under the assumption that task demands have differential effects on preferred and dispreferred relative clause attachment times. 
+The latter assumption is supported by Swets et al.’s finding that the difference in reading times between sentences with preferred and dispreferred unambiguous attachment was bigger in the RC questions condition than in the superficial questions condition. While the mechanism causing this interaction between task demands and attachment remains unclear, Swets et al.’s findings appear to be compatible with models that do not assume a modulation of the ambiguity resolution strategy by task demands. Importantly, both accounts of Swets et al.’s findings (the underspecification account and the SMCM) must assume some mechanism by which task demands affect either the duration or the quality of some parsing operations, even in unambiguous sentences. While we are not aware of any independent evidence for an interaction between sentence complexity and task demands, it is in line with prior research demonstrating the influence of task demands on reading [@KaakinenHyona:2010, @Schotter:2014, @WotschackKliegl:2013, @WeissEtAl:2018, @DempseyBrehm:2020].
+
+
+Our aim in this paper is to test the idea that readers strategically underspecify attachment in order to save time. According to Swets et al.’s underspecification account, the parser chooses to underspecify ambiguous sentences whenever doing so doesn’t conflict with carrying out what is perceived as the main experimental task, such as answering comprehension questions. Importantly, the underspecification mechanism could function in one of two ways: One possibility is that the parser routinely underspecifies RC attachment ambiguities when it first encounters them (i.e., at the relative pronoun), task demands permitting. Later, it disambiguates them, when that is deemed necessary, or if the ambiguity is disambiguated. We will refer to this mechanism as early underspecification. A second possibility is that the parser delays RC attachment until it has processed the key parts of the RC (at a minimum, the verb and its core arguments). Having done so, it decides whether to attach or to underspecify based on whether the RC is ambiguous and the task demands. We will refer to this mechanism as late underspecification.
+
+---
+
+When both attachment sites become available sim ...
+
+- When readings become available successively, early underspecification predicts underspecification at N1 when possible, followed by no disambiguation in ambiguous conditions, which means there should be an ambiguity advantage
+
+- When readings become available successively, late underspecification predicts 
+
+- … super-late underspecification (wait till N1 N2 over) predicts an amb adv as well
+
+As a result, their qualitative predictions are the same when it comes to relative clause attachment ambiguities such as (1) and (2), where both attachment sites become available simultaneously, because they precede the relative clause. Importantly, this may not be the case if the different readings became available successively. 
+
+A key assumption of the underspecification account and the SMCM is that the parser’s strategy for dealing with ambiguity can change in accordance with task demands. According to the SMCM, the parser can either (i) adopt the structure which is created the fastest, or (ii) wait for several permissible structures to be computed. 
+
+... “It seems that of these two, the underspecification parser is potentially a bit more flexible than the SMCM because it apparently has the power to suspend, and by extension probably also delay parsing decisions” ... “we will try to find out how flexible it really is” (The above para needs to be more about “how strategic is the parser”.)
+
+“In the following we will attempt to find out at what cost the parser is willing to save time by (1) figuring out the predictions .”
+
+
+
+<!-- in the following, explain how we'll use the terms NP1/NP2 and N1/N2, and the relationship -->
+
+
+# Ambiguity resolution in pre- and post-nominal relative clauses
+
+In the sentences in (\ref{Traxler98}) and (\ref{Swets08}), both, race models as well as the underspecification account predict the occurrence of the ambiguity advantage at the relative clause. This is because relative clauses in English are post-nominal, i.e., they follow the noun phrases they modify. As a result, when readers have processed a post-nominal relative clause to a sufficient degree to attach it, both potential attachment sites are immediately available, allowing the parser to either start a race, or to underspecify. The situation is quite different in languages with pre-nominal relative clauses, such as Turkish (@GokselKerslake:2005). In constructions like (\ref{TurkishEx}), the attachment sites become available successively, after the relative clause has been processed. For example, in the globally ambiguous sentence in (\ref{TurkishEx}), the relative clause *'who cried'* modifies either the complex subject noun phrase headed by *aunt* (N2), or its genitive possessor *girl* (N1). Thus, this sentence can either mean that the girl had cried (local attachment; to the NP headed by N1), or that the girl's aunt had cried (non-local attachment; to the NP headed by N2). For the sake of clarity, we will refer to these attachment conditions as N1 and N2 attachment (i.e., with regard to the position of the NP's head noun). ^[This is to avoid any confusion due to the fact that prior literature on RC attachment in Turkish [@Nazik; @Ankara1; @Ankara2] labeled them based on the level of syntactic embedding, with NP2, the noun phrase in the lower syntactic position, being headed by N1.]
+
+\begin{exe}
+	\ex \label{TurkishEx} 
+\gll $[$Sokakta ağlayan$]_{RC}$ kızın halası evde arkadaşlarını bekledi. \\
+    {on the street} {cried} {the girl's} aunt {at home} {her friends} waited. \\
+    `The aunt of the girl who had cried on the street waited for her friends at home.'
+\end{exe}
+
+The earliest point in this sentence at which an attachment can be made is the first noun (*girl*). This is because after reading this noun, the parser has processed a relative clause, as well as a potential attachment site for it. Therefore, a dependency between *girl* and *'who had cried'* can be established. However, the parser does not yet know whether the sentence is ambiguous, but importantly, it has good reason to believe that it might be. This is because the genitive case suffix on the first noun phrase signals that it is likely the possessor of a complex noun phrase and that the parser can thus expect another potential attachment site at the next word.
+
+--- Prior research on Turkish (Kirkici, Nazik, Ankara1, Ankara2) ---
+
+The fact that the two possible attachment sites are encountered successively makes this structure particularly interesting for testing the idea that the parser strategically underspecifies relative clause attachment in order to save time. This is because the optimal time-saving strategy in processing this structure would be underspecification of attachment when N1 is encountered. The next step in ambiguous sentences, when N1 is followed by an N2 to which the RC can also attach, the parser can maintain the underspecified structure.
+In unambiguous sentences, when N1 is followed by an N2 which is incompatible with the RC (or other material to which the RC cannot attach), the parser can fully specify RC attachment at this point. As a result, the strategic underspecification account predicts an ambiguity advantage in the processing of structures with pre-nominal relative clauses like (\ref{TurkishEx}).
+
+The SMCM, on the other hand, assumes that the parser always computes at least one attachment as soon as it can. There is no mechanism by which RC attachment can be delayed. As a result, it predicts that when task demands do not require the computation of both interpretations, the processes that will unfold in ambiguous sentences is the same as in the N1 attachment sentences, and thus does not predict an ambiguity advantage.
+
+We conducted two experiments in order to test these predictions. In both experiments, task demands were superficial. In experiment 1, we disambiguated RC attachment by means of animacy, while in experiment 2 RC attachment was disambiguated morphosyntactically.
+
+
+# Experiment 1
+
+For this experiment, we created three types of sentences exemplified in (\ref{StimExp1}a,b,c). Which NPs were available as attachment attachment sites was manipulated by means of animacy of N1 and N2: For example, in sentence (\ref{StimExp1}b) the relative clause “who was shouting in the school building” can attach only to the noun *principal*, but not to *voice*, whereas in sentence (\ref{StimExp1}c) the relative clause *'who was fired'* can attach only to the noun *cook* but not to *yacht*. In (\ref{StimExp1}a), on the other hand, both nouns are potential agents of crying, and therefore RC attachment is ambiguous.
+
+\begin{exe}
+\ex \label{StimExp1}
+\begin{xlist} 
+
+\item{}\textsc{ambiguous attachment}{} 
+\gll $[$Sokakta ağlayan$]_{RC}$ kızın halası evde arkadaşlarını bekledi. \\
+    {on the street} {cried} {the girl's} aunt {at home} {her friends} waited. \\
+    `The aunt of the girl who had cried on the street waited for her friends at home.'
+          
+\item{}\textsc{unambiguous, N1 attachment}{} 
+  \gll $[$Okulda bağıran$]_{RC}$    müdürün   sesi   caddenin            karşısında duyuldu. \\
+      {in the school building} {shouting} principal voice  street.\textsc{gen} opposite   hear. \\
+`The voice of the principal who was shouting in the school building was audible from across the street.'
+
+\item{}\textsc{unambiguous, N2 attachment}{} 
+ \gll $[$İşten çıkarılan$]_{RC}$  yatın              aşçısı  işverenden      parasını    almadı. \\
+{from work} {dismissed} yacht.\textsc{gen} cook    {from employer} {his money} {did not take}    \\
+`The yacht's cook who was fired by his employer did not take his money.'
+
+\end{xlist}
+\end{exe}
+
+According to the SMCM, the parser should attempt RC attachment while at N1, which would successfully terminate in the N1 attachment and in the ambiguous attachment conditions. At N2, no additional RC attachment should be carried out because the occasional comprehension questions in this experiment should not encourage the computation of a second interpretation of the sentence. In the N2 attachment condition, in contrast, the attempt at RC attachment at N1 will fail. At N2, RC attachment would be carried out successfully, resulting in a slowdown relative to the other two questions. It’s not clear whether the parser’s failure to attach the RC to N2 should lead to a speedup, a slowdown, or no appreciable difference in reading times.
+
+The underspecification account makes one of two predictions. Under the assumption that the parser strategically uses underspecification to avoid unnecessary processing, we would expect it to always underspecify RC attachment during the processing of N1, in case it turns out that it doesn’t attach at all. Then, at N2, RC attachment should be carried out in NP1 and N2 attachment conditions. In the ambiguous condition, no such thing is expected to happen since there is no need to disambiguate the sentence when comprehension questions are occasional, as in this experiment. As a result, we expect no difference in reading times at N1, since we underspecify in all conditions, and an ambiguity advantage at N2, since the parser will attach the RC at N2 in both unambiguous conditions but not in the ambiguous condition. Moreover, we may expect a difference between the two unambiguous conditions.
+
+Under the assumption that the parser can't routinely underspecify RC attachment in anticipation of an ambiguity, and can only do so if both attachment sites are available, the underspecification account’s prediction match the predictions of the SMCM: early attachment at N1 in the N1 attachment and ambiguous conditions, and late attachment at N2 in the N2 attachment condition.
+
+<!-- <put at the end, general discussion>
+While it is possible, in principle, that for some reason, the parser requires clear evidence of ambiguity in order to decide to underspecify, and therefore requires both attachment sites to be available simulataneously in order to notice that the sentence is ambiguous, it is not clear why that would be so. 
+-->
+
+
+<!--
+% Expected magnitude of the ambiguity advantage:
+% 
+%% Comparison is complicated by the fact that all experiments involved other manipulations too, such as attachment bias based on plausibility of certain attachments
+% ambiguity advantage = preferred (fastest) unambiguous minus ambiguous 
+%
+%TraxlerEtAl:1998 
+%   - 92 ms (TFT), at disambiguating (moustache), Experiment 1 (RCs)
+%   - 27 ms (TFT), at disambiguating (herself), Experiment 2 (RCs)
+%VanGompelPickeringTraxler2001,
+%   - 122 ms (TFT), at spill-over, Experiment 1 (PP)
+%   - 41 ms (TFT) at spill-over, 120 ms (RPD) at spill-over, Experiment 2 (PP)
+%vanGompelEtAl:2005
+%   - 26 ms (RPD) at disambiguating, 50 ms (TFT) at disambiguating, 
+%   - 86 ms (RPD) at spill-over, 79 ms (TFT) at spill-over, Experiment 1 (PP)
+%   - 31 ms (RPD), spill-over, 36 ms (TFT) disambiguating, 
+%   - 83 ms (TFT), spill-over, Experiment 2 (RCs) 
+% SwetsEtAl:2008
+%   - 52 ms (superficial)
+%   - 36 ms (occasional superficial) [both SPR] 
+-->
+```{r emPriorEffectSize, results='hide', message=FALSE, warning=FALSE}
+prior_amb_adv_ms <- c(92,27,122,41,26,86,31,83,52,36)
+```
+
+The underspecification account predicts a speed-up in the ambiguous condition at the second noun, compared to the local attachment condition. This prediction translates into an interaction between modifier type and the grammatical number of the second noun. Reading should slow down in RC attachment conditions when the second noun is singular. The URM makes predictions concerning the same interaction. Its prediction about the lack of an ambiguity advantage in Turkish translates into a predicted lack of an interaction. In other words, there should not be any significant interaction between modifier type and the grammatical number of the second noun in the RC attachment conditions.
+
+Importantly, because the URM predicts no significant attachment-related speed-up; in other words, a statistical null-result is expected under this account. In order to differentiate between possible outcomes compatible with the URM and strategic underspecification, respectively, we need to quantify the expected magnitude of an ambiguity advantage. @SwetsEtAl:2008 is to the best of our knowledge the only study which has demonstrated an ambiguity advantage in self-paced reading. They found ambiguity advantage effects of $52\,ms$ and $36\,ms$ in the superficial and occasional questions conditions respectively, though the latter was not significant. Three other studies have found evidence for this effect in eye tracking experiments: the original @TraxlerEtAl:1998 article presented ambiguity-related speedups between $92\,ms$ and $32\,ms$ in total reading times at the disambiguating region in two eye tracking experiments. Both experiments involved relative clause attachment. In further two experiments concerning attachment of prepositional phrases, @vanGompelEtAl:2001 presented effects between $41\,ms$ and $122\,ms$, mostly in total reading times, and one in regression-path duration. Furthermore, @vanGompelEtAl:2005 demonstrated speedups between 26ms and 86ms in total reading time and regression-path durations. This pattern suggests that most ambiguity advantage effects appear to concentrate somewhere around $50\,ms$. Thus, under the strategic underspecification account, we expect an attachment-related speedup of approximately $50\,ms$. Under the SMCM, we expect no such speed-up.
+
+The key question we wanted to answer with this experiment is whether there is an ambiguity advantage in Turkish, under task demands that have produced one in English. We operationalized an ambiguity advantage as the observation of a speed-up in the ambiguous condition relative to *both* unambiguous conditions and its magnitude as the difference between the fastest unambiguous condition and the ambiguous condition. Since the smallest previously observed ambiguity advantage effect in prior literature [@TraxlerEtAl:1998; @vanGompelEtAl:2001; @vanGompelEtAl:2005; @SwetsEtAl:2008] amounted to a $26\,ms$ difference between the preferred unambiguous condition and the ambiguous condition (range: $26\,ms-122\,ms$), we expected an effect of at least that magnitude.
+
+
+## Method
+
+### Materials
+We constructed 36 experimental sentences such as in (\ref{StimExp1}), i.e., twelve for each attachment condition. Disambiguation was effected by means of animacy. Relative clauses always comprised two words. The critical region and the spillover region were approximately equal in length across the three conditions: (cf. Table \ref{tab:eyeStimuliStats}).
+
+
+```{r eyeStimuliStats, eval=TRUE, results='asis'}
+
+stimulus_lengths <- 
+    data.frame('pre-critical' = c("7.4 (1.2; 6-10)", "6.7 (0.9; 5-8)", "7.8 (1.1; 7-10)"), 
+               'Noun 1'    = c("5.8 (1.1; 4-7)", "5.7 (1.2; 4-8)", "5.7 (1.2; 3-7)"), 
+               'Noun 2'    = c("5.4 (1.0; 4-7)", "5.3 (1.2; 3-7)", "5.3 (1.2; 3-7)"),
+               'spillover' = c("5.5 (2.0; 3-9)", "5.5 (1.7; 3-8)", "5.7 (3.1; 3-13)")
+              )
+colnames(stimulus_lengths) <- c("pre-critical", "noun 1", "noun 2", "spillover")
+
+
+knitr::kable(stimulus_lengths, caption = "Average word length by condition and position in the sentence. We considered the positions pre-critical ('shouting'), noun 1 ('principal'), noun 2 ('voice'), and spill-over ('street'). (Standard deviations and range in parentheses.)") %>% print()
+
+```
+
+### Participants
+
+A group of 39 native Turkish speakers aged 18–28 (mean = 23; SD = 3.2), who were students at Ankara University (in Ankara, Turkey) at the time of testing, participated in the study. All of the participants reported to have normal or corrected to normal vision; none of them reported to have extensive stays abroad or neurological/psychiatric disorder that may impact language comprehension ability in Turkish. The participants were informed that their participation was voluntary and were asked to give their consent allowing us to anonymously process their experimental data for scientific purposes.
+Participants provided informed consent and the procedures in this study were compliant with the Ankara University research ethics requirements as well as with the ethical principles outlined in the Helsinki Declaration on research involving human subjects.
+
+### Procedure
+
+All the experiments took place at Ankara University Linguistics Laboratory (http://dilab.ankara.edu.tr/), with each participant individually in a single session. The participants were required to perform the sentence processing task in a dimly lit room and seated within 60 cm distance from a 1680 x 1050 pixels 22-inch LCD desktop monitor with 60 Hz refresh rate.
+During the performance of the sentence processing task, the eye-tracker device (RED 500 by Sensor Motoric Instruments, SMI) with chin rest recorded the participants' binocular eyes movements at a sampling rate of $500\,Hz$, but only the left eye was analyzed. Before beginning the sentence processing task, participants were told that they would read Turkish sentences and answer comprehension questions on the computer screen while the eye-tracker recorded their eye movements.
+Each participant was given a practice session to get used to the dynamics of the task. A 5-point calibration was executed before and after the practice. During the testing phase, each participant read forty-eight sentences (36 test sentences and 12 filler sentences) in two sentence blocks of twenty-four sentences each. 
+Before each sentence, a fixation cross appeared for 500 ms trigger duration, in order to help the participants to fixate their eyes in the initial point of each sentence on the screen. The sentences appeared on the screen one at a time in one line in a grey background. The degree of angle per character was 0.074 cm (Courier New, 36 point). After every two sentences, superficial questions or questions questions about the RC attachment ambiguity related to the last sentence read was presented, the answer to which was given by clicking on one of two responses shown on the screen. Each session lasted about 25 minutes.
+
+
+### Statistical Analysis
+
+We excluded all fixations which were shorter than 80 ms or longer than 1200 ms prior to using the *em2* package [@LogacevVasishth:2013] in `r cite_r()` for computing reading time measures from the eye movement record. We used the *tidyverse* and *ggplot2* packages `r knitcitations::citep( c(citation("tidyverse"), citation("ggplot2")) )` for data processing and plotting, and the R packages *brms* `r citep(citation("brms"))` and *rstan* `r citep(citation("rstan"))` to fit Bayesian generalized hierarchical linear models [e.g., @GelmanHill:2007; @McElreath:2016; @Kruschke:2015; @VasishthEtAl:2019] to the eye-tracking measures of interest. 
+The discrete dependent measures regression probability and probability of refixation were modeled with generalized hierarchical linear models with a logit-link.
+All reading time measures were modeled using generalized hierarchical linear models assuming log-normally distributed residuals. 
+We used normal priors for all coefficients for both, log-normal models ($\mu=0$, $\sigma=0.2$), as well as logit models ($\mu=0$, $\sigma=1$). All models were fitted using four chains with $2,500$ post-warmup samples each. 
+
+The models presented below included fixed effects of attachment coded using orthogonal simple contrasts (comparing each of the unambiguous attachment condition to the ambiguous condition), as well as centered log word length as predictors. Word length was used as a covariate in order to account for any differences in critical word length between our experimental sentences. We included random intercepts for participants and items, as well as maximal by-participant random slopes and correlations between random effects.
+
+While all coefficients for reading time measures were estimated using sum contrasts on a log-scale, we used the model's posterior MCMC samples to construct 95% credible intervals for the pairwise differences between each of the unambiguous conditions and the ambiguous condition on the original scale (in *milliseconds*). Doing so allowed us to compare the size of the effects we found with previously attested instances of the ambiguity advantage.
+
+
+## Results
+
+The average comprehension questions accuracy was $78.8%$. Figures \ref{fig:EyeRTsPlot1} show a summary of the eye-tracking measures computed for the the critical regions:
+(i) *First-pass reading time* (FPRT), which is the amount of time spent reading a word for the first time when that the first fixation on that word was *progressive* (i.e., the reader has not yet read anything to the right of this word).
+(ii) *Regression-path duration* (RPD), which is the amount of time spent on the word starting with a progressive first fixation, until the gaze moves to the right of that word.
+(iii) *Total fixation time* (TFT), which is the total amount of time spent fixating the critical word, including re-reading.
+(iv) The percentage of *first-pass regressions*, which is the proportion of trials on which readers regress after reading the critical word).
+<!--
+The percentage of *regressive refixations*, which is the proportion of times readers re-inspect a word after looking at another word further to its right.
+-->
+
+```{r Eye.LoadData, results='hide', message=FALSE, warning=FALSE}
+
+crit_em_rc <- read.csv("../data/Experiment_Eye/corrected_data_em.csv")
+crit_em_rc$roiLabel %<>% factor(levels = c("pre-critical", "N1", "N2", "spillover"))
+
+recode_char2double <- function(x, mapping) {
+    x %>% as.character %>% dplyr::recode(!!!mapping) %>% as.double
+}
+recode_char2char <- function(x, mapping) {
+    x %>% as.character %>% dplyr::recode(!!!mapping) %>% as.character
+}
+
+# # # exclude the 5 participants with the least numbers of regions fixated
+# subj_missing_fixations = c("P08", "P22", "P01", "P14", "P07")
+# crit_em_rc %<>% subset(!subj %in% subj_missing_fixations) %T>% { .$subj %<>% as.factor() }
+crit_em_rc$subject %<>% as.factor()
+
+crit_em_rc %<>% within({
+  # compares the N2 attachment condition to the average
+  attachment %>% recode_char2double( c('ambiguous'=-1/3, 'N2 attachment'=-1/3, 'N1 attachment'=2/3) ) -> cN1attachmentVsAmb
+  # compares the N1 attachment condition to the average
+  attachment %>% recode_char2double( c('ambiguous'=-1/3, 'N2 attachment'=2/3, 'N1 attachment'=-1/3) ) -> cN2attachmentVsAmb
+
+  clWlen <- scale(log(wlen))
+  clPrevWlen <- scale(log(prev_wlen))
+  clNextWlen <- scale(log(next_wlen))
+  refixation = as.numeric(RRTR!=0)
+  regression = as.numeric(as.logical(RBRC))
+  fp_skip = as.numeric(FFP==0)
+})
+
+```
+
+```{r EyeRTsPlot1, results='asis', fig.height=5, fig.cap="Average first-pass regression probabilities and backtransformed log-reading time measures FPRT, RPD, and TFT for the critical regions by condition. Within-participants standard-errors in brackets [@Cousineau:2005; @Morey:2008]."}
+
+se_cousineau_bygroup <- function(df, bygroup, ...) {
+   ddply(df, bygroup, function(df) {
+    se_cousineau(df, ...)
+    })
+}
+
+crit_em_rc %<>% mutate(log_FPRT = log(FPRT), log_RPD = log(RPD), log_TFT = log(TFT) )
+
+fprt <- subset(crit_em_rc, FPRT!=0) %>% 
+        se_cousineau_bygroup( bygroup = "roiLabel", n_conditions=3, subject = subj, 
+                              DV = log_FPRT, group = "attachment", is_proportion = F)
+rpd <- subset(crit_em_rc, RPD!=0) %>% 
+        se_cousineau_bygroup( bygroup = "roiLabel", n_conditions=3, subject = subj, 
+                              DV = log_RPD, "attachment", is_proportion = F)
+tft <- subset(crit_em_rc, TFT!=0) %>% 
+        se_cousineau_bygroup( bygroup = "roiLabel", n_conditions=3, subject = subj, 
+                              DV = log_TFT, "attachment", is_proportion = F)
+
+crit_em_rc %<>% mutate( RBR = as.logical(RBRC) )
+rp <- subset(crit_em_rc, FFP==1) %>% 
+       se_cousineau_bygroup( bygroup = "roiLabel", n_conditions=3, subject = subj, 
+                             DV = regression, "attachment", is_proportion = T)
+
+RTs = rbind(cbind(fprt, measure="First Pass\nReading Time"), 
+            cbind(rpd, measure="Regression\nPath Duration"), 
+            cbind(tft, measure="Total Fixation\nTime"))
+
+RTs$attachment %<>% as.factor
+p_avg_rt_exp1 <- RTs %>% ggplot(aes(attachment, exp(M), group = attachment, color = attachment)) + 
+                          geom_point() + 
+                          geom_errorbar(aes(ymin=exp(M-1.96*SE), ymax=exp(M+1.96*SE)), width = 0.2) + 
+                          ylab("Reading Time") + xlab("") +
+                          facet_grid(measure ~ roiLabel, scales = "free_y") + 
+                          scale_y_continuous(breaks = seq(200, 500, by=25)) +
+                          scale_x_discrete(labels = NULL, breaks = NULL) +
+                          #scale_x_discrete(guide = guide_axis(angle = 45)) + 
+                          theme(legend.position='top') + 
+                          theme(  strip.background = element_rect(fill="white") )
+
+probs = cbind(rp, measure="First-pass\nRegressions") # rbind( )
+
+probs$attachment %<>% as.factor 
+p_avg_prob_exp2 <- ggplot(probs, aes(attachment, M, group = attachment, color = attachment)) + 
+                        geom_point() + 
+                        geom_errorbar(aes(ymin=(M-1.96*SE), ymax=(M+1.96*SE)), width = 0.2) + 
+                        scale_y_continuous(labels = function(...) scales::percent(accuracy=1, ...) ) +
+                        ylab("% Regressions") + xlab("") +
+                        facet_grid(measure ~ roiLabel, scales = "free_y") + 
+                        scale_x_discrete(labels = NULL, breaks = NULL) +
+                        #scale_x_discrete(guide = guide_axis(angle = 45)) + 
+                        theme(legend.position='none') + 
+                        theme(  strip.background = element_rect(fill="white") )
+ 
+
+# print(p_avg_prob_exp2)
+p_avgs <- ggarrange(p_avg_rt_exp1, p_avg_prob_exp2, ncol = 1, heights = c(2.5,1))
+
+
+print(p_avgs)
+```
+
+```{r Eye.brms, results='hide', message=FALSE, warning=FALSE}
+
+brm_reading <- function(DV, data, file, prior = NULL, family = brms::lognormal() )
+{
+  print(DV)
+  data %<>% dplyr::rename_( "DV" = DV )
+  brm(DV ~ cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + clPrevWlen + clNextWlen +
+            (cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + clPrevWlen + clNextWlen + 1|subj) +
+            (1|stimulus),
+            data = data, family = family,
+            prior = prior, 
+            #stanvars = stanvars_lognormalParamMeanSigma,
+            #control = list(adapt_delta = .95),
+            # family = brms::lognormal(),
+            #sample_prior = "only",
+            chains = n_chains, cores = n_cores, 
+            seed = 1234, iter = n_iter, 
+            file = file
+            )
+}
+
+brm_models <- function(data, fname)
+{
+    lst <- list()
+    
+    DV = "FPRT"
+    lst$fprt <- brm_reading(DV, data = subset(data, FFP==1),
+                                file = paste(fname, DV, sep = "_"),
+                                prior = c(prior_string("normal(5.75, 1)", class = "Intercept"),
+                                          prior_string("normal(0, 0.2)", class = "b"))
+                               )
+    
+    DV = "RPD"
+    lst$rpd <- brm_reading(DV, data = subset(data, FFP==1),
+                               file = paste(fname, DV, sep = "_"),
+                               prior = c(prior_string("normal(5.75, 1)", class = "Intercept"),
+                                         prior_string("normal(0, 0.2)", class = "b"))
+                               )
+    
+    DV = "TFT"
+    lst$tft <- brm_reading(DV, data = subset(data, TFT!=0),
+                               file = paste(fname, DV, sep = "_"),
+                               prior = c(prior_string("normal(5.75, 1)", class = "Intercept"),
+                                        prior_string("normal(0, 0.2)", class = "b"))
+                               )
+    
+    DV = "regression"
+    lst$rp <- brm_reading(DV, data = subset(data, FFP==1),
+                              file = paste(fname, DV, sep = "_"),
+                              prior = c(prior_string("normal(0, 3)", class = "Intercept"),
+                                        prior_string("normal(0, 1)", class = "b")),
+                              family="bernoulli"
+                              )
+    lst
+}
+
+
+n_cores <- 4
+n_chains <- 4
+n_iter <- 5000
+
+# to-do: (i) Fit each measure in a single model, to make sure that the slopes for all effects of word length 
+#        are the same across regions, and use fillers for priors on this. Or at least (ii) just do the fillers for priors.
+eye_np1 <- brm_models(data = crit_em_rc %>% subset(roiLabel == "N1"), 
+                      fname = '../workspace/models_eye_np1')
+
+eye_np2 <- brm_models(data = crit_em_rc %>% subset(roiLabel == "N2"), 
+                      fname = '../workspace/models_eye_np2')
+
+eye_spillover <- brm_models(data = crit_em_rc %>% subset(roiLabel == "spillover"), 
+                      fname = '../workspace/models_eye_spillover')
+
+```
+
+```{r emStandardMeasuresModelPlot.prepare}
+
+plot_coefs <- function(ms, transformations = NULL) {
+  create_model_coefs_plot( ms, 
+                           plot_stats = F,
+                           transformations = transformations,
+                           map_names = c("clWlen"="word length",
+                                          "delta_n1attachment_m_amb_ms"="N1 attachment - ambiguous",
+                                          "delta_n2attachment_m_amb_ms"="N2 attachment - ambiguous"
+                                         ),
+                           exclude_names = c("cN1attachmentVsAmb", "cN2attachmentVsAmb",
+                                             "clWlen", "clPrevWlen", "clNextWlen",
+                                             "mean_amb_ms", "mean_n1_ms", "mean_n2_ms")#,
+                           #expand_right = 5#, 
+                           #x_stat_adjust = 0 
+                           ) + theme(  strip.background =element_rect(fill="white") )
+}
+
+# note: + sigma^2/2 is to get the mean instead of the median
+# note 2: not using + sigma^2/2 for the sake of consistency -- the plots show an estimate of exp(log-mean), not of the mean 
+transformations_emrts_means <- c(mean_amb_ms = "exp(b_Intercept - 1/3*b_cN1attachmentVsAmb - 1/3*b_cN2attachmentVsAmb)", # 
+                                 mean_n1_ms  = "exp(b_Intercept + 2/3*b_cN1attachmentVsAmb - 1/3*b_cN2attachmentVsAmb)", #
+                                 mean_n2_ms  = "exp(b_Intercept - 1/3*b_cN1attachmentVsAmb + 2/3*b_cN2attachmentVsAmb)" #
+                                )
+transformations_emrts <- c(transformations_emrts_means,
+                           delta_n1attachment_m_amb_ms = "mean_n1_ms - mean_amb_ms",
+                           delta_n2attachment_m_amb_ms = "mean_n2_ms - mean_amb_ms"
+                          )
+
+m_eye_fprt <- list("noun 1" = eye_np1$fprt, "noun 2" = eye_np2$fprt, "spill-over" = eye_spillover$fprt)
+p_fprt <- m_eye_fprt %>% { plot_coefs(., transformations = transformations_emrts)  + xlab("Estimate (ms)")  }
+
+m_eye_rpd <- list("noun 1" = eye_np1$rpd, "noun 2" = eye_np2$rpd, "spill-over" = eye_spillover$rpd)
+p_rpd <- m_eye_rpd %>% { plot_coefs(., transformations = transformations_emrts)  + xlab("Estimate (ms)")  }
+
+m_eye_tft <- list("noun 1" = eye_np1$tft, "noun 2" = eye_np2$tft, "spill-over" = eye_spillover$tft)
+p_tft <- m_eye_tft %>% { plot_coefs(., transformations = transformations_emrts)  + xlab("Estimate (ms)")  }
+
+
+transformations_emprop_means <- c(mean_amb_ms = "plogis(b_Intercept - 1/3*b_cN1attachmentVsAmb - 1/3*b_cN2attachmentVsAmb)", 
+                                  mean_n1_ms  = "plogis(b_Intercept + 2/3*b_cN1attachmentVsAmb - 1/3*b_cN2attachmentVsAmb)",
+                                  mean_n2_ms  = "plogis(b_Intercept - 1/3*b_cN1attachmentVsAmb + 2/3*b_cN2attachmentVsAmb)"
+                                 )
+transformations_emprop <- c(delta_n1attachment_m_amb_ms = "b_cN1attachmentVsAmb",
+                            delta_n2attachment_m_amb_ms = "b_cN2attachmentVsAmb"
+                           )
+ 
+m_eye_rp <- list("noun 1" = eye_np1$rp, "noun 2" = eye_np2$rp, "spill-over" = eye_spillover$rp)
+p_rp <- m_eye_rp %>% { plot_coefs(., transformations = transformations_emprop)  + xlab("Estimate (log-odds)")  }
+
+# m_eye_rfp <- list("noun 1" = eye_np1$rfp, "noun 2" = eye_np2$rfp, "spill-over" = eye_spillover$rfp)
+# p_rfp <- m_eye_rfp %>% { plot_coefs(., transformations = transformations_emprop)  + xlab("Estimate (log-odds)") }
+
+```
+
+```{r emStandardMeasuresModelCoefPlot, results='asis', fig.height = 5.5, fig.cap="Estimates and 90% credible intervals (thin lines) as well as 80% credible intervals (thick lines)  for the analyses of first-pass reading time, regression-path duration, total fixation time, regression probability, and refixation probability. The posterior probability that the parameter is smaller than (or larger than) zero is larger than $0.9$ if the 80% credible interval excludes zero, and larger than $0.95$ if the 90% credible interval excludes zero.", message=FALSE, warning=FALSE}
+
+add_title <- function(p, title, hjust) { 
+  p + ggtitle(title) + theme(plot.title = element_text(hjust=hjust))
+}
+
+p <- ggarrange(add_title(p_fprt, "First-pass reading time", hjust=-.65), 
+               add_title(p_rpd, "Regression-path duration", hjust=-.7), 
+               add_title(p_tft, "Total fixation time", hjust=-.55),
+               add_title(p_rp, "% Regressions", hjust=-.525),
+               # add_title(p_rfp, "% Refixations", hjust=-.5),
+               labels = NULL,
+               ncol = 1, nrow = 4, vjust = -.2, hjust = 0)
+print(p)
+
+```
+
+```{r emExtractCIs, results='hide', cache=T }
+
+extract_effect <- function(p, coef, model = NULL)
+{
+    cur_model = model
+    cur_coef = coef
+    
+    if (is.null(model))
+        df <- subset(p$data, coef == cur_coef)
+    else
+        df <- subset(p$data, model == cur_model & coef == cur_coef)
+    stopifnot(nrow(df) == 1)
+    df
+}
+
+row_summary_string90 <- function(row, fmt, lower = T)#
+{
+  if (lower) {
+      fmt <- paste0("CrI [", fmt, "; ", fmt, "], P($\\beta$ < 0) = %s")
+      post_prob_name <- "PBelowZeroStr"
+  } else {
+      fmt <- paste0("CrI [", fmt, "; ", fmt, "], P($\\beta$ > 0) = %s")
+      post_prob_name <- "PAboveZeroStr"
+  }
+  res <- sprintf(fmt, row$lower90, row$upper90, row[[post_prob_name]] )
+  res %<>% gsub("= <", "<", .) %>% gsub("= >", ">", .)
+  res
+}
+
+row_summary_string90 <- function(row, fmt, lower = T)#
+{
+  if (lower) {
+      fmt <- paste0("CrI [", fmt, "; ", fmt, "], P($\\beta$ < 0) = %s")
+      post_prob_name <- "PBelowZeroStr"
+  } else {
+      fmt <- paste0("CrI [", fmt, "; ", fmt, "], P($\\beta$ > 0) = %s")
+      post_prob_name <- "PAboveZeroStr"
+  }
+  res <- sprintf(fmt, row$lower90, row$upper90, row[[post_prob_name]] )
+  res %<>% gsub("= <", "<", .) %>% gsub("= >", ">", .)
+  res
+}
+
+row_summary_ci95 <- function(row, fmt, lower = T)#
+{
+  fmt <- paste0("[", fmt, "; ", fmt, "]")
+  res <- sprintf(fmt, row$lower95, row$upper95 )
+  res
+}
+
+effect_summary_string <- function(p, coef, fmt, model = NULL, lower = T) {
+    extract_effect(p=p, model=model, coef=coef) %>%
+        row_summary_string90(fmt = fmt, lower = lower)
+}
+
+effect_ci95 <- function(p, coef, fmt, model = NULL, lower = T) {
+    extract_effect(p=p, model=model, coef=coef) %>%
+        row_summary_ci95(fmt = fmt, lower = lower)
+}
+
+```
+
+<!-- to-do: re-do the plots and plot credible intervals based on the models -->
+<!-- to-do: reconsider using means in back-transformation, since the plots are all backtransformed medians  -->
+
+<!-- ### Model Estimates -->
+Figure \ref{fig:emStandardMeasuresModelCoefPlot} shows the estimated differences between the unambiguous conditions and the ambiguous condition for each word position and eye-tracking measure. It also shows the upper and lower boundaries of the $90\%$ credible interval for each position (noun 1, noun 2, spill-over region).
+<!-- -->
+
+### N2 attachment
+The estimates show a moderate amount of evidence for a slowdown in N2 attachment conditions in first-pass reading times
+(\textit{N2:} `r effect_summary_string(p=p_fprt, model="noun 2", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F)`;
+\textit{spill-over:} `r effect_summary_string(p=p_fprt, model="spill-over", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F)`), 
+with stronger evidence for a slowdown in regression-path duration 
+(\textit{N2:} `r effect_summary_string(p=p_rpd, model="noun 2", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F)`,
+\textit{spill-over:} `r effect_summary_string(p=p_rpd, model="spill-over", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F)`). 
+In total fixation time, we found a slowdown in N2 attachment conditions at N2 (`r effect_summary_string(p=p_tft, model="noun 2", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F)`), and a weaker effect in the same direction at the  (`r effect_summary_string(p=p_tft, model="spill-over", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F)`).
+We further found an N2 attachment-related slowdown in regression probability at N2 
+(`r effect_summary_string(p=p_rp, model="noun 2", coef="N2 attachment - ambiguous", fmt="%0.1f", lower = F)`).
+
+### N1 attachment
+While most eye tracking measures on most regions reflected an N2 attachment-related slowdown, only regression path duration and regression probability suggested a slowdown in N1 attachment conditions: RPD at N2 (`r effect_summary_string(p=p_rpd, model="noun 2", coef="N1 attachment - ambiguous", fmt="%0.1f", lower = F)`) and at the spill-over region (`r effect_summary_string(p=p_rpd, model="spill-over", coef="N1 attachment - ambiguous", fmt="%0.1f", lower = F)`), as well as regression probability at N2 (`r effect_summary_string(p=p_rp, model="noun 2", coef="N1 attachment - ambiguous", fmt="%0.1f", lower = F)`).
+
+```{r emEffectSize, results='asis', message=FALSE, warning=FALSE}
+
+all_plots <- list("fprt"=p_fprt, "rpd"=p_rpd, "tft"=p_tft, "rp"=p_rp) # , "rfp"=p_rfp
+all_cis <- ldply(1:length(all_plots), function(i) { all_plots[[i]]$data %>% data.frame(measure=names(all_plots)[i], .) })
+all_cis %<>% arrange(PAboveZero)
+
+# plot the posterior prob of an ambiguity advantage larger than a specific effect
+samples_eye_np2_rpd <- brms::posterior_samples(eye_np2$rpd)
+samples_eye_spillover_rpd <- brms::posterior_samples(eye_spillover$rpd)
+
+for (i in seq_along(transformations_emrts)) {
+  transformation_code <- paste(names(transformations_emrts)[i], transformations_emrts[i], sep = "=" ) %>% 
+                          parse(text = .)
+  samples_eye_np2_rpd %<>% within(eval(transformation_code) )
+  samples_eye_spillover_rpd %<>% within(eval(transformation_code) )
+}
+
+# hist(samples_eye_np2_rpd$delta_n1attachment_m_amb_ms)
+# mean(samples_eye_np2_rpd$delta_n1attachment_m_amb_ms > 25)
+
+```
+
+###  Ambiguity Advantage
+The posterior probability of the difference between N1 attachment and the ambiguous being larger than the smallest observed ambiguity advantage so far was  $P(\beta \geq 26\,ms)=`r mean(samples_eye_np2_rpd$delta_n1attachment_m_amb_ms >= 26)`$, 
+while the posterior probability of the difference between N2 attachment and the ambiguous being larger than the smallest observed ambiguity advantage so far was  $P(\beta \geq 26\,ms)=`r mean(samples_eye_np2_rpd$delta_n2attachment_m_amb_ms >= 26)`$.
+
+<!--
+There wasn't any clear indication of a slowdown or a speedup in the N1 attachment condition relative to the ambiguous condition 
+(in all measures, and all regions $`-r min( subset(all_cis, coef == "N1 attachment - ambiguous")$PAboveZero )` \leq P(\beta > 0) \leq `-r max( subset(all_cis, coef == "N1 attachment - ambiguous")$PAboveZero )`$). 
+-->
+<!--
+The posterior probability that the ambiguity advantage effect (the difference between the preferred N1 attachment condition and the ambiguous condition) was larger than $`r min(prior_amb_adv_ms)`\,ms$ (the smallest ambiguity effect attested in the literature) was `r mean( samples_eye_np2_rpd$delta_n1attachment_m_amb_ms > min(prior_amb_adv_ms) )` at N2, and `r mean( samples_eye_spillover_rpd$delta_n1attachment_m_amb_ms > min(prior_amb_adv_ms) )` at spillover.
+
+
+\pagebreak
+### Model Comparisons
+
+```{r emRPDBayesF,  eval=F, results='hide', message=FALSE, warning=FALSE}
+
+fname_bf <- "../workspace/models_eye_bf/bfs.rda"
+
+if (!file.exists(fname_bf)) 
+{
+  crit_em_rc$cN1attachmentVsAmb_SnglPred <- crit_em_rc$cN1attachmentVsAmb - 1/6
+  crit_em_rc$cN2attachmentVsAmb_SnglPred <- crit_em_rc$cN2attachmentVsAmb - 1/6
+  # df %>% dplyr::select(attachment, cN1attachmentVsAmb, cN2attachmentVsAmb, cN1attachmentVsAmb_SnglPred, cN2attachmentVsAmb_SnglPred) %>% unique()
+  
+  df <- crit_em_rc %>% subset(roiLabel == "spillover") %>% subset(FFP == 1)
+
+  # save_all_pars=T and large number of iterations needed for bayes factors
+  brm_template_bf_rpd <- function(formula, file, df, constrain_positive = T) {
+        if (constrain_positive) {
+            prior <- c(set_prior("normal(0, 0.2)", lb = 0.01))
+        } else {
+            prior <- c(set_prior("normal(0, 0.2)"))
+        }
+        brms::brm(formula = formula, 
+                  chains = 4, cores = 4, iter = 21000, warmup = 1000, save_all_pars = TRUE,
+                  family = brms::lognormal(),
+                  prior = prior,
+                  data = df, file = file)
+  }
+  
+  m_full <- brm_template_bf_rpd(
+                  RPD ~ cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + (cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + 1 | subj) + (1 | stimulus), 
+                  constrain_positive = FALSE,
+                  file = "../workspace/models_eye_bf/rpd_full_spillover",
+                  df = df)
+  
+  m_pos_full <- brm_template_bf_rpd(
+                  RPD ~ cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + (cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + 1 | subj) + (1 | stimulus), 
+                  file = "../workspace/models_eye_bf/rpd_positive_full_spillover",
+                  df = df)
+###
+
+x <- ranef(m_pos_full)
+x$subj  
+  
+###
+  
+  
+  m_pos_onlyN2 <- brm_template_bf_rpd(
+                  RPD ~ cN2attachmentVsAmb_SnglPred + clWlen + (cN2attachmentVsAmb_SnglPred + clWlen + 1 | subj) + (1 | stimulus), 
+                  file = "../workspace/models_eye_bf/rpd_positive_onlyN2_spillover",
+                  df = df)
+ 
+  m_pos_onlyN1 <- brm_template_bf_rpd(
+                  RPD ~ cN1attachmentVsAmb_SnglPred + clWlen + (cN1attachmentVsAmb_SnglPred + clWlen + 1 | subj) + (1 | stimulus),
+                  file = "../workspace/models_eye_bf/rpd_positive_onlyN1_spillover",
+                  df = df)
+  
+
+  bf0_eye_spillover_rpd <- bayes_factor(m_full, m_pos_full)
+  # Estimated Bayes factor in favor of m_full over m_pos_full: 0.16582 (inv: 6)
+
+  bf1_eye_spillover_rpd <- bayes_factor(m_pos_full, m_pos_onlyN2)
+  # Estimated Bayes factor in favor of m_original over m_alt_onlyN2: 0.03975 (inv: 25)
+  
+  bf2_eye_spillover_rpd <- bayes_factor(m_pos_full, m_pos_onlyN1)
+  # Estimated Bayes factor in favor of m_original over m_alt_onlyN1: 3.38791
+  
+  # bayes_factor(m_alt_onlyN2, m_alt_onlyN1)
+  # # Estimated Bayes factor in favor of m_alt_onlyN2 over m_alt_onlyN1: 87.78061
+
+  
+  
+  df <- crit_em_rc %>% subset(roiLabel == "N2") %>% subset(FFP == 1)
+
+  # save_all_pars=T and large number of iterations needed for Bayes factors
+  brm_template_bf_rp <- function(formula, file, df, constrain_positive = T) {
+        if (constrain_positive) {
+            prior <- c(set_prior("normal(0, 1)", lb = 0.01))
+        } else {
+            prior <- c(set_prior("normal(0, 1)"))
+        }
+        brms::brm(formula = formula, 
+                  chains = 4, cores = 4, iter = 21000, warmup = 1000, save_all_pars = TRUE,
+                  family = brms::bernoulli(),
+                  prior = prior,
+                  data = df, file = file)
+  }
+
+  m_full <- brm_template_bf_rp(
+                  regression ~ cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + (cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + 1 | subj) + (1 | stimulus),
+                  constrain_positive = FALSE,
+                  file = "../workspace/models_eye_bf/rp_full_n2",
+                  df = df)
+
+  m_pos_full <- brm_template_bf_rp(
+                  regression ~ cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + (cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + 1 | subj) + (1 | stimulus), 
+                  file = "../workspace/models_eye_bf/rp_positive_full_n2",
+                  df = df)
+  
+  m_pos_onlyN2_n2 <- brm_template_bf_rp(
+                  regression ~ cN2attachmentVsAmb_SnglPred + clWlen + (cN2attachmentVsAmb_SnglPred + clWlen + 1 | subj) + (1 | stimulus), 
+                  file = "../workspace/models_eye_bf/rp_positive_onlyN2_n2",
+                  df = df)
+  
+  m_pos_onlyN1_n2 <- brm_template_bf_rp(
+                  regression ~ cN1attachmentVsAmb_SnglPred + clWlen + (cN1attachmentVsAmb_SnglPred + clWlen + 1 | subj) + (1 | stimulus), 
+                  file = "../workspace/models_eye_bf/rp_positive_onlyN1_n2",
+                  df = df)
+
+  bf0_eye_spillover_rp_n2 <- bayes_factor(m_full, m_pos_full)
+  # Estimated Bayes factor in favor of m_full over m_pos_full: 0.20188 (inv: 5)
+  
+  bf1_eye_spillover_rp_n2 <- bayes_factor(m_pos_full, m_pos_onlyN2_n2)
+  # Estimated Bayes factor in favor of m_pos_full over m_pos_onlyN2_n2: 0.16228 (inv: 6.2)
+  
+  bf2_eye_spillover_rp_n2 <- bayes_factor(m_pos_full, m_pos_onlyN1_n2)
+  # Estimated Bayes factor in favor of m_pos_full over m_pos_onlyN1_n2: 167.38944
+  
+  # bayes_factor(m_alt_onlyN2, m_alt_onlyN1)
+  # # Estimated Bayes factor in favor of m_alt_onlyN2 over m_alt_onlyN1: 86.46598
+
+  
+  save(bf0_eye_spillover_rpd, bf1_eye_spillover_rpd, bf2_eye_spillover_rpd, 
+       bf0_eye_spillover_rp_n2, bf1_eye_spillover_rp_n2, bf2_eye_spillover_rpd,
+       file = fname_bf)
+}
+
+
+load(fname_bf)
+```
+
+The models presented above were agnostic about the direction of the differences between the unambiguous conditions and the ambiguous condition. We further fitted several constrained models in order to compare the relative posterior probabilities of (i) an ambiguity advantage (a positive difference between the preferred N1 attachment condition and the ambiguous condition) vs (ii) the absence of an ambiguity advantage (no such difference between the ambiguous and N1 attachment condition).
+We did so for the two combination of region and eye tracking measure with the highest posterior probability of a slowdown in N1 attachment conditions compared to the ambiguous condition: (i) the regression probability at the N2 region, and (ii) the regression path duration at the spill-over region.
+Using the same priors as previously, we constrained all predictors to be strictly positive ($>0.01$). This resulted in a half-normal
+prior for the RPD model ($\mu=0, \sigma=0.2$), and the regression probability ($\mu=0, \sigma=1$).
+We fitted two models to each measure: model 1 included the predictors (i) the difference between the N1 attachment and the ambiguous attachment conditions, (ii) the difference between the N2 attachment and the ambiguous attachment conditions, and (iii) word length. The predictors used in model 2 were only (ii) and (iii). In including predictor (i), model 1 encoded the assumption of an ambiguity advantage, while model 2 encoded the assumption of its absence in not including it.
+
+The models were fitted in *brms*, with $20,000$ post-warmup iterations ($1,000$ iterations warmup) and Bayes factors [e.g., @LeeWagenmakers:2014] were computed using the *bridgesampling* package `r citep(citation("bridgesampling"))`.
+
+For regression path duration, a Bayes factor quantifying the evidence for model 2 relative to model 1 ($BF_{21} = ` r round(1/bf1_eye_spillover_rpd$bf,1)`$) provided *'strong evidence'* for model 2, and thus *against* a slowdown in N1 attachment conditions. 
+<!-- The Bayes factor for model 1 relative to model 3 was $BF_{13} = ` r round(bf2_eye_spillover_rpd$bf,1)`$), and  provided *'moderate evidence'* in favor of model 1 and thus in favor of a slowdown in N2 attachment conditions. ->
+For regression probability, the Bayes factor quantifying the evidence for model 2 relative to model 1 ($BF_{21} = ` r round(1/bf1_eye_spillover_rp_n2$bf,1)`$) provided *'moderate evidence'* for model 2, and thus *in favor* of a slowdown in N1 attachment conditions. 
+
+...
+-->
+
+<!-- Use NP1/2 attachment as a label if submitting to Glossa. If submitting to a psychology journal, explain what the difference is between N and NP is, and why we say that attachment happens to an NP. -->
+
+
+<!--
+While the results are 
+
+XXX
+
+These results do not suggest the presence of a large ambiguity advantage. In order to quantify the amount of evidence in favor or against the presence of an ambiguity advantage Turkish provided by our findings, we analyzed the regression path duration at the spill-over region, which showed the numerically largest slowdown in the preferred unambiguous condition relative to the ambiguous condition, which we operationalized as the estimate of the magnitude of the ambiguity advantage.
+-->
+
+## Discussion
+
+We found substantial processing difficulty in the N2 attachment condition relative to the ambiguous attachment condition, while the effect of unambiguous N1 attachment was less clear.
+In the N2 attachment condition, we found indications of processing difficulty in most eyetracking measures starting with regression path duration on N1, suggesting that reading in N2 attachment conditions is initially slowed by the the fact that the RC cannot be attached to the first structurally available noun phrase, headed by N1. Subsequently, it may be slowed down relative to the ambiguous baseline due to RC attachment to the noun phrase headed by N2 which unfolds at N1, as this process would arguable not be carried out in the N1 attachment and ambiguous conditions.
+
+The relative difficulty of the N1 attachment sentences is less clear. While there was no appreciable slowdown in first-pass reading time or total fixation time at N2 in the N1 attachment condition relative to the ambiguous condition, the regression-path duration as well the regression probability indicated somewhat higher processing difficulty in the N1 attachment conditions compared to the ambiguous conditions. Since the posterior probability of a slowdown is $0.72$, while the posterior probability of the slowdown being at least as large as the smallest previously observed ambiguity advantage was $0.32$, the results of this experiment do not provide unambiguous evidence for or against the presence of an ambiguity advantage in Turkish. However, they do suggest that it is more likely that there is no ambiguity advantage of a previously attested magnitude than that there is one.
+
+
+# Experiment 2
+
+Our second experiment was designed to address two issues which may complicate the interpretation of the first experiment: Firstly, the analysis of multiple eye tracking measures at multiple regions increases the chances that one of them exhibits a theoretically interesting effect due to chance, even if there is no underlying effect (e.g, @BernhardTitus:2015).
+Secondly, it is possible 
+we hypothesized that a plausibility-based disambiguation 
+based on manipulation 
+maybe plausibility isn't a strong enough manipulation. 
+... this design made a within-items(?) design?
+
+The aim of the second experiment was to confirm the findings of the first experiment using a different design.
+The critical regions in the experimental sentences in this experiment had a structure similar to sentence (\ref{ExpSPRExample}), in which the head noun of the relative clause (*football player*/*fan*) performs the function of the subject of the embedded verb (*hit*). The grammatical object of all relative clauses was the reciprocal pronoun *each other*. RC attachment was disambiguated by the grammatical number of the nouns. 
+In (\ref{ExpSPRExample}), for instance, the relative clause *'hit each other'* can attach to the NP headed by *fans* because it is plural, but not to the NP headed by *football player*, because it is singular and therefore cannot bind the reciprocal *each other*.
+
+\begin{exe}
+\ex \label{ExpSPRExample}
+\gll $[$Birbirini döven$]_{RC}$ futbolcu-nun hayran-lar-ı terk etti. \\
+      {each other} hit  {footballer}.\textsc{sg}-\textsc{gen} {fan}-\textsc{pl}-\textsc{poss} leave did. \\
+\textit{`The fan(s) of the football player(s) who hit each other left the stadium.'}
+\end{exe}
+
+We used the fact that relative clauses with a reciprocal as a grammatical object can only attach to plural noun phrases to create three attachment conditions: N1 attachment, N2 attachment and ambiguous attachment, as illustrated in (\ref{ExpSPRExperimental}).
+Because plurals were formed through addition of the plural suffix *-ler/-lar*, reading times for plural and singular versions of a word are not easily comparable. Thus, in order to control for possible effects of length, we created three control conditions illustrated in (\ref{ExpSPRControl}) in which the complex noun phrase was modified by an adjective which could only attach to N1. In the examples in (\ref{ExpSPRControl}) it is *'Fenerbahçeli'* (meaning *'of Fenerbahçe'*, a well-known Turkish football team). These additional conditions will serve as a baseline, any differences from which must be considered effects of RC attachment.
+
+In this self-paced reading experiment, we asked superficial comprehension questions occasionally. Questions were kept superficial in order to parallel the task demands employed by previous experiments which demonstrated an ambiguity advantage [@TraxlerEtAl:1998; @vanGompelEtAl:2001; @vanGompelEtAl:2005; @SwetsEtAl:2008].
+
+
+\begin{exe}
+\ex \label{ExpSPRExperimental} 
+
+\gll Dün akşam, \ldots \\
+     Yesterday evening, {} \\
+     
+\begin{xlist} 
+
+\item[a.]{}\textsc{ambiguous attachment (plural-plural)}{} 
+\gll $[$birbirini döven$]_{RC}$ futbolcu-lar-ın hayran-lar-ı \\
+{each other} hit {football player}-\textsc{pl}-\textsc{gen} {fan}-\textsc{pl}-\textsc{poss}  \\
+
+\item[b.]{}\textsc{N1 attachment (plural-singular)}{} 
+\gll $[$birbirini döven$]_{RC}$ futbolcu-lar-ın hayran-ı \\
+{each other} hit  {football player}-\textsc{pl}-\textsc{gen} {fan}.\textsc{sg}-\textsc{poss}  \\
+
+\item[c.]{}\textsc{N2 attachment (singular-plural)}{} 
+\gll $[$birbirini döven$]_{RC}$ futbolcu-nun hayran-lar-ı\\
+{each other} hit  {football player}.\textsc{sg}-\textsc{gen} {fan}-\textsc{pl}-\textsc{poss}  \\
+
+\item[] \gll {\ldots} stadyumu hemen terk etti. \\
+{}       stadium  immediately leave did. \\
+\end{xlist}
+
+\textit{`The fan(s) of the football player(s) who hit each other left the stadium immediately, yesterday evening.'}
+\end{exe}
+        
+        
+\begin{exe}
+\ex \label{ExpSPRControl} 
+
+\gll Dün akşam, \ldots \\
+     Yesterday evening, {} \\
+     
+\begin{xlist} 
+
+\item[a.]{}\textsc{ambiguous attachment control (plural-plural)}{} 
+\gll $[$Fenerbahçe-li$]_{ADJ}$  futbolcu-lar-ın hayran-lar-ı \\
+{Fenerbahce-\textsc{adj}} hit {football player}-\textsc{pl}-\textsc{gen} {fan}-\textsc{pl}-\textsc{poss}  \\
+
+\item[b.]{}\textsc{N1 attachment control (plural-singular)}{} 
+\gll $[$Fenerbahçe-li$]_{ADJ}$  futbolcu-lar-ın hayran-ı \\
+{Fenerbahce-\textsc{adj}} hit  {football player}-\textsc{pl}-\textsc{gen} {fan}.\textsc{sg}-\textsc{poss}  \\
+
+\item[c.]{}\textsc{N2 attachment control (singular-plural)}{} 
+\gll $[$Fenerbahçe-li$]_{ADJ}$ futbolcu-nun hayran-lar-ı\\
+{Fenerbahce-\textsc{adj}}  hit  {football player}.\textsc{sg}-\textsc{gen} {fan}-\textsc{pl}-\textsc{poss}  \\
+
+\item[] \gll {\ldots} stadyumu hemen terk etti. \\
+{}       stadium  immediately leave did. \\
+\end{xlist}
+
+\textit{`The fan(s) of the Fenerbahce football player(s) left the stadium immediately, yesterday evening.'}
+\end{exe}
+        
+
+## Method
+
+### Materials
+
+Forty-two experimental sentence sets like (\ref{ExpSPRExperimental}) and (\ref{ExpSPRControl}) were constructed. All relative clauses comprised between two and three words and always started with a reciprocal pronoun. Sentences were divided into different lists according to a latin-square design, such that every participant read exactly one sentence from each sentence set, and seven sentences from every condition. Experimental sentences were mixed with 65 filler sentences, so that every participant read 107 sentences during the course of the experiment. Each list was randomized prior to presentation.
+
+### Participants
+Thirty-six students of Anadolu University in Eski\c{s}ehir, Turkey participated in the experiment. All participants were native speakers of Turkish; their age range was 19-29 years.
+One experimental session took approximately 40 minutes to complete. Participants were paid 15 Turkish Lira for participation. Participants provided informed consent and the procedures in this study were compliant with the Anadolu University research ethics requirements as well as with the ethical principles outlined in the Helsinki Declaration on research involving human subjects.	
+
+### Procedure
+The task was self-paced non-cumulative word-by-word reading. Presentation and recording was done with the Linger software package, version 2.94 by Doug Rohde. At the beginning of a trial all words, masked by underscores, appeared. Participants pressed the space bar to reveal the next word. As the next word appeared, the current one was masked by underscores again. The time between key-presses was recorded as the reading time for the word.
+Each participant read five practice sentences before the start of the experiment. 
+<!-- Our 42 sentence sets were divided into different lists according to a latin-square design, and randomly intermixed with 65 filler sentences, such that every participant read 107 sentences during the course of the experiment. 
+-->
+Questions about the sentence were asked on one third of all trials (14 questions about experimental sentences, 21 questions about fillers). Participants answered questions with `yes' or `no' by pressing the corresponding button on the keyboard. 
+
+### Statistical Analysis
+
+We used the *tidyverse* and *ggplot2* packages (Wickham, Averick, Bryan, et al., 2019; Wickham, 2016) for data processing and plotting, and the R packages *brms* (Bürkner, 2017; Bürkner, 2018) and *rstan* (Stan Development Team, 2020).
+All reading time measures were modeled using Bayesian generalized hierarchical linear models assuming log-normally distributed residuals [e.g., @GelmanHill:2007; @McElreath:2016; @Kruschke:2015; @VasishthEtAl:2019].
+We used normal priors for all coefficients ($\mu=0$, $\sigma=0.2$). All models were fitted using four chains with $2500$ post-warmup samples each. 
+
+All models included fixed effects of (i) centered log-word length, (ii) the availability of N1 and N2 as head nouns for RC attachment, (iii) the presence of a relative clause (*relative clause* vs. *control*), as well as (iv) the interactions between the presence of a relative clause and the availability of N1 and N2 as head nouns for RC attachment. Word length was used as a covariate in order to account for any differences in critical word length between our experimental sentences. For word length at critical regions N1 and N2, the word length of the singular form was used. All contrasts were centered.
+We included varying intercepts for participants and items, as well as maximal by-participant and near-maximal by-item slopes, as well as correlations between random intercepts and slopes. By-item random slopes of word length were not included in the models for critical regions N1 and N2, because they would be colinear with the effect of the grammatical number of those nouns.
+
+The availability of N1 and N2 as head nouns for RC attachment was coded using (orthogonal) simple contrasts comparing (i) the average of (\ref{ExpSPRExperimental}b) and (\ref{ExpSPRControl}b) to the average of (\ref{ExpSPRExperimental}a) and  (\ref{ExpSPRControl}a), as well as (ii) the average of (\ref{ExpSPRExperimental}c) and (\ref{ExpSPRControl}c) to the average of (\ref{ExpSPRExperimental}a) and (\ref{ExpSPRControl}a).
+Because the coefficients associated with the interaction contrasts represent the differences in the effect of N1 and N2 availability associated with the presence of a relative clause, they can be interpreted as the respective effects of unambiguous N1 and N2 attachment, relative to the ambiguous condition.
+
+While all coefficients for reading time measures were on a log-scale, we used the model's posterior MCMC samples to construct 95% credible intervals on the original scale (in *milliseconds*)
+for (i) the main effect of relative clause attachment, as well as 
+for (ii) the interactions between N1 and N2 unvailability and the presence of a relative clause, which correspond to the pairwise differences between each of the unambiguous conditions and the ambiguous condition. Doing so allowed us to compare the size of the effects we found with previously attested instances of the ambiguity advantage.
+
+## Results
+
+```{r SPR.LoadData}
+
+dir_base <- ".."
+(source("../source/load_SPR.R"))
+
+spr1_res <- load_SPR1()
+reading_rc <- spr1_res$reading_rc %<>% subset(posLabel %in% c('V/Adj','N1','N2','spillover'))
+
+# represent as factors
+reading_rc %<>% mutate(subject = subject %>% as.factor(),
+                         item = item %>% as.factor(),
+                         nps = nps %>% ordered(levels = c('sg pl','pl pl','pl sg'))
+                        )
+
+reading_rc %<>% within({
+  clWlen <- scale(log(wlen))[,1]
+  clWlen.n1.sg <- scale(log(wlen.n1.sg))[,1]
+  clWlen.n2.sg <- scale(log(wlen.n2.sg))[,1]
+})
+
+mrt <- plyr::ddply(reading_rc, .(modifier, attachment, posLabel), function(d) {
+  mean.se.cousineau(log(d$RT), d$subject, d$condition, conditions.cnt=6) %T>% 
+      {.$upper <- exp(.$M + 1.96*.$SE); .$lower <- exp(.$M - 1.96*.$SE); .$M <- exp(.$M); .$SE <- NULL} 
+})
+
+```
+
+```{r sprAverageRTs, results='asis', fig.height = 3, fig.cap="Average backtransformed log-reading times for the critical regions by condition. Within-participants 95%-confidence intervals in brackets. [@Cousineau:2005; @Morey:2008]"}
+
+new_pos_labels = c('V/Adj'='pre-critical', 
+                 'N1'='noun 1', 
+                 'N2'='noun 2', 
+                 'spillover'='spill-over')
+new_attachment_labels = c("ambiguous"="ambiguous", 
+                          "n1"="N1 attachment",
+                          "n2"="N2 attachment")
+
+mrt$posLabel %<>% as.character %>% dplyr::recode(!!!new_pos_labels)
+mrt$posLabel %<>% ordered(levels=new_pos_labels)
+#mrt$M.SE <- with(mrt, sprintf("%.0f (%.0f)", M, SE))
+mrt$modifier %<>% as.character %>% dplyr::recode('rc'='rc', 'adj'='control')
+
+mrt$attachment %<>% dplyr::recode(!!!new_attachment_labels) %>% factor(levels=new_attachment_labels)
+mrt$modifier %<>% as.character %>% factor(levels = c("rc", "control"))
+
+dodge <- position_dodge(width = .5)
+p <- ggplot(mrt, aes(attachment, M, group=attachment:modifier,
+                     color=attachment, linetype=modifier)) + 
+      geom_point(aes(shape=modifier), position = dodge) + #geom_line() + 
+      geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = dodge) +
+      theme_bw() + 
+      theme(axis.text.x = element_text(angle=45, hjust=1)) +
+      ylab("Reading Time") + xlab("") +
+      facet_wrap(~posLabel, nrow = 1) + 
+      theme(  strip.background =element_rect(fill="white") ) + 
+      scale_x_discrete(labels = NULL, breaks = NULL) + 
+      theme(legend.position='top')
+
+print(p)
+
+```
+
+```{r SPR.LMER}
+
+n_cores <- 4
+n_chains <- 4
+n_iter <- 5000
+
+
+exp2_contrasts <-
+    data.frame( condition          = c('a', 'b', 'c',  'd', 'e', 'f'),
+                cN1attachmentVsAmb = c(-1,  -1,   2,   -1,   -1,   2) / 3,
+                cN2attachmentVsAmb = c(-1,   2,  -1,   -1,    2,  -1) / 3,
+                cExperimental = rep(c(1, -1), each = 3) / 2,
+                stringsAsFactors = F)
+
+
+# # identify trials with potential outliers
+# rt_lower = 150; rt_upper = 3000
+# data_too_fast <- subset(reading_rc, posLabel %in% c("N1", "N2", "spillover") & RT < rt_lower ) %>% arrange(subject)
+# data_too_slow <- subset(reading_rc, posLabel %in% c("N1", "N2", "spillover") & RT > rt_upper ) %>% arrange(subject)
+# 
+# # too fast: 4 out of 5 extremely fast reading times are due to participant 10031, of those 2 are due to one trial 
+# # data.rt.critical %>% subset(subject == 10031) %>% ggplot(aes(pos, RT)) + geom_point() + facet_wrap(~item) # nothing out of the ordinary
+# with(data_too_fast, xtabs(~modifier+attachment))
+# 
+# # too slow: a large proportion of extremely slow reading times are due to participant 10003
+# # data.rt.critical %>% subset(subject == 10003) %>% ggplot(aes(pos, RT)) + geom_point() + facet_wrap(~item, scales = "free_y") # nothing out of the ordinary
+# # with(data_too_slow, xtabs(~RC+attachment)) # all super-slow reading times are for the controls of unambiguous conditions; 
+
+# # exclude trials with too fast RTs
+# data_problematic <- data_too_fast #rbind(data_too_fast, data_too_slow)
+# d_to_be_excluded <- data_problematic %>% dplyr::select(subject, experiment, item, condition) %>% unique %T>% {.$exclude <- T}
+# reading_rc %<>% left_join(d_to_be_excluded, by = c("subject", "experiment", "item", "condition"))
+reading_rc$exclude <- NA
+
+# merge in the contrasts and slice the data by position for analysis
+reading_rc %<>% left_join(exp2_contrasts, by = "condition")
+reading_rc_np1 = subset(reading_rc, posLabel =='N1' & is.na(exclude) )
+reading_rc_np2 = subset(reading_rc, posLabel =='N2' & is.na(exclude) )
+reading_rc_spillover = subset(reading_rc, posLabel == 'spillover' & is.na(exclude) )
+
+fname_models_spr_np1 <- '../workspace/models_spr_np1'
+fname_models_spr_np2 <- '../workspace/models_spr_np2'
+fname_models_spr_spillover <- '../workspace/models_spr_spillover'
+
+
+####################
+# POSITION: noun 1 #
+####################
+m.np1 = brm(RT ~ cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen.n1.sg + 
+                    (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen.n1.sg + 1|subject) +
+                    (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + 1|item),
+            family = brms::lognormal(), 
+            prior = c(prior_string("normal(0, 0.2)", class = "b")),
+            chains = n_chains, cores = n_cores, 
+            seed = 1234, iter = n_iter, 
+            data = reading_rc_np1, 
+            file = fname_models_spr_np1)
+
+####################
+# POSITION: noun 2 #
+####################
+
+m.np2 = brm(RT ~ cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen.n2.sg +
+                    (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen.n2.sg + 1|subject) +
+                    (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + 1|item),
+            family = brms::lognormal(), 
+            prior = c(prior_string("normal(0, 0.2)", class = "b")),
+            chains = n_chains, cores = n_cores, 
+            seed = 1234, iter = n_iter, 
+            data = reading_rc_np2, 
+            file = fname_models_spr_np2)
+
+
+#######################
+# POSITION: spillover #
+#######################
+m.spillover = brm(RT ~ cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen +
+                        (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen + 1|subject) +
+                        (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + 1|item),
+            family = brms::lognormal(), 
+            prior = c(prior_string("normal(0, 0.2)", class = "b")),
+            chains = n_chains, cores = n_cores, 
+            seed = 1234, iter = n_iter, 
+            data = reading_rc_spillover, 
+            file = fname_models_spr_spillover)
+
+```
+
+```{r sprModelPlot, results='asis', fig.height = 1.5, fig.cap="Estimates and 90% credible intervals (thin lines) as well as 80% credible intervals (thick lines) for the effect (in milliseconds) of unambiguous RC attachment relative to ambiguous attachment on reading times at the critical regions. The posterior probability that the parameter is smaller than (or larger than) zero is larger than $0.9$ if the 80% credible interval excludes zero, and larger than $0.95$ if the 90% credible interval excludes zero."}
+
+map_names <- c( "clWlen.n1.sg"="word length",
+                "clWlen.n2.sg"="word length",
+                "clWlen"="word length",
+                "cN1attachmentVsAmb"="N1 singular",
+                "cN2attachmentVsAmb"="N2 singular",
+                "cExperimental"="experimental - control",
+                "cExperimental:cN1attachmentVsAmb"="N1 attachment - ambiguous",
+                "cExperimental:cN2attachmentVsAmb"="N2 attachment - ambiguous"
+                )
+
+models <- list("noun 1" = m.np1, "noun 2" = m.np2, "spill-over" = m.spillover)
+p_exp2_coef_appendix <- 
+  create_model_coefs_plot( models, plot_stats = F, map_names = map_names
+                           #expand_right = 2.5, x_stat_adjust = -20 
+                         ) + xlab("Estimate") +
+                    theme(  strip.background = element_rect(fill="white") )
+
+
+# note: + sigma^2/2 is to get the mean instead of the median
+# note 2: not using + sigma^2/2 for the sake of consistency -- the plots show an estimate of exp(log-mean), not of the mean 
+transformations_rts <- c(mean_amb_ctrl_ms = "exp(b_Intercept - 0.5*b_cExperimental - 1/3*b_cN1attachmentVsAmb - 1/3*b_cN2attachmentVsAmb + 
+                                                (-0.5*-1/3)*`b_cExperimental:cN1attachmentVsAmb` +
+                                                (-0.5*-1/3)*`b_cExperimental:cN2attachmentVsAmb`)",
+                         mean_n1_ctrl_ms  = "exp(b_Intercept - 0.5*b_cExperimental + 2/3*b_cN1attachmentVsAmb - 1/3*b_cN2attachmentVsAmb +
+                                                 (-0.5*2/3)*`b_cExperimental:cN1attachmentVsAmb` +
+                                                 (-0.5*-1/3)*`b_cExperimental:cN2attachmentVsAmb`)",
+                         mean_n2_ctrl_ms  = "exp(b_Intercept - 0.5*b_cExperimental - 1/3*b_cN1attachmentVsAmb + 2/3*b_cN2attachmentVsAmb +
+                                                 (-0.5*-1/3)*`b_cExperimental:cN1attachmentVsAmb` +
+                                                 (-0.5*2/3)*`b_cExperimental:cN2attachmentVsAmb`)",
+
+                         mean_amb_rc_ms = "exp(b_Intercept + 0.5*b_cExperimental - 1/3*b_cN1attachmentVsAmb - 1/3*b_cN2attachmentVsAmb  +
+                                                  (0.5*-1/3)*`b_cExperimental:cN1attachmentVsAmb` +
+                                                  (0.5*-1/3)*`b_cExperimental:cN2attachmentVsAmb`)",
+                         mean_n1_rc_ms  = "exp(b_Intercept + 0.5*b_cExperimental + 2/3*b_cN1attachmentVsAmb - 1/3*b_cN2attachmentVsAmb  +
+                                                  (0.5*2/3)*`b_cExperimental:cN1attachmentVsAmb` +
+                                                  (0.5*-1/3)*`b_cExperimental:cN2attachmentVsAmb`)",
+                         mean_n2_rc_ms  = "exp(b_Intercept + 0.5*b_cExperimental - 1/3*b_cN1attachmentVsAmb + 2/3*b_cN2attachmentVsAmb  +
+                                                  (0.5*-1/3)*`b_cExperimental:cN1attachmentVsAmb` +
+                                                  (0.5*2/3)*`b_cExperimental:cN2attachmentVsAmb`)",
+                         
+                         delta_amb_attachment_ms = "mean_amb_rc_ms - mean_amb_ctrl_ms",
+                         delta_n1_attachment_ms  = "mean_n1_rc_ms - mean_n1_ctrl_ms",
+                         delta_n2_attachment_ms  = "mean_n2_rc_ms - mean_n2_ctrl_ms",
+
+                         # delta_n1singular = "",
+                         # delta_n2singular = "",
+                         
+                         delta_rc_m_control_ms = "(mean_amb_rc_ms+mean_n1_rc_ms+mean_n2_rc_ms)/3-(mean_amb_ctrl_ms+mean_n1_ctrl_ms+mean_n2_ctrl_ms)/3 ",
+                         delta_n1attachment_m_amb_ms = "delta_n1_attachment_ms - delta_amb_attachment_ms",
+                         delta_n2attachment_m_amb_ms = "delta_n2_attachment_ms - delta_amb_attachment_ms"
+                       )
+ 
+p <-   create_model_coefs_plot( models, plot_stats = F,
+                           map_names = c("delta_rc_m_control_ms"="RC attachment - control",
+                                         "delta_n1attachment_m_amb_ms"="N1 attachment - ambiguous", 
+                                         "delta_n2attachment_m_amb_ms"="N2 attachment - ambiguous"),
+                           transformations = transformations_rts,
+                           exclude_names = c("mean_amb_ctrl_ms", "mean_n1_ctrl_ms", "mean_n2_ctrl_ms", "mean_amb_rc_ms", "mean_n1_rc_ms",
+                                             "mean_n2_rc_ms", "delta_amb_attachment_ms", 
+                                             "delta_n1_attachment_ms", "delta_n2_attachment_ms",
+                                             "clWlen.n1.sg", "clWlen.n2.sg", "clWlen", "cN1attachmentVsAmb", "cN2attachmentVsAmb", "cExperimental",
+                                             "cExperimental:cN1attachmentVsAmb", "cExperimental:cN2attachmentVsAmb")
+                         ) + xlab("Estimate (ms)") + 
+                        theme(  strip.background = element_rect(fill="white") )
+
+suppressWarnings({
+  print(p)
+})
+
+```
+
+```{r sprRPDBayesF, eval=F, results='hide', message=FALSE, warning=FALSE}
+
+fname_bf <- "../workspace/models_spr_bf/bfs.rda"
+
+if (!file.exists(fname_bf))
+{
+  # save_all_pars=T and large number of iterations needed for Bayes factors
+  brm_template_bf_spr <- function(formula, file, df) {
+        brms::brm(formula = formula, 
+                  chains = 4, cores = 4, iter = 21000, warmup = 1000, save_all_pars = TRUE,
+                  family = brms::lognormal(),
+                  prior = c(set_prior("normal(0, 0.2)", lb = 0.01)),
+                  data = df, file = file)
+  }
+
+  m_original <- brm_template_bf_spr( RT ~ cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen +
+                                          (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen + 1|subject) +
+                                          (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + 1|item),
+                  file = "../workspace/models_spr_bf/m_full_n2",
+                  df = reading_rc_np2)
+  
+
+  
+  # save_all_pars=T and large number of iterations needed for Bayes factors
+  brm_template_bf_spr <- function(formula, file, df) {
+        brms::brm(formula = formula, 
+                  chains = 4, cores = 4, iter = 21000, warmup = 1000, save_all_pars = TRUE,
+                  family = brms::lognormal(),
+                  prior = c(set_prior("normal(0, 0.2)", lb = 0.01)),
+                  data = df, file = file)
+  }
+
+  m_original <- brm_template_bf_spr( RT ~ cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen +
+                                          (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen + 1|subject) +
+                                          (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + 1|item),
+                  file = "../workspace/models_spr_bf/m_full_n2",
+                  df = reading_rc_np2)
+  
+  m_alt_onlyN2 <- brm_template_bf_spr( RT ~ cExperimental * (cN2attachmentVsAmb) + cN1attachmentVsAmb + clWlen +
+                                            (cExperimental * (cN2attachmentVsAmb) + cN1attachmentVsAmb + clWlen + 1|subject) +
+                                            (cExperimental * (cN2attachmentVsAmb) + cN1attachmentVsAmb + 1|item),
+                  file = "../workspace/models_spr_bf/m_onlyN2_n2",
+                  df = reading_rc_np2)
+  
+  m_alt_onlyN1 <- brm_template_bf_spr( RT ~ cExperimental * (cN1attachmentVsAmb) + cN2attachmentVsAmb + clWlen +
+                                            (cExperimental * (cN1attachmentVsAmb) + cN2attachmentVsAmb + clWlen + 1|subject) +
+                                            (cExperimental * (cN1attachmentVsAmb) + cN2attachmentVsAmb + 1|item),
+                  file = "../workspace/models_spr_bf/m_onlyN1_n2",
+                  df = reading_rc_np2)
+ 
+  m_alt_null <- brm_template_bf_spr( RT ~ cExperimental + cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen +
+                                            (cExperimental + cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + 1|subject) +
+                                            (cExperimental + cN1attachmentVsAmb + cN2attachmentVsAmb + 1|item),
+                  file = "../workspace/models_spr_bf/m_null_n2",
+                  df = reading_rc_np2)
+ 
+  bf1_spr_n2 <- bayes_factor(m_original, m_alt_onlyN2)
+  # Estimated Bayes factor in favor of m_original over m_alt_onlyN2: 0.00007 (inv: 15011)
+  
+  bf2_spr_n2 <- bayes_factor(m_original, m_alt_onlyN1)
+  # Estimated Bayes factor in favor of m_original over m_alt_onlyN1: 0.59675 (inv: 1.7)
+  
+  bf3_spr_n2 <- bayes_factor(m_original, m_alt_null)
+  # Estimated Bayes factor in favor of m_original over m_alt_null: 0.00003 (inv: 33649)
+
+
+  save(bf1_spr_n2, bf2_spr_n2, bf3_spr_n2, file = fname_bf)
+}
+
+
+load(fname_bf)
+```
+
+-- present coefficients clearly --
+
+Figure \ref{fig:sprAverageRTs} shows the average log-reading times transformed back to the original scale (milliseconds) and figure \ref{fig:sprModelPlot} shows the estimates and credible intervals for the key contrasts at the critical regions (in milliseconds; figure \ref{fig:sprModelPlotAppendix} in appendix B shows all estimates in log-units).
+
+As figure \ref{fig:sprModelPlot} shows, we found moderate evidence for a slowdown in relative clause attachment conditions relative to the control conditions which occurred at both, N1 (`r effect_summary_string(p=p , model="noun 1", coef="RC attachment - control", fmt="%0.0f", lower = F)`) and N2 (`r effect_summary_string(p=p , model="noun 2", coef="RC attachment - control", fmt="%0.0f", lower = F)`).
+
+In the *N1 attachment condition*, relative to the ambiguous condition, we found moderate evidence for a speedup at N2 (`r effect_summary_string(p=p , model="noun 2", coef="N1 attachment - ambiguous", fmt="%0.0f", lower = T)`).
+Fig. \ref{fig:sprModelPlot} shows that the credible intervals for all other attachment-related effects were not unambiguous in sign, which reflects the absence of unambiguous evidence of any reading time differences between the *N2 attachment condition* and the ambiguous condition. 
+
+```{r sprEffectSize, results='asis', message=FALSE, warning=FALSE}
+# for the posterior prob of an ambiguity advantage larger than a specific effect
+samples_spr_np2 <- brms::posterior_samples(m.np2)
+samples_spr_spillover <- brms::posterior_samples(m.spillover)
+
+for (i in seq_along(transformations_rts)) {
+  transformations_code <- paste(names(transformations_rts)[i], transformations_rts[i], sep = "=" ) %>% 
+                          parse(text = .)
+  samples_spr_np2 %<>% within(eval(transformations_code) )
+  samples_spr_spillover %<>% within(eval(transformations_code) )
+}
+```
+
+The posterior probability that the ambiguity advantage effect (the difference between the ambiguous and the N1 attachment condition) was larger than $`r min(prior_amb_adv_ms)`\,ms$ (the smallest ambiguity effect attested in the literature) was $`r mean(samples_spr_np2$delta_n1attachment_m_amb_ms > min(prior_amb_adv_ms))`$ at N2, and $`r mean(samples_spr_spillover$delta_n1attachment_m_amb_ms > min(prior_amb_adv_ms))`$ at the spillover region.
+
+[Compute the posterior probability of an ambiguity advantage for the joint N2 + spill-over region.]
+
+
+## Discussion
+
+The slowdown in the relative clause attachment conditions compared to the control conditions is likely to reflect the increased processing difficulty associated with the processing and attachment of a relative clause, compared to an adjective. 
+While we didn’t find strong evidence for a slowdown at N2 in N2 attachment sentences, the finding of a slowdown in the range of [xxx-xxx] (90% CrI) was consistent with the slowdown N2 attachment sentences in RPD in experiment 1 in the range of [xxx-xxx] (90%).
+The speedup at N2 in N1 attachment sentences relative to ambiguous sentences likely stemmed from the unavailability of N2 as an attachment site, ... [why no slowdown in contrast to N2 attachment then?]
+Importantly, our data did not support the presence of an ambiguity advantage. We hypothesized that such an effect could occur either on N2 or on the spillover position. The posterior probability of an ambiguity advantage of the expected magnitude on N2 was very low (0.01), and while it was noteworthy at the spill-over region (0.39), its magnitude at the spill-over region would need to compensate for the N1 attachment speedup in order to yield a net ambiguity advantage.  
+
+
+# General Discussion
+
+... Here is a recap why we did this experiment, what roughly what the predictions were, what we found (do the experiments even show the same thing?), what it means, and what the caveats are. In a nutshell, we looked for an ambiguity advantage in Turkish and didn’t find one. This finding is not compatible with a version of underspecification which is capable of suspending RC attachment as it predicts an ambiguity advantage in Turkish, but there is no evidence of one. It is consistent with a race-based model such as SMCM, as well as with a version of underspecification which is incapable of suspending RC attachment. But if it’s the latter, we need to raise the question - why would a parser capable of underspecification, and which carries it out in order to save time be unable to postpone RC attachment in anticipation of an opportunity to save time? Especially if it doesn’t stand to lose any time in the process? Does it only go for certain things, and doesn’t like to ‘gamble’? ... 
+
+# to-do
+
+- Make terminology consistent with regard to N1-N2/NP1-NP2 ()
+- Give the two versions of underspecification catchy names 
+- Consider stating in every results section that every speed-up or slowdown is relative to the ambiguous condition. Currently there’s too many instances of “compared/relative to the ambiguous condition”, which is good for readers who just scan the text, but it’s also awfully tedious to read.
+
+
+<!-- Discuss the underspecification mechanism somewhere, and that the 'underspecification' might actually be at the semantic or mental model level. Maybe place this in the general discussion, since that's where speculation most natually lives. 
+-->
+
+<!-- 
+we'll most likely assume that that must mean that it *doesn't* specify (cf. Logacev and Vasishth, 2016b), since there is no reason why a proper syntactic underspecification (cite) would actually save time.
+-->
+
+<!-- The analysis showed a significant slowdown at the first noun in the RC attachment conditions compared to the control conditions. This finding is not surprising considering that relative clauses are syntactically more complex than the adverbial modifiers in this experiment, which always consisted of one word. -->
+
+<!-- The underspecification account predicted an interaction between modifier type and the N2 singular contrast. Because we expected a slowdown of approximately $50\,ms$ in the non-local condition relative to the ambiguous condition, we predicted an interaction the *RC* $\times$  *N2 singular* of approximately $50\,ms$, reflecting slower reading times for sentences with only one attachment option due to underspecification in ambiguous conditions. No such effect was found. Moreover, the confidence interval for this interaction ($[-35\,ms;\,8\,ms]$) is not compatible with a predicted slowdown of this magnitude. -->
+<!-- More importantly, neither is the Bayesian credible interval of $[-75\,ms;\,15\,ms]$, which was computed for this parameter. -->
+<!-- Our finding is clearly incompatible with an ambiguity advantage of the expected magnitude. -->
+<!-- However, this finding is compatible with the URM, because it predicted the lack of an ambiguity advantage in Turkish and thus the lack of a significant interaction between modifier type and the *N2 singular* contrast, which is what we found. -->
+
+<!-- Furthermore, the interaction *RC $\times$ N1 singular* provided evidence for a RC attachment-related slowdown at the second noun when attachment was non-local, but no such effect was found on the first noun. This finding is compatible with the URM and the underspecification model. -->
+<!-- Under the assumptions of the URM, the parser first attempts to attach the RC to the first noun. In the non-local attachment condition, it fails at doing so because such an attachment is unavailable. In the other two conditions, it succeeds. Subsequently, it moves on to the next word, and the relative clause is attached to the second noun in the non-local attachment condition, at some processing cost compared to the two other conditions, where RC attachment was already completed during the reading of the first noun. A necessary assumption is that the failure to attach the RC at the first noun comes at no processing cost, i.e. that attempting to attach a relative clause and succeeding requires the same amount of time as attempting to do so and failing. Although such an assumption may appear somewhat surprising and is certainly worth further investigation, the parser has good reasons to expect a potential attachment site at the next word because of the genitive maker on the first noun. Therefore, it does not need to treat the unavailability of the first noun for RC attachment as an anomaly, and may simply move on to the next word once RC attachment has failed. -->
+<!-- Under the assumptions of the underspecification parser, relative clause attachment is delayed until the second noun (*fans*) is read. At this point RC attachment is carried out in both unambiguous conditions. The underspecification parser can explain the longer reading times in the non-local condition under the assumption that (i) non-local attachment is inherently more difficult because it involves retrieval of the last noun from memory, or (ii) the parser always attempts to carry out local attachment first, and only after failing to do so, it attaches the RC non-locally. -->
+
+
+
+# References
+```{r create_r-references}
+r_refs(file = "r-references.bib")
+```
+
