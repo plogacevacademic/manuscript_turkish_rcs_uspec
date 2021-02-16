@@ -317,7 +317,7 @@ The percentage of *regressive refixations*, which is the proportion of times rea
 
 ```{r Eye.LoadData, results='hide', message=FALSE, warning=FALSE}
 
-crit_em_rc <- read.csv("../data/Experiment_Eye/corrected_data_em.csv")
+crit_em_rc <- read.csv("../data/experiment_eye/corrected_data_em.csv")
 crit_em_rc$roiLabel %<>% factor(levels = c("pre-critical", "N1", "N2", "spillover"))
 
 recode_char2double <- function(x, mapping) {

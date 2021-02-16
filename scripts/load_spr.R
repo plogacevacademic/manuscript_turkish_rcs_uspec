@@ -1,4 +1,4 @@
-source(file.path(dir_base, "source/misc.R"))
+source(file.path(dir_base, "scripts/misc.R"))
 
 suppressPackageStartupMessages({
   library(plyr)
@@ -18,7 +18,7 @@ condition_info$nps <- with(condition_info, paste(N1_number, N2_number))
 load_SPR1 <- function()
 {
     # determine the file names of the data files
-    data_path <- file.path(dir_base, "data/Experiment_SPR/Experiments/TurkishRCs/Results")
+    data_path <- file.path(dir_base, "data/experiment_spr/Experiments/TurkishRCs/Results")
     fnames <- dir(data_path, pattern = "*.dat", full.names = TRUE)
     
     # read data
