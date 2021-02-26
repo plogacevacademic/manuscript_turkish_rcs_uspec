@@ -48,18 +48,18 @@ footnotelist      : no
 linenumbers       : no
 mask              : no
 draft             : no
-documentclass     : "apa6"
+documentclass     : "apa7"
 classoption       : "doc"
 output:
+  papaja::apa6_word:
+    fig_caption: yes
+  html_document:
+    keep_md: yes 
   papaja::apa6_pdf:
     keep_md: yes 
     keep_tex: yes
     includes:
         in_header: paper_draft_preamble.tex
-  html_document:
-    keep_md: yes 
-  papaja::apa6_word:
-    fig_caption: yes
 editor_options: 
   chunk_output_type: console
 ---
@@ -100,7 +100,8 @@ library(ggpubr)
 library(knitcitations)
 
 
-source("../../../Code/plmisc/R/misc.R")
+#source("../../../Code/plmisc/R/misc.R")
+source("../scripts/misc.R")
 
 ```
 
@@ -540,7 +541,7 @@ p_rp <- m_eye_rp %>% { plot_coefs(., transformations = transformations_emprop)  
 
 ```
 
-```{r emStandardMeasuresModelCoefPlot, results='asis', fig.height = 5.5, fig.cap="Estimates and 90% credible intervals (thin lines) as well as 80% credible intervals (thick lines)  for the analyses of first-pass reading time, regression-path duration, total fixation time, regression probability, and refixation probability. The posterior probability that the parameter is smaller than (or larger than) zero is larger than $0.9$ if the 80% credible interval excludes zero, and larger than $0.95$ if the 90% credible interval excludes zero.", message=FALSE, warning=FALSE}
+```{r emStandardMeasuresModelCoefPlot, results='asis', fig.height = 5.5, fig.cap="Estimates and 90% credible intervals (thin lines) as well as 80% credible intervals (thick lines)  for the analyses of first-pass reading time, regression-path duration, total fixation time, regression probability, and refixation probability. The posterior probability that the parameter is smaller than (or larger than) zero is larger than 90% if the 80% credible interval excludes zero, and larger than 95% if the 90% credible interval excludes zero.", message=FALSE, warning=FALSE}
 
 add_title <- function(p, title, hjust) { 
   p + ggtitle(title) + theme(plot.title = element_text(hjust=hjust))
@@ -600,21 +601,32 @@ row_summary_string90 <- function(row, fmt, lower = T)#
   res
 }
 
-row_summary_ci95 <- function(row, fmt, lower = T)#
+row_summary_ci95 <- function(row, fmt)#
 {
   fmt <- paste0("[", fmt, "; ", fmt, "]")
   res <- sprintf(fmt, row$lower95, row$upper95 )
   res
 }
 
+row_summary_ci90 <- function(row, fmt)#
+{
+  fmt <- paste0("[", fmt, "; ", fmt, "]")
+  res <- sprintf(fmt, row$lower95, row$upper95 )
+  res
+}
 effect_summary_string <- function(p, coef, fmt, model = NULL, lower = T) {
     extract_effect(p=p, model=model, coef=coef) %>%
         row_summary_string90(fmt = fmt, lower = lower)
 }
 
-effect_ci95 <- function(p, coef, fmt, model = NULL, lower = T) {
+effect_ci95 <- function(p, coef, fmt, model = NULL) {
     extract_effect(p=p, model=model, coef=coef) %>%
-        row_summary_ci95(fmt = fmt, lower = lower)
+        row_summary_ci95(fmt = fmt)
+}
+
+effect_ci90 <- function(p, coef, fmt, model = NULL) {
+    extract_effect(p=p, model=model, coef=coef) %>%
+        row_summary_ci90(fmt = fmt)
 }
 
 ```
@@ -959,7 +971,7 @@ for (ii) the interactions between N1 and N2 unvailability and the presence of a 
 ```{r SPR.LoadData}
 
 dir_base <- ".."
-(source("../source/load_SPR.R"))
+(source("../scripts/load_spr.R"))
 
 spr1_res <- load_SPR1()
 reading_rc <- spr1_res$reading_rc %<>% subset(posLabel %in% c('V/Adj','N1','N2','spillover'))
@@ -976,9 +988,11 @@ reading_rc %<>% within({
   clWlen.n2.sg <- scale(log(wlen.n2.sg))[,1]
 })
 
-mrt <- plyr::ddply(reading_rc, .(modifier, attachment, posLabel), function(d) {
-  mean.se.cousineau(log(d$RT), d$subject, d$condition, conditions.cnt=6) %T>% 
-      {.$upper <- exp(.$M + 1.96*.$SE); .$lower <- exp(.$M - 1.96*.$SE); .$M <- exp(.$M); .$SE <- NULL} 
+mrt <- plyr::ddply(reading_rc, .(posLabel), function(d) {
+  d$log_RT <- log(d$RT)
+  se_cousineau(d, n_conditions=6, subject, log_RT, group = c("modifier", "attachment"), is_proportion = FALSE) %T>% 
+      {.$upper <- exp(.$M + 1.96*.$SE); .$lower <- exp(.$M - 1.96*.$SE); .$M <- exp(.$M); .$SE <- NULL} %>%
+      dplyr::select(-Var)
 })
 
 ```
@@ -1013,8 +1027,10 @@ p <- ggplot(mrt, aes(attachment, M, group=attachment:modifier,
       theme(  strip.background =element_rect(fill="white") ) + 
       scale_x_discrete(labels = NULL, breaks = NULL) + 
       theme(legend.position='top')
+p <- p + scale_color_discrete(name="") + scale_linetype_discrete(name="") + scale_shape_discrete(name="")
 
 print(p)
+
 
 ```
 
@@ -1106,14 +1122,14 @@ m.spillover = brm(RT ~ cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb)
 
 ```
 
-```{r sprModelPlot, results='asis', fig.height = 1.5, fig.cap="Estimates and 90% credible intervals (thin lines) as well as 80% credible intervals (thick lines) for the effect (in milliseconds) of unambiguous RC attachment relative to ambiguous attachment on reading times at the critical regions. The posterior probability that the parameter is smaller than (or larger than) zero is larger than $0.9$ if the 80% credible interval excludes zero, and larger than $0.95$ if the 90% credible interval excludes zero."}
+```{r sprModelPlot, results='asis', fig.height = 1.5, fig.cap="Estimates and 90% credible intervals (thin lines) as well as 80% credible intervals (thick lines) for the effect (in milliseconds) of unambiguous RC attachment relative to ambiguous attachment on reading times at the critical regions. The posterior probability that the parameter is smaller than (or larger than) zero is larger than 90% if the 80% credible interval excludes zero, and larger than 95% if the 90% credible interval excludes zero."}
 
 map_names <- c( "clWlen.n1.sg"="word length",
                 "clWlen.n2.sg"="word length",
                 "clWlen"="word length",
                 "cN1attachmentVsAmb"="N1 singular",
                 "cN2attachmentVsAmb"="N2 singular",
-                "cExperimental"="experimental - control",
+                "cExperimental"="RC attachment - control",
                 "cExperimental:cN1attachmentVsAmb"="N1 attachment - ambiguous",
                 "cExperimental:cN2attachmentVsAmb"="N2 attachment - ambiguous"
                 )
@@ -1252,14 +1268,12 @@ if (!file.exists(fname_bf))
 load(fname_bf)
 ```
 
--- present coefficients clearly --
-
-Figure \ref{fig:sprAverageRTs} shows the average log-reading times transformed back to the original scale (milliseconds) and figure \ref{fig:sprModelPlot} shows the estimates and credible intervals for the key contrasts at the critical regions (in milliseconds; figure \ref{fig:sprModelPlotAppendix} in appendix B shows all estimates in log-units).
+Figure \ref{fig:sprAverageRTs} shows the average log-reading times transformed back to the original scale in milliseconds and figure \ref{fig:sprModelPlot} shows the estimates and credible intervals for the key contrasts at the critical regions in milliseconds. The effects of attachment shown in it correspond to the interactions between the presence of a relative clause and the contrasts encoding the grammatical number of N1 and N2, thus accounting for the effect of RC attachment when a relative clause is present.
+Figure \ref{fig:sprModelPlotAppendix} in the appendix shows all model coefficients in the original units (on the log-scale). 
 
 As figure \ref{fig:sprModelPlot} shows, we found moderate evidence for a slowdown in relative clause attachment conditions relative to the control conditions which occurred at both, N1 (`r effect_summary_string(p=p , model="noun 1", coef="RC attachment - control", fmt="%0.0f", lower = F)`) and N2 (`r effect_summary_string(p=p , model="noun 2", coef="RC attachment - control", fmt="%0.0f", lower = F)`).
-
-In the *N1 attachment condition*, relative to the ambiguous condition, we found moderate evidence for a speedup at N2 (`r effect_summary_string(p=p , model="noun 2", coef="N1 attachment - ambiguous", fmt="%0.0f", lower = T)`).
-Fig. \ref{fig:sprModelPlot} shows that the credible intervals for all other attachment-related effects were not unambiguous in sign, which reflects the absence of unambiguous evidence of any reading time differences between the *N2 attachment condition* and the ambiguous condition. 
+In the *N1 attachment condition*, relative to the ambiguous condition, we found moderate evidence for a speedup at N2 (`r effect_summary_string(p=p , model="noun 2", coef="N1 attachment - ambiguous", fmt="%0.0f", lower = T)`), which did not persist until the the spill-over region (`r effect_summary_string(p=p , model="spill-over", coef="N1 attachment - ambiguous", fmt="%0.0f", lower = T)`).
+Meanwhile, there was moderate evidence of a slowdown in the *N2 attachment condition* relative to the ambiguous condition at N2 (`r effect_summary_string(p=p , model="noun 2", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F)`) and nearly no indication of such an effect at the spill-over region (`r effect_summary_string(p=p, model="spill-over", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F)`).
 
 ```{r sprEffectSize, results='asis', message=FALSE, warning=FALSE}
 # for the posterior prob of an ambiguity advantage larger than a specific effect
@@ -1274,27 +1288,39 @@ for (i in seq_along(transformations_rts)) {
 }
 ```
 
-The posterior probability that the ambiguity advantage effect (the difference between the ambiguous and the N1 attachment condition) was larger than $`r min(prior_amb_adv_ms)`\,ms$ (the smallest ambiguity effect attested in the literature) was $`r mean(samples_spr_np2$delta_n1attachment_m_amb_ms > min(prior_amb_adv_ms))`$ at N2, and $`r mean(samples_spr_spillover$delta_n1attachment_m_amb_ms > min(prior_amb_adv_ms))`$ at the spillover region.
-
-[Compute the posterior probability of an ambiguity advantage for the joint N2 + spill-over region.]
+The posterior probability that the ambiguity advantage effect (the difference between the N1 attachment and the ambiguous condition) was larger than the smallest ambiguity effect attested in the literature was $P(\beta \geq 26\,ms ) = `r mean(samples_spr_np2[["delta_n1attachment_m_amb_ms"]] > min(prior_amb_adv_ms))`$ at N2, and 
+$P(\beta \geq 26\,ms ) = `r mean(samples_spr_spillover[["delta_n1attachment_m_amb_ms"]] > min(prior_amb_adv_ms))`$ at the spill-over region.
 
 
 ## Discussion
 
-The slowdown in the relative clause attachment conditions compared to the control conditions is likely to reflect the increased processing difficulty associated with the processing and attachment of a relative clause, compared to an adjective. 
-While we didn’t find strong evidence for a slowdown at N2 in N2 attachment sentences, the finding of a slowdown in the range of [xxx-xxx] (90% CrI) was consistent with the slowdown N2 attachment sentences in RPD in experiment 1 in the range of [xxx-xxx] (90%).
-The speedup at N2 in N1 attachment sentences relative to ambiguous sentences likely stemmed from the unavailability of N2 as an attachment site, ... [why no slowdown in contrast to N2 attachment then?]
-Importantly, our data did not support the presence of an ambiguity advantage. We hypothesized that such an effect could occur either on N2 or on the spillover position. The posterior probability of an ambiguity advantage of the expected magnitude on N2 was very low (0.01), and while it was noteworthy at the spill-over region (0.39), its magnitude at the spill-over region would need to compensate for the N1 attachment speedup in order to yield a net ambiguity advantage.  
+We found an across-the-board slowdown in relative clause attachment conditions compared to the control conditions, which likely reflects the increased processing difficulty associated with the processing and attachment of relative clauses, compared to adjectives. 
+While we did not find strong evidence for a slowdown at N2 in N2 attachment sentences, the finding of a slowdown in the range of
+`r effect_ci90(p=p, coef="N2 attachment - ambiguous", fmt="%0.0f", model="noun 2")` (90% CrI) was consistent with the slowdown in N2 attachment sentences in RPD at N2 in experiment 1, which was in the range of `r effect_ci90(p=p, coef="N2 attachment - ambiguous", fmt="%0.0f", model="noun 2")` (90% CrI). As in experiment 1, this slowdown likely reflects late RC attachment in the N2 attachment condition.
+The speedup at N2 in N1 attachment sentences relative to ambiguous sentences suggests that the parser *sometimes* considers attaching the RC to N2 in ambiguous conditions, but not in N1 attachment conditions.
 
+Importantly, our data did not support the presence of an ambiguity advantage. We hypothesized that such an effect could occur either on N2 or on the spillover position. The posterior probability of an ambiguity advantage of the expected magnitude on N2 was very low ($`r mean(samples_spr_np2[["delta_n1attachment_m_amb_ms"]] > min(prior_amb_adv_ms))`$), and while it was noteworthy at the spill-over region ($`r mean(samples_spr_spillover[["delta_n1attachment_m_amb_ms"]] > min(prior_amb_adv_ms))`$), its magnitude at the spill-over region would need to compensate for the N1 attachment speedup in order to yield a net ambiguity advantage.  
+
+<!-- to-do: Make sure that its clear that exp 1 is between items and experiment 2 is within-items. -->
 
 # General Discussion
 
-... Here is a recap why we did this experiment, what roughly what the predictions were, what we found (do the experiments even show the same thing?), what it means, and what the caveats are. In a nutshell, we looked for an ambiguity advantage in Turkish and didn’t find one. This finding is not compatible with a version of underspecification which is capable of suspending RC attachment as it predicts an ambiguity advantage in Turkish, but there is no evidence of one. It is consistent with a race-based model such as SMCM, as well as with a version of underspecification which is incapable of suspending RC attachment. But if it’s the latter, we need to raise the question - why would a parser capable of underspecification, and which carries it out in order to save time be unable to postpone RC attachment in anticipation of an opportunity to save time? Especially if it doesn’t stand to lose any time in the process? Does it only go for certain things, and doesn’t like to ‘gamble’? ... 
+We conducted two reading experiments to test a prediction made by the strategic underspecification account: If readers strategically underspecify ambiguous sentences, they should do so even when RCs are pre-nominal, as they are in Turkish. Therefore, we expect to see an ambiguity advantage in such cases too. 
+In contrast, if readers don't underspecify, such as in the SMCM account, we don't expect to see any ambiguity advantages.
+
+In experiment 1, we tested this prediction in an eye tracking experiment in which a relative clause attachment ambiguity was disambiguated by means of plausibility. 
+<!-- to-do: stress above that it's not really just animacy, but plausibility -->
+We did not find clear evidence for or against an ambiguity advantage in this experiment. While the first-pass reading time and the total fixation time at the critical region did not indicate shorter processing times in ambiguous sentences compared to the preferred N1 attachment conditions, the regression path duration as well as the number of first-pass regressions pointed to a *potential* small slowdown. This finding is consistent with the absence of an ambiguity advantage, as well as with the presence of a relatively small ambiguity advantage.
+
+In experiment 2, we tested the same prediction as in experiment 1, but with a different experiment design. 
+We disambiguated relative clause attachment by means of anaphor co-reference and used control conditions to control for word length differences. The results of this experiment did not 
+In this experiment, we 
+
+
+This finding is not compatible with a version of underspecification which is capable of suspending RC attachment as it predicts an ambiguity advantage in Turkish, but there is no evidence of one. It is consistent with a race-based model such as SMCM, as well as with a version of underspecification which is incapable of suspending RC attachment. But if it's the latter, we need to raise the question - why would a parser capable of underspecification, and which carries it out in order to save time be unable to postpone RC attachment in anticipation of an opportunity to save time? Especially if it doesn’t stand to lose any time in the process? Does it only go for certain things, and doesn’t like to ‘gamble’? ... 
 
 # to-do
 
-- Make terminology consistent with regard to N1-N2/NP1-NP2 ()
-- Give the two versions of underspecification catchy names 
 - Consider stating in every results section that every speed-up or slowdown is relative to the ambiguous condition. Currently there’s too many instances of “compared/relative to the ambiguous condition”, which is good for readers who just scan the text, but it’s also awfully tedious to read.
 
 
@@ -1321,5 +1347,17 @@ we'll most likely assume that that must mean that it *doesn't* specify (cf. Loga
 # References
 ```{r create_r-references}
 r_refs(file = "r-references.bib")
+```
+
+\newpage
+
+# Appendix
+
+```{r sprModelPlotAppendix, results='asis', fig.height = 2, fig.cap="Estimates and 90% credible intervals (thin lines) as well as 80% credible intervals (thick lines) for the effect (in log-units) of unambiguous RC attachment relative to ambiguous attachment on reading times at the critical regions. The posterior probability that the parameter is smaller than (or larger than) zero is larger than $0.9$ if the 80% credible interval excludes zero, and larger than $0.95$ if the 90% credible interval excludes zero."}
+
+suppressWarnings({
+  print(p_exp2_coef_appendix)
+})
+
 ```
 
