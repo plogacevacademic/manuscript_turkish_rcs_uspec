@@ -1,4 +1,4 @@
-\documentclass[english, doc]{apa7}
+\documentclass[english, man]{apa7}
 
 \usepackage[]{graphicx}
 \usepackage[]{color}
@@ -9,7 +9,7 @@
 \usepackage{amsmath}
 \usepackage{ifxetex,ifluatex}
 \hypersetup{
-  pdftitle={Incrementality in Pre-nominal Relative Clause Attachment},
+  pdftitle={Absence of Evidence for Underspecification in Prenominal Relative Clause Attachment},
   pdflang={en-EN},
   pdfkeywords={keywords},
   hidelinks,
@@ -42,7 +42,8 @@
 \def \todo#1 { \colorbox{yellow!30}{#1} }
 
 
-\shorttitle{Pre-nominal RC Attachment}
+\title{Absence of Evidence for Underspecification in Prenominal Relative Clause Attachment}
+\shorttitle{Underspecification in Prenominal RC Attachment}
 \author{Pavel Logačev\textsuperscript{1}, Özgur Aydın\textsuperscript{2}, Müge Tuncer\textsuperscript{3}}
 \affiliation{
 \vspace{0.5cm}
@@ -56,7 +57,7 @@
 
 Correspondence concerning this article should be addressed to Pavel Logačev, %, Postal address. 
 E-mail: pavel.logacev@boun.edu.tr}
-\keywords{keywords\newline\indent Word count: X}
+\keywords{relative clause attachment, underspecification, Turkish\newline\indent Word count: 6,849}
 \usepackage{csquotes}
 \ifxetex
   % Load polyglossia as late as possible: uses bidi with RTL langages (e.g. Hebrew, Arabic)
@@ -123,8 +124,8 @@ library(ggpubr)
 library(knitcitations)
 
 
-#source("../../../Code/plmisc/R/misc.R")
 source("../scripts/misc.R")
+source("../scripts/format_fn.r")
 
 options(dplyr.summarise.inform = FALSE)
 
@@ -135,10 +136,14 @@ options(dplyr.summarise.inform = FALSE)
 
 
 \abstract{
-We present data from two reading experiments in Turkish in which we find no evidence for the hypothesis that sentences with ambiguous attachment are processed faster than their unambiguous counterparts. We conclude that there is no evidence for an ambiguity advantage in the processing of ambiguous sentences with pre-nominal relative clauses and argue that this finding poses a major challenge for the strategic underspecification account.
-Traxler et al.~(1998) have found that relative clauses with ambiguous attachment are read faster than their unambiguous counterparts, under certain conditions. Presently, there are two broad classes of accounts of this phenomenon: \emph{Race-based models} (van Gompel et al., 2000; Logacev \& Vasishth, 2016) posit that ambiguous sentences are read faster due to a `race' between several permissible analyses of the sentence. In contrast, the \emph{strategic underspecification account} by Swets et al.~(2008) maintains that, under the right conditions, readers are capable of underspecifying ambiguities in order to save time. We argue that while their predictions of the two accounts differ only quantitatively in languages with post-nominal relative clauses, such as English, they make qualitatively different predictions for structures with pre-nominal relative clauses, such as in Turkish. While the underspecification account predicts an ambiguity in Turkish, for the same reason as in English, race-based accounts predict the absence of such an effect.
-}
+Traxler et al. (1998) have found that relative clauses with ambiguous attachment are sometimes read faster than their unambiguous counterparts. Two broad classes of theories account for this phenomenon: Race-based models posit that ambiguous sentences are read faster due to a ‘race’ between several permissible analyses of the sentence. In contrast, the strategic underspecification account maintains that, under the right conditions, readers underspecify ambiguities in order to save time. We show the two accounts make qualitatively different predictions for structures with pre-nominal relative clauses, such as in Turkish. While the underspecification account predicts an ambiguity in Turkish, race-based accounts predict the absence of such an effect. 
+We present data from two reading experiments in Turkish in which we find no evidence for an ambiguity advantage in the processing of ambiguous sentences with prenominal relative clauses and argue that this finding poses a major challenge for the strategic underspecification account.
 
+% long version
+%Traxler et al.~(1998) have found that relative clauses with ambiguous attachment are read faster than their unambiguous counterparts under certain conditions. Presently, there are two broad classes of accounts of this phenomenon: \emph{Race-based models} (van Gompel et al., 2000; Loga\v cev \& Vasishth, 2016) posit that ambiguous sentences are read faster due to a `race' between several permissible analyses of the sentence. In contrast, the \emph{strategic underspecification account} by Swets et al.~(2008) maintains that, under the right conditions, readers are capable of underspecifying ambiguities in order to save time. We argue that while the two accounts make similar predictions for languages with postnominal relative clauses, such as English, they make qualitatively different predictions for structures with prenominal relative clauses, such as in Turkish. While the underspecification account predicts an ambiguity in Turkish, race-based accounts predict the absence of such an effect.
+%We present data from two reading experiments in Turkish in which we fail to find evidence for the hypothesis that sentences with ambiguous attachment are processed faster than their unambiguous counterparts. We conclude that there is no evidence for an ambiguity advantage in the processing of ambiguous sentences with prenominal relative clauses and argue that this finding poses a major challenge for the strategic underspecification account.
+}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 \maketitle
 
@@ -156,12 +161,12 @@ One important question in human sentence comprehension has always been how the h
         \end{xlist}
  \end{exe}
 
-Because this local ambiguity is sometimes resolved towards one reading and sometimes towards the other in all attachment conditions, disambiguation of the local ambiguity at \emph{moustache} results in occasional reanalysis in both unambiguous conditions, (\ref{Traxler98}b) and (\ref{Traxler98}c). Since globally ambiguous sentences like (\ref{Traxler98}a) are never disambiguated, reanalysis is never required. Therefore, on a certain proportion of occasions, locally ambiguous sentences cause reanalysis-related slowdowns, while globally ambiguous sentences do not, resulting in an ambiguity advantage. The ambiguity advantage effect has been replicated in multiple experiments \citep{vanGompelEtAl:2001, vanGompelEtAl:2005, vonderMalsburgVasishth:2013, DillonEtAl:2019}.
+Because this local ambiguity is sometimes resolved towards one reading and sometimes towards the other in all attachment conditions, the disambiguation of the local ambiguity at \emph{moustache} results in occasional reanalysis in both unambiguous conditions, (\ref{Traxler98}b) and (\ref{Traxler98}c). Since globally ambiguous sentences like (\ref{Traxler98}a) are never disambiguated, reanalysis is never required. Therefore, on a certain proportion of occasions, locally ambiguous sentences cause reanalysis-related slowdowns, while globally ambiguous sentences do not, resulting in an ambiguity advantage. The ambiguity advantage effect has been replicated in multiple experiments \citep{vanGompelEtAl:2001, vanGompelEtAl:2005, vonderMalsburgVasishth:2013, DillonEtAl:2019}.
 
 Multiple alternative explanations of the ambiguity advantage have been proposed, such as surprisal \citep{Levy:2008, Hale:2001}, and specific implementations of constraint-based models \citep{GreenMitchell:2006, VosseKempen:2009}. Levy's (2008) independently motivated surprisal account posits that the processing difficulty at each word is proportional to the word's surprisal value, that is, to its negative conditional log-probability, given the context. According to this account, the potentially disambiguating word ``moustache'\,' is associated with higher surprisal in locally ambiguous sentences such as (\ref{Traxler98}b) and (\ref{Traxler98}c) than in globally ambiguous sentences such as (\ref{Traxler98}a) because it is compatible with both possible structures in ambiguous sentences, but with only one structure in unambiguous sentences. Thus, the potentially disambiguating word has a higher conditional probability in ambiguous sentences than in unambiguous sentences. Because higher conditional probability corresponds to lower surprisal, the shorter reading times in globally ambiguous conditions compared to the locally ambiguous conditions are explained by the lower surprisal in ambiguous sentences.
 
-Another influential alternative account has been the underspecification account \cite{SwetsEtAl:2008}, which posits that the parser may underspecify ambiguities if their disambiguation is not required by the task. They argue that because participants in the studies by Traxler et al., as well as Van Gompel et al.~were asked fairly superficial questions about the sentences they read, they decided that ambiguous sentences don't need to be disambiguated as they knew that they wouldn't be asked comprehension questions about the ambiguous grammatical relation. In other words, readers underspecify RC attachment when they believe that it is irrelevant. For example, RCs with ambiguous attachment such as in sentence (\ref{Traxler98}a) are not attached to NP1 or NP2, but instead are associated with the entire complex NP indicating attachment to any constituent within the complex NP.
-Swets et al.~further postulate that underspecification of ambiguous relative clause attachment saves time, which explains the ambiguity advantage attested in the abovementioned studies. Importantly, underspecification is assumed to be a viable strategy only when tasks demands do not require disambiguation. Swets et al.~tested this explanation by conducting a self-paced reading study in which participants read sentences such as in (\ref{Swets08}) and were asked either (i) superficial questions such as \emph{`Was anyone humiliated/proud?'} or (ii) questions about the RC attachment ambiguity \emph{`Did the maid/princess/son scratch in public?'}. They found an ambiguity advantage effect in the reading time data of participants in the superficial questions group, while the RC questions group did not display such an effect. Based on these findings, Swets et al.~argue that the type of questions asked modulates task demands and thus can switch underspecification on and off.
+Another influential alternative account has been the underspecification account \cite{SwetsEtAl:2008}, which posits that the parser may underspecify ambiguities if their disambiguation is not required by the task. They argue that because participants in the studies by Traxler et al., as well as Van Gompel et al.~were asked fairly superficial questions about the sentences they read, they decided that ambiguous sentences do not need to be disambiguated as they knew that they would not be asked comprehension questions about the ambiguous grammatical relation. In other words, readers underspecify RC attachment when they believe that it is irrelevant. For example, RCs with ambiguous attachment such as in sentence (\ref{Traxler98}a) are not attached to NP1 or NP2, but instead are associated with the entire complex NP indicating attachment to any constituent within the complex NP.
+Swets et al.~further postulate that underspecification of ambiguous relative clause attachment saves time, which explains the ambiguity advantage attested in the above-mentioned studies. Importantly, underspecification is assumed to be a viable strategy only when task demands do not require disambiguation. Swets et al.~tested this explanation by conducting a self-paced reading study in which participants read sentences such as in (\ref{Swets08}) and were asked either (i) superficial questions such as \emph{`Was anyone humiliated/proud?'} or (ii) questions about the RC attachment ambiguity \emph{`Did the maid/princess/son scratch in public?'}. They found an ambiguity advantage effect in the reading time data of participants in the superficial questions group, while the RC questions group did not display such an effect. Based on these findings, Swets et al.~argue that the type of questions asked modulates task demands and thus can switch underspecification on and off.
 
 \begin{exe}
     \ex \label{Swets08}
@@ -175,17 +180,17 @@ Swets et al.~further postulate that underspecification of ambiguous relative cla
 
 While Swets et al.'s findings do constitute evidence for a certain degree of influence of task-demands in reading, they do not necessarily constitute evidence for underspecification. \cite{LogacevVasishth:2016} have demonstrated by means of simulations that Swets et al.'s findings are compatible with some race-based accounts under the assumption that relative clauses are attached only after they have been processed to a sufficient degree, which may also be a necessary assumption of the underspecification account. According to their proposal, the \emph{SMCM} (\emph{stochastic multiple channel model}), the ambiguity advantage arises as a result of so-called statistical facilitation \citep{Raab:1962} due to a race between two independent attachment processes.
 
-Because ambiguous sentences have two possible readings while unambiguous sentences have only one, a race between two independent attachment processes executed in parallel leads to a decrease in average processing times because the probability that a race between two independent processes of approximately the same speed terminates quickly is higher than the probability that a specific process will do so. Using a computational implementation of the SMCM model, Logačev and Vasishth demonstrate that the Swets et al.~findings are compatible with a race model like the SMCM, under the assumption that task demands have differential effects on preferred and dispreferred relative clause attachment times.
+Because ambiguous sentences have two possible readings while unambiguous sentences have only one, a race between two independent attachment processes executed in parallel leads to a decrease in average processing time because the probability that a race between two independent processes of approximately the same speed terminates quickly is higher than the probability that a specific process will do so. Using a computational implementation of the SMCM model, Logačev and Vasishth demonstrate that the Swets et al.~findings are compatible with a race model like the SMCM, under the assumption that task demands have differential effects on preferred and dispreferred relative clause attachment times.
 
 The latter assumption is supported by Swets et al.'s finding that the difference in reading times between sentences with preferred and dispreferred unambiguous attachment was bigger in the RC questions condition than in the superficial questions condition. While the mechanism causing this interaction between task demands and attachment remains unclear, Swets et al.'s findings appear to be compatible with models that do not assume a modulation of the ambiguity resolution strategy by task demands. Importantly, both accounts of Swets et al.'s findings (the underspecification account and the SMCM) must assume some mechanism by which task demands affect either the duration or the quality of some parsing operations, even in unambiguous sentences. While we are not aware of any independent evidence for an interaction between sentence complexity and task demands, it is in line with prior research demonstrating the influence of task demands on reading in general \citep{KaakinenHyona:2010, Schotter:2014, WotschackKliegl:2013, WeissEtAl:2018, DempseyBrehm:2020}.
 
-According to the underspecification account, the parser chooses to underspecify ambiguous sentences whenever doing so does not conflict with carrying out what is perceived as the main experimental task, such as answering comprehension questions. Importantly, the underspecification mechanism could function in one of two ways: One possibility is that, task demands permitting, the parser routinely underspecifies RC attachment ambiguities when it first encounters them, i.e., at the relativizer. Later, it disambiguates them, when that is deemed necessary due to task demands, or if the ambiguity is disambiguated. We will refer to this mechanism as \emph{early underspecification}. A second possibility is that the parser delays RC any attachment-related operationsentirely until it has processed the key parts of the RC (at a minimum, the verb and its core arguments). Having done so, it decides whether to attach or to underspecify based on whether the RC is ambiguous and on the task demands. We will refer to this mechanism as \emph{late underspecification}. The key difference between the two accounts is that according to early underspecification an underspecified representation is always created as soon as possible and may be disambiguated at a later point, while according to late underspecification, structure-building is delayed until the parser decides to either underspecify or to disambiguate.
+According to the underspecification account, the parser chooses to underspecify ambiguous sentences whenever doing so does not conflict with carrying out what is perceived as the main experimental task, such as answering comprehension questions. Importantly, the underspecification mechanism could function in one of two ways: One possibility is that, task demands permitting, the parser routinely underspecifies RC attachment ambiguities when it first encounters them, i.e., at the relativizer. Later, it disambiguates them, when that is deemed necessary due to task demands, or if the ambiguity is disambiguated. We will refer to this mechanism as \emph{early underspecification}. A second possibility is that the parser delays RC any attachment-related operations entirely until it has processed the key parts of the RC (at a minimum, the verb and its core arguments). Having done so, it decides whether to attach or to underspecify based on whether the RC is ambiguous and on the task demands. We will refer to this mechanism as \emph{late underspecification}. The key difference between the two accounts is that according to early underspecification an underspecified representation is always created as soon as possible and may be disambiguated at a later point, while according to late underspecification, structure building is delayed until the parser decides to either underspecify or to disambiguate.
 
-While both underspecification accounts and the SMCM make the same predictions for the processing of post-nominal relative clauses, such as in English in (1) and (2), their predictions diverge for pre-nominal relative clauses, such as in Turkish.
+While both underspecification accounts and the SMCM make the same predictions for the processing of postnominal relative clauses, such as in English in (1) and (2), their predictions diverge for prenominal relative clauses, such as in Turkish.
 
-\section{Ambiguity resolution in pre- and post-nominal relative clauses}
+\section{Ambiguity resolution in pre- and postnominal relative clauses}
 
-In the sentences in (\ref{Traxler98}) and (\ref{Swets08}), both, race models as well as the underspecification account predict the occurrence of the ambiguity advantage at the relative clause. This is because relative clauses in English are post-nominal, i.e., they follow the noun phrases they modify. As a result, when readers have processed a post-nominal relative clause to a sufficient degree to attach it, both potential attachment sites are immediately available, allowing the parser to either start a race, or to underspecify. The situation is quite different in languages with pre-nominal relative clauses, such as Turkish \citep{GokselKerslake:2005}.
+In the sentences in (\ref{Traxler98}) and (\ref{Swets08}), both, race models as well as the underspecification account predict the occurrence of the ambiguity advantage at the relative clause. This is because relative clauses in English are postnominal, i.e., they follow the noun phrases they modify. As a result, when readers have processed a postnominal relative clause to a sufficient degree to attach it, both potential attachment sites are immediately available, allowing the parser to either start a race or to underspecify. The situation is quite different in languages with prenominal relative clauses, such as Turkish \citep{GokselKerslake:2005}.
 
 In constructions like (\ref{TurkishEx}), the potential attachment sites form a complex noun phrase with the structure \emph{{[}NP1-genitive {[}N2-possessive{]}{]},} in which the attachment sites become available \emph{successively} after the relative clause has been processed. For example, in the globally ambiguous sentence in (\ref{TurkishEx}), the relative clause \emph{`{[}who lives in the city center{]}'} modifies either the complex subject noun phrase headed by `\emph{professor'} (NP2), or its possessor'\emph{secretary'} (NP1). Thus, this sentence can either mean that the professor lives in the city center (local attachment; to the NP headed by N1), or that the professor's secretary lives in the city center (non-local attachment; to the NP headed by N2). For the sake of clarity, we will refer to these attachment conditions as NP1 and NP2 attachment, in reference to the position of the NP's head noun.
 %\footnote{This is to avoid any confusion due to the fact that some prior literature on RC attachment in Turkish (\cite{Bacser:2020}) labeled them based on the level of syntactic embedding, with NP2, the noun phrase in the lower syntactic position, being headed by N1.}
@@ -197,7 +202,7 @@ In constructions like (\ref{TurkishEx}), the potential attachment sites form a c
     `The aunt of the girl who had cried on the street waited for her friends at home.'
 \end{exe}
 
-Prior research suggests that sentences like (3) display a weak NP1 attachment preference: In a questionnaire study with sentences like (3), \cite{Kirkici:2004} found a weak tendency towards NP1 attachment (55\%-63\%). Contrary to this finding, \cite{Dincctopal:2010} found an across-the-board preference for NP1 attachment in Turkish. In her questionnaire study, monolingual Turkish speakers read Turkish sentences with ambiguous RC attachment and answered questions about those by indicating one of two options on each trial. The results of this study showed that participants preferred NP1 attachment over NP2 attachment (66\% and 34\%, respectively).
+Prior research suggests that sentences like (3) display a weak NP1 attachment preference: In a questionnaire study with sentences like (3), \cite{Kirkici:2004} found a weak tendency towards NP1 attachment (55\%-63\%). Contrary to this finding, \cite{Dincctopal:2010} found an across-the-board preference for NP1 attachment in Turkish. In her questionnaire study, monolingual Turkish speakers read Turkish sentences with ambiguous RC attachment and answered questions about them by indicating one of two options on each trial. The results of this study showed that participants preferred NP1 attachment over NP2 attachment (66\% and 34\%, respectively).
 
 \begin{exe}
     \ex \label{KirkiciEx} 
@@ -234,21 +239,23 @@ In order to determine whether there is an ambiguity advantage in Turkish, we cre
 \end{xlist}
 \end{exe}
 
-Under superficial task demands, \emph{early underspecification} predicts that the parser should underspecify RC attachment in NP1 attachment and ambiguous conditions during the processing of NP1, since it routinely underspecifies in order to reduce the processing load. Because the underspecified attachment is disambiguated at N2 in NP1 attachment conditions such as (4b), ambiguous sentences should be processed faster than NP1 attachment sentences at N2. No difference in reading times between ambiguous and NP1 attachment conditions is expected at N1, because initial underspecification is carried out in all conditions.
+Under superficial task demands, \emph{early underspecification} predicts that the parser should underspecify RC attachment in NP1 attachment and ambiguous conditions during the processing of NP1, since it routinely underspecifies in order to reduce the processing load. Because the underspecified attachment is disambiguated at N2 in NP1 attachment conditions such as (4b), ambiguous sentences should be processed faster than NP1 attachment sentences at N2. No difference in reading time between ambiguous and NP1 attachment conditions is expected at N1, because initial underspecification is carried out in all conditions.
 
 \emph{Late underspecification} assumes that the parser does not preemptively underspecify in anticipation of a possible ambiguity, and that it delays attachment-related operations until it can unambiguously determine how many attachment sites are available. As a result, it also predicts an ambiguity advantage, but for slightly different reasons. According to this account, when the parser is at N1, it will delay RC attachment until it can determine whether the structure is ambiguous, which happens at or following N2. Once this has been determined, the parser should underspecify RC attachment in ambiguous attachment conditions, and attach the RC unambiguously in unambiguous attachment conditions. The consequence should be an ambiguity advantage at N2 or the spill-over region.
 
 The SMCM, on the other hand, predicts that the parser should compute at least one attachment as soon as it can. There is no mechanism by which RC attachment can be delayed beyond N1, because at N1, the RC as well as an attachment site (NP1) are already available. As a result, the SMCM predicts that when task demands do not require the computation of both interpretations, the processes that will unfold in ambiguous sentences are the same as in the NP1 attachment sentences. It therefore does not predict an ambiguity advantage.
 
-According to the SMCM, the parser should attempt RC attachment while at N1, which would be successfully carried out in the NP1 attachment and in the ambiguous attachment conditions. At N2, no additional RC attachment should be carried out because the occasional comprehension questions in both experiments should not encourage the computation of a second interpretation of the sentence. In NP2 attachment sentences such as (4c), in contrast, the attempt at RC attachment at N1 will fail. At N2, RC attachment should be carried out successfully, resulting in a slowdown relative to the other two questions. It is not clear whether the parser's failure to attach the RC to NP1 in such sentences should lead to a slowdown, or to no appreciable difference in reading times.
+According to the SMCM, the parser should attempt RC attachment while at N1, which would be successfully carried out in the NP1 attachment and in the ambiguous attachment conditions. At N2, no additional RC attachment should be carried out because the occasional comprehension questions in both experiments should not encourage the computation of a second interpretation of the sentence. In NP2 attachment sentences such as (4c), in contrast, the attempt at RC attachment at N1 will fail. At N2, RC attachment should be carried out successfully, resulting in a slowdown relative to the other two questions. It is not clear whether the parser's failure to attach the RC to NP1 in such sentences should lead to a slowdown, or to no appreciable difference in reading time.
 
-In sum, the underspecification account predicts an ambiguity advantage in sentences like (4), while the SMCM predicts the absence of such an effect. We conducted two experiments in order to test these predictions. In both experiments, task demands were kept superficial. In experiment 1, we disambiguated RC attachment by means of animacy, while in experiment 2, RC attachment was disambiguated morphosyntactically.
+It is currently not entirely clear what the predictions of surprisal \citep{Levy:2008} or the constraint-based models \citep{GreenMitchell:2006, VosseKempen:2009} are as they depend on a number of underlying assumptions regarding the grammar of Turkish for the former, and the specific constraints and their timing for the latter. 
+
+In sum, the underspecification account predicts an ambiguity advantage in sentences like (4), while the SMCM predicts the absence of such an effect. We conducted two experiments to test these predictions. In both experiments, task demands were kept superficial. In experiment 1, we disambiguated RC attachment by means of animacy, while in experiment 2, RC attachment was disambiguated morphosyntactically.
 
 \section{Experiment 1}
 
-We conducted experiment 1 with the aim of testing for the presence of an ambiguity advantage at the second noun (N2). The presence of an ambiguity advantage would be compatible with both types of underspecification, but not with the SMCM (or the URM). In order to create task demands which encourage underspecification, participants were asked comprehension questions occasionally, most of which were superficial. In order to discourage participants from skipping over the relative clause, we asked five RC-related comprehension questions in unambiguous attachment conditions over the course of the experiment.
+We conducted experiment 1 with the aim of testing for the presence of an ambiguity advantage at the second noun (N2). The presence of an ambiguity advantage would be compatible with both types of underspecification, but not with the SMCM (or the URM). In order to create task demands which encourage underspecification, participants were asked comprehension questions occasionally, most of which were superficial. To discourage participants from skipping over the relative clause, we asked five RC-related comprehension questions in unambiguous attachment conditions over the course of the experiment.
 
-Because the SMCM predicts no significant attachment-related speed-up in ambiguous conditions, which corresponds to a statistical null-result, we need to quantify the expected magnitude of an ambiguity advantage. We operationalized an ambiguity advantage as the observation of a speed-up in the ambiguous condition relative to the preferred NP1 attachment conditions and its magnitude as the difference between the fastest unambiguous condition and the ambiguous condition. Since the smallest previously observed ambiguity advantage effect in the prior literature \citep{SwetsEtAl:2008, TraxlerEtAl:1998, vanGompelEtAl:2005, vanGompelEtAl:2001} amounted to a 26\emph{ms} difference between the preferred unambiguous condition and the ambiguous condition (range: 26\emph{ms -} 122\emph{ms}), we expected an effect of at least that magnitude.
+Because the SMCM predicts no significant attachment-related speed-up in ambiguous conditions, which corresponds to a statistical null result, we need to quantify the expected magnitude of an ambiguity advantage. We operationalized an ambiguity advantage as the observation of a speed-up in the ambiguous condition relative to the preferred NP1 attachment conditions and its magnitude as the difference between the fastest unambiguous condition and the ambiguous condition. Since the smallest previously observed ambiguity advantage effect in the prior literature \citep{SwetsEtAl:2008, TraxlerEtAl:1998, vanGompelEtAl:2005, vanGompelEtAl:2001} amounted to a 26\emph{ms} difference between the preferred unambiguous condition and the ambiguous condition (range: 26\emph{ms -} 122\emph{ms}), we expected an effect of at least that magnitude.
 
 
 % Expected magnitude of the ambiguity advantage:
@@ -298,13 +305,16 @@ knitr::kable(stimulus_lengths, caption = "Average word length by condition and p
 
 \subsubsection{Participants}
 
-A group of 39 native Turkish speakers aged $18-28$ (mean = $23$; SD = $3.2$), who were students at Ankara University (in Ankara, Turkey) at the time of testing, participated in the study. All of the participants reported to have normal or corrected to normal vision; none of them reported to have extensive stays abroad or neurological/psychiatric disorder that may impact language comprehension ability in Turkish. The participants were informed that their participation was voluntary and were asked to give their consent allowing us to anonymously process their experimental data for scientific purposes.
+A group of 39 native Turkish speakers aged $18-28$ (mean = $23$; SD = $3.2$), who were students at Ankara University (in Ankara, Turkey) at the time of testing, participated in the study. 
+All of the participants reported to have normal or corrected to normal vision.
+%none of them reported to have extensive stays abroad or neurological/psychiatric disorder that may impact language comprehension ability in Turkish. 
+The participants were informed that their participation was voluntary and were asked to give their consent allowing us to anonymously process their experimental data for scientific purposes.
 
 Participants provided informed consent and the procedures in this study were compliant with the Ankara University research ethics requirements as well as with the ethical principles outlined in the Helsinki Declaration on research involving human subjects.
 
 \subsubsection{Procedure}
 
-All the experiments took place at Ankara University Linguistics Laboratory, with each participant individually in a single session. The participants were required to perform the sentence processing task in a dimly lit room and seated within 60 cm distance from a 1680 x 1050 pixels 22-inch LCD desktop monitor with 60 Hz refresh rate. During the performance of the sentence processing task, the eye-tracker device (RED 500 by Sensor Motoric Instruments, SMI) with chin rest recorded the participants' binocular eyes movements at a sampling rate of 500\emph{Hz}, but only the left eye was analyzed. Before beginning the sentence processing task, participants were told that they would read Turkish sentences and answer comprehension questions on the computer screen while the eye-tracker recorded their eye movements. Each participant was given a practice session to get used to the dynamics of the task. A 5-point calibration was executed before and after the practice. During the testing phase, each participant read forty-eight sentences (36 test sentences and 12 filler sentences) in two sentence blocks of twenty-four sentences each. Before each sentence, a fixation cross appeared for 500 ms trigger duration, in order to help the participants to fixate their eyes in the initial point of each sentence on the screen. The sentences appeared on the screen one at a time in one line in a grey background. The degree of angle per character was 0.074 cm (Courier New, 36 point).
+All experiments took place at Ankara University Linguistics Laboratory, with each participant individually in a single session. The participants were required to perform the sentence processing task in a dimly lit room and seated within $60\,cm$ distance from a 1680 x 1050 pixels 22-inch LCD desktop monitor with 60 Hz refresh rate. During the performance of the sentence processing task, the eye-tracker device (RED 500 by SensoMotoric Instruments, SMI) with chin rest recorded the participants' binocular eye movements at a sampling rate of 500\emph{Hz}, but only the left eye was analyzed. Before beginning the sentence processing task, participants were told that they would read Turkish sentences and answer comprehension questions on the computer screen while the eye-tracker recorded their eye movements. Each participant was given a practice session to get used to the dynamics of the task. A 5-point calibration was executed before and after the practice. During the testing phase, each participant read forty-eight sentences (36 test sentences and 12 filler sentences) in two sentence blocks of twenty-four sentences each. Before each sentence, a fixation cross appeared for 500 ms trigger duration, in order to help the participants to fixate their eyes on the initial point of each sentence on the screen. The sentences appeared on the screen one at a time in one line in a grey background. The degree of angle per character was 0.074 cm (Courier New, 36 point).
 
 Comprehension questions about the sentence were asked on every second trial: 19 of the 24 questions were superficial, and 5 questions were about the RC attachment ambiguity. All RC questions were asked in unambiguous attachment conditions. Participants answered questions by selecting one of two options shown on the screen. Each session lasted about 25 minutes.
 
@@ -312,7 +322,7 @@ Comprehension questions about the sentence were asked on every second trial: 19 
 
 We excluded all fixations which were shorter than 80 ms or longer than 1200 ms prior to using the \emph{em2} package \citep{LogacevVasishth:2013} in R \citep{R-base} for computing reading time measures from the eye movement record. We used the \emph{tidyverse} and \emph{ggplot2} packages
 \citep{R-tidyr, R-ggplot2} for data processing and plotting, and the R packages \emph{brms} \citep{R-brms_a} and \emph{rstan} \citep{R-rstan} to fit Bayesian generalized hierarchical linear models \citep[e.g.,][]{GelmanHill:2007, McElreath:2016, Kruschke:2015, VasishthEtAl:2019} to the eye-tracking measures of interest. 
-The discrete dependent measures regression probability and probability of refixation were modeled with generalized hierarchical linear models with a logit-link.
+The discrete dependent measure regression probability were modeled with generalized hierarchical linear models with a logit-link.
 All reading time measures were modeled using generalized hierarchical linear models assuming log-normally distributed residuals.
 We used normal priors for all coefficients for both, log-normal models (\(\mu=0\), \(\sigma=0.2\)), as well as logit models (\(\mu=0\), \(\sigma=1\)). All models were fitted using four chains with \(2,500\) post-warmup samples each.
 
@@ -336,13 +346,6 @@ The average comprehension questions accuracy was \(78.8\%\). Figures \ref{fig:Ey
 crit_em_rc <- read.csv("../data/experiment_eye/corrected_data_em.csv")
 crit_em_rc$roiLabel %<>% factor(levels = c("pre-critical", "N1", "N2", "spillover"))
 
-recode_char2double <- function(x, mapping) {
-    x %>% as.character %>% dplyr::recode(!!!mapping) %>% as.double
-}
-recode_char2char <- function(x, mapping) {
-    x %>% as.character %>% dplyr::recode(!!!mapping) %>% as.character
-}
-
 # # # exclude the 5 participants with the least numbers of regions fixated
 # subj_missing_fixations = c("P08", "P22", "P01", "P14", "P07")
 # crit_em_rc %<>% subset(!subj %in% subj_missing_fixations) %T>% { .$subj %<>% as.factor() }
@@ -365,12 +368,6 @@ crit_em_rc %<>% within({
 @
 
 <<r EyeRTsPlot, results='hide', message=FALSE, warning=FALSE>>=
-
-se_cousineau_bygroup <- function(df, bygroup, ...) {
-   ddply(df, bygroup, function(df) {
-    se_cousineau(df, ...)
-    })
-}
 
 crit_em_rc %<>% mutate(log_FPRT = log(FPRT), log_RPD = log(RPD), log_TFT = log(TFT) )
 
@@ -423,23 +420,9 @@ p_avg_prob_exp2 <- ggplot(probs, aes(attachment, M, group = attachment, color = 
 # print(p_avg_prob_exp2)
 p_avgs <- ggarrange(p_avg_rt_exp1, p_avg_prob_exp2, ncol = 1, heights = c(2.5,1))
 
-
-#print(p_avgs)
-
 ggsave(p_avgs, file = "./figure/EyeRTsPlot.pdf", height = 5)
 
 @
-
-
-
-\begin{figure}
-\includegraphics[width=\maxwidth]{figure/EyeRTsPlot.pdf} 
-\caption{Average first-pass regression probabilities and backtransformed log-reading time measures FPRT, RPD, and TFT for the critical regions by condition. Within-participants standard-errors in brackets
-\protect{\citep{Cousineau:2005, Morey:2008}}.}
-\label{fig:EyeRTsPlot}
-\end{figure}
-
-
 
 <<r Eye.brms, results='hide', message=FALSE, warning=FALSE>>=
 
@@ -517,22 +500,6 @@ eye_spillover <- brm_models(data = crit_em_rc %>% subset(roiLabel == "spillover"
 
 <<r emStandardMeasuresModelPlot.prepare>>=
 
-plot_coefs <- function(ms, transformations = NULL) {
-  create_model_coefs_plot( ms, 
-                           plot_stats = F,
-                           transformations = transformations,
-                           map_names = c("clWlen"="word length",
-                                          "delta_n1attachment_m_amb_ms"="N1 attachment - ambiguous",
-                                          "delta_n2attachment_m_amb_ms"="N2 attachment - ambiguous"
-                                         ),
-                           exclude_names = c("cN1attachmentVsAmb", "cN2attachmentVsAmb",
-                                             "clWlen", "clPrevWlen", "clNextWlen",
-                                             "mean_amb_ms", "mean_n1_ms", "mean_n2_ms")#,
-                           #expand_right = 5#, 
-                           #x_stat_adjust = 0 
-                           ) + theme(  strip.background =element_rect(fill="white") )
-}
-
 # note: + sigma^2/2 is to get the mean instead of the median
 # note 2: not using + sigma^2/2 for the sake of consistency -- the plots show an estimate of exp(log-mean), not of the mean 
 transformations_emrts_means <- c(mean_amb_ms = "exp(b_Intercept - 1/3*b_cN1attachmentVsAmb - 1/3*b_cN2attachmentVsAmb)", # 
@@ -570,14 +537,7 @@ p_rp <- m_eye_rp %>% { plot_coefs(., transformations = transformations_emprop)  
 
 @
 
-
-
-
 <<r emStandardMeasuresModelCoefPlot, results='hide', message=FALSE, warning=FALSE>>=
-
-add_title <- function(p, title, hjust) { 
-  p + ggtitle(title) + theme(plot.title = element_text(hjust=hjust))
-}
 
 p <- 
   ggarrange(add_title(p_fprt, "First-pass reading time", hjust=-.6), 
@@ -595,85 +555,24 @@ ggsave(p, file = "./figure/emStandardMeasuresModelCoefPlot.pdf", height = 5.5)
 
 
 
+
 \begin{figure}
-\includegraphics[width=\maxwidth]{figure/emStandardMeasuresModelCoefPlot} 
-\caption{Estimates and $90\%$ credible intervals (thin lines) as well as $80\%$ credible intervals (thick lines)  for the analyses of first-pass reading time, regression-path duration, total fixation time, regression probability, and refixation probability. The posterior probability that the parameter is smaller than (or larger than) zero is larger than $90\%$ if the $80\%$ credible interval excludes zero, and larger than $95\%$ if the $90\%$ credible interval excludes zero.}\label{fig:emStandardMeasuresModelCoefPlot}
+\includegraphics[width=\maxwidth]{figure/EyeRTsPlot.pdf} 
+\caption{Average first-pass regression probabilities and back-transformed log-reading time measures FPRT, RPD, and TFT for the critical regions by condition. Within-participants standard errors in parentheses.
+\protect{\citep{Cousineau:2005, Morey:2008}}.}
+\label{fig:EyeRTsPlot}
 \end{figure}
 
 
 
-<<r emExtractCIs, results='hide', cache=T >>=
+\begin{figure}
+\includegraphics[width=\maxwidth]{figure/emStandardMeasuresModelCoefPlot} 
+\caption{Estimates and $90\%$ credible intervals (thin lines) as well as $80\%$ credible intervals (thick lines)  for the analyses of first-pass reading time, regression-path duration, total fixation time, and regression probability. The posterior probability that the parameter is smaller than (or larger than) zero is larger than $90\%$ if the $80\%$ credible interval excludes zero, and larger than $95\%$ if the $90\%$ credible interval excludes zero.}\label{fig:emStandardMeasuresModelCoefPlot}
+\end{figure}
 
-extract_effect <- function(p, coef, model = NULL)
-{
-    cur_model = model
-    cur_coef = coef
-    
-    if (is.null(model))
-        df <- subset(p$data, coef == cur_coef)
-    else
-        df <- subset(p$data, model == cur_model & coef == cur_coef)
-    stopifnot(nrow(df) == 1)
-    df
-}
 
-row_summary_string90 <- function(row, fmt, lower = T)#
-{
-  if (lower) {
-      fmt <- paste0("CrI [", fmt, "; ", fmt, "], P($\\beta$ < 0) = %s")
-      post_prob_name <- "PBelowZeroStr"
-  } else {
-      fmt <- paste0("CrI [", fmt, "; ", fmt, "], P($\\beta$ > 0) = %s")
-      post_prob_name <- "PAboveZeroStr"
-  }
-  res <- sprintf(fmt, row$lower90, row$upper90, row[[post_prob_name]] )
-  res %<>% gsub("= <", "<", .) %>% gsub("= >", ">", .)
-  res
-}
 
-row_summary_string90 <- function(row, fmt, lower = T)#
-{
-  if (lower) {
-      fmt <- paste0("CrI [", fmt, "; ", fmt, "], P($\\beta$ < 0) = %s")
-      post_prob_name <- "PBelowZeroStr"
-  } else {
-      fmt <- paste0("CrI [", fmt, "; ", fmt, "], P($\\beta$ > 0) = %s")
-      post_prob_name <- "PAboveZeroStr"
-  }
-  res <- sprintf(fmt, row$lower90, row$upper90, row[[post_prob_name]] )
-  res %<>% gsub("= <", "<", .) %>% gsub("= >", ">", .)
-  res
-}
 
-row_summary_ci95 <- function(row, fmt)#
-{
-  fmt <- paste0("[", fmt, "; ", fmt, "]")
-  res <- sprintf(fmt, row$lower95, row$upper95 )
-  res
-}
-
-row_summary_ci90 <- function(row, fmt)#
-{
-  fmt <- paste0("[", fmt, "; ", fmt, "]")
-  res <- sprintf(fmt, row$lower95, row$upper95 )
-  res
-}
-effect_summary_string <- function(p, coef, fmt, model = NULL, lower = T) {
-    extract_effect(p=p, model=model, coef=coef) %>%
-        row_summary_string90(fmt = fmt, lower = lower)
-}
-
-effect_ci95 <- function(p, coef, fmt, model = NULL) {
-    extract_effect(p=p, model=model, coef=coef) %>%
-        row_summary_ci95(fmt = fmt)
-}
-
-effect_ci90 <- function(p, coef, fmt, model = NULL) {
-    extract_effect(p=p, model=model, coef=coef) %>%
-        row_summary_ci90(fmt = fmt)
-}
-
-@
 
 The average comprehension questions accuracy was $79\%$. Figure 1 shows a summary of the eye-tracking measures computed for the the critical regions:
 (i) \emph{First-pass reading time} (FPRT), which is the amount of time spent reading a word for the first time when that the first fixation on that word was \emph{progressive} (i.e., the reader has not yet read anything to the right of this word).
@@ -710,7 +609,7 @@ We further found an NP2 attachment-related slowdown in regression probability at
 \Sexpr{ effect_summary_string(p=p_tft, model="noun 2", coef="N2 attachment - ambiguous", fmt="%0.1f", lower = F) }
 ).
 
-While most eye tracking measures on most regions reflected an NP2 attachment-related slowdown, only regression path duration and regression probability suggested a slowdown in NP1 attachment conditions: RPD at N2
+While most eye tracking measures at most regions reflected an NP2 attachment-related slowdown, only regression path duration and regression probability suggested a slowdown in NP1 attachment conditions: RPD at N2
 (
 \Sexpr{ effect_summary_string(p=p_rpd, model="noun 2", coef="N1 attachment - ambiguous", fmt="%0.1f", lower = F) }
 )
@@ -762,133 +661,7 @@ while the posterior probability of the difference between NP2 attachment and the
 %The posterior probability that the ambiguity advantage effect (the difference between the %preferred N1 attachment condition and the ambiguous condition) was larger than $\Sexpr{ %min(prior_amb_adv_ms) }\,ms$ (the smallest ambiguity effect attested in the literature) was \Sexpr{ %mean( samples_eye_np2_rpd$delta_n1attachment_m_amb_ms > min(prior_amb_adv_ms) )} at N2, and \Sexpr{ %mean( samples_eye_spillover_rpd$delta_n1attachment_m_amb_ms > min(prior_amb_adv_ms) )} at %spillover.
 
 
-<<r emRPDBayesF,  eval=F, results='hide', message=FALSE, warning=FALSE>>=
 
-fname_bf <- "../workspace/models_eye_bf/bfs.rda"
-
-if (!file.exists(fname_bf)) 
-{
-  crit_em_rc$cN1attachmentVsAmb_SnglPred <- crit_em_rc$cN1attachmentVsAmb - 1/6
-  crit_em_rc$cN2attachmentVsAmb_SnglPred <- crit_em_rc$cN2attachmentVsAmb - 1/6
-  # df %>% dplyr::select(attachment, cN1attachmentVsAmb, cN2attachmentVsAmb, cN1attachmentVsAmb_SnglPred, cN2attachmentVsAmb_SnglPred) %>% unique()
-  
-  df <- crit_em_rc %>% subset(roiLabel == "spillover") %>% subset(FFP == 1)
-
-  # save_all_pars=T and large number of iterations needed for bayes factors
-  brm_template_bf_rpd <- function(formula, file, df, constrain_positive = T) {
-        if (constrain_positive) {
-            prior <- c(set_prior("normal(0, 0.2)", lb = 0.01))
-        } else {
-            prior <- c(set_prior("normal(0, 0.2)"))
-        }
-        brms::brm(formula = formula, 
-                  chains = 4, cores = 4, iter = 21000, warmup = 1000, save_all_pars = TRUE,
-                  family = brms::lognormal(),
-                  prior = prior,
-                  data = df, file = file)
-  }
-  
-  m_full <- brm_template_bf_rpd(
-                  RPD ~ cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + (cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + 1 | subj) + (1 | stimulus), 
-                  constrain_positive = FALSE,
-                  file = "../workspace/models_eye_bf/rpd_full_spillover",
-                  df = df)
-  
-  m_pos_full <- brm_template_bf_rpd(
-                  RPD ~ cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + (cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + 1 | subj) + (1 | stimulus), 
-                  file = "../workspace/models_eye_bf/rpd_positive_full_spillover",
-                  df = df)
-###
-
-x <- ranef(m_pos_full)
-x$subj  
-  
-###
-  
-  
-  m_pos_onlyN2 <- brm_template_bf_rpd(
-                  RPD ~ cN2attachmentVsAmb_SnglPred + clWlen + (cN2attachmentVsAmb_SnglPred + clWlen + 1 | subj) + (1 | stimulus), 
-                  file = "../workspace/models_eye_bf/rpd_positive_onlyN2_spillover",
-                  df = df)
- 
-  m_pos_onlyN1 <- brm_template_bf_rpd(
-                  RPD ~ cN1attachmentVsAmb_SnglPred + clWlen + (cN1attachmentVsAmb_SnglPred + clWlen + 1 | subj) + (1 | stimulus),
-                  file = "../workspace/models_eye_bf/rpd_positive_onlyN1_spillover",
-                  df = df)
-  
-
-  bf0_eye_spillover_rpd <- bayes_factor(m_full, m_pos_full)
-  # Estimated Bayes factor in favor of m_full over m_pos_full: 0.16582 (inv: 6)
-
-  bf1_eye_spillover_rpd <- bayes_factor(m_pos_full, m_pos_onlyN2)
-  # Estimated Bayes factor in favor of m_original over m_alt_onlyN2: 0.03975 (inv: 25)
-  
-  bf2_eye_spillover_rpd <- bayes_factor(m_pos_full, m_pos_onlyN1)
-  # Estimated Bayes factor in favor of m_original over m_alt_onlyN1: 3.38791
-  
-  # bayes_factor(m_alt_onlyN2, m_alt_onlyN1)
-  # # Estimated Bayes factor in favor of m_alt_onlyN2 over m_alt_onlyN1: 87.78061
-
-  
-  
-  df <- crit_em_rc %>% subset(roiLabel == "N2") %>% subset(FFP == 1)
-
-  # save_all_pars=T and large number of iterations needed for Bayes factors
-  brm_template_bf_rp <- function(formula, file, df, constrain_positive = T) {
-        if (constrain_positive) {
-            prior <- c(set_prior("normal(0, 1)", lb = 0.01))
-        } else {
-            prior <- c(set_prior("normal(0, 1)"))
-        }
-        brms::brm(formula = formula, 
-                  chains = 4, cores = 4, iter = 21000, warmup = 1000, save_all_pars = TRUE,
-                  family = brms::bernoulli(),
-                  prior = prior,
-                  data = df, file = file)
-  }
-
-  m_full <- brm_template_bf_rp(
-                  regression ~ cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + (cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + 1 | subj) + (1 | stimulus),
-                  constrain_positive = FALSE,
-                  file = "../workspace/models_eye_bf/rp_full_n2",
-                  df = df)
-
-  m_pos_full <- brm_template_bf_rp(
-                  regression ~ cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + (cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + 1 | subj) + (1 | stimulus), 
-                  file = "../workspace/models_eye_bf/rp_positive_full_n2",
-                  df = df)
-  
-  m_pos_onlyN2_n2 <- brm_template_bf_rp(
-                  regression ~ cN2attachmentVsAmb_SnglPred + clWlen + (cN2attachmentVsAmb_SnglPred + clWlen + 1 | subj) + (1 | stimulus), 
-                  file = "../workspace/models_eye_bf/rp_positive_onlyN2_n2",
-                  df = df)
-  
-  m_pos_onlyN1_n2 <- brm_template_bf_rp(
-                  regression ~ cN1attachmentVsAmb_SnglPred + clWlen + (cN1attachmentVsAmb_SnglPred + clWlen + 1 | subj) + (1 | stimulus), 
-                  file = "../workspace/models_eye_bf/rp_positive_onlyN1_n2",
-                  df = df)
-
-  bf0_eye_spillover_rp_n2 <- bayes_factor(m_full, m_pos_full)
-  # Estimated Bayes factor in favor of m_full over m_pos_full: 0.20188 (inv: 5)
-  
-  bf1_eye_spillover_rp_n2 <- bayes_factor(m_pos_full, m_pos_onlyN2_n2)
-  # Estimated Bayes factor in favor of m_pos_full over m_pos_onlyN2_n2: 0.16228 (inv: 6.2)
-  
-  bf2_eye_spillover_rp_n2 <- bayes_factor(m_pos_full, m_pos_onlyN1_n2)
-  # Estimated Bayes factor in favor of m_pos_full over m_pos_onlyN1_n2: 167.38944
-  
-  # bayes_factor(m_alt_onlyN2, m_alt_onlyN1)
-  # # Estimated Bayes factor in favor of m_alt_onlyN2 over m_alt_onlyN1: 86.46598
-
-  
-  save(bf0_eye_spillover_rpd, bf1_eye_spillover_rpd, bf2_eye_spillover_rpd, 
-       bf0_eye_spillover_rp_n2, bf1_eye_spillover_rp_n2, bf2_eye_spillover_rpd,
-       file = fname_bf)
-}
-
-
-load(fname_bf)
-@
 
 
 % The models presented above were agnostic about the direction of the differences between the unambiguous conditions and the ambiguous condition. We further fitted several constrained models in order to compare the relative posterior probabilities of (i) an ambiguity advantage (a positive difference between the preferred N1 attachment condition and the ambiguous condition) vs (ii) the absence of an ambiguity advantage (no such difference between the ambiguous and N1 attachment condition).
@@ -922,13 +695,13 @@ load(fname_bf)
 
 We found evidence for substantial processing difficulty in unambiguous NP2 attachment sentences relative to the ambiguous attachment condition, while the effect of unambiguous NP1 attachment was less clear. In the NP2 attachment condition, we found indications of processing difficulty in most eye-tracking measures starting with regression path duration on N1, suggesting that reading in NP2 attachment sentences is initially slowed by the the fact that the RC cannot be attached to the first structurally available noun phrase, headed by N1. The subsequent slowdown relative to the ambiguous baseline may be due to the time the parser spends in carrying out RC attachment to the noun phrase headed by N2.
 
-The results concerning the relative difficulty of the NP1 attachment sentences are less clear-cut: We found no appreciable slowdown in first-pass reading time or total fixation time at N2 in the NP1 attachment condition relative to the ambiguous condition. However, the regression-path duration as well the regression probability indicated somewhat higher processing difficulty in the NP1 attachment conditions compared to the ambiguous conditions. Since the posterior probability of a slowdown is \(0.72\), while the posterior probability of the slowdown at least as large as the smallest previously observed ambiguity advantage was \(0.32\), the results of this experiment do not provide unambiguous evidence for or against the presence of an ambiguity advantage in Turkish. However, they do suggest that it is more likely that there is no ambiguity advantage of a previously attested magnitude than that there is one.
+The results concerning the relative difficulty of the NP1 attachment sentences are less clear-cut: We found no appreciable slowdown in first-pass reading time or total fixation time at N2 in the NP1 attachment condition relative to the ambiguous condition. However, the regression path duration as well as the regression probability indicated somewhat higher processing difficulty in the NP1 attachment conditions compared to the ambiguous conditions. Since the posterior probability of a slowdown is \(0.72\), while the posterior probability that the slowdown was at least as large as the smallest previously observed ambiguity advantage was \(0.32\), the results of this experiment do not provide unambiguous evidence for or against the presence of an ambiguity advantage in Turkish. However, they do suggest that it is more likely that there is no ambiguity advantage of a previously attested magnitude than that there is one.
 
 \section{Experiment 2}
 
 The second experiment was designed to address three issues which may complicate the interpretation of the first experiment: Firstly, although participants in experiment 1 were asked only 5 comprehension questions about relative clause attachment, and only in unambiguous conditions, their presence may still have discouraged underspecification. Secondly, the analysis of multiple eye tracking measures at multiple regions increases the chances that one of them exhibits a theoretically interesting effect purely by chance, even in the absence of such an effect \cite[e.g.,][]{vonderMalsburgAngele:2017}. Lastly, a plausibility-based disambiguation of RC attachment may have caused between-participant or between-item variability in the time course of disambiguation, thus making its effect more difficult to detect.
 
-In order to address these potential shortcomings, we asked only occasional superficial questions (on one third of the trials), and used a different stimulus design. The experimental sentences in this experiment had a structure similar to sentence (\ref{ExpSPRExample}), in which the head noun of the relative clause (`\emph{football player'}/'\emph{fan'}) performs the function of the subject of the embedded verb (`\emph{hit'}). The grammatical object of all relative clauses was the reciprocal pronoun \emph{each other}. RC attachment was disambiguated by the grammatical number of the nouns in the complex noun phrase \emph{'fan(s) of the football player(s)'}. In (\ref{ExpSPRExample}), for instance, the relative clause \emph{'hit each other'} can attach to the NP headed by \emph{fans} because it is plural, but not to the NP headed by'\emph{football player'}, because it is singular and therefore cannot bind the reciprocal '\emph{each other'}.
+In order to address these potential shortcomings, we asked only occasional superficial questions (on one third of the trials), and used a different stimulus design. The experimental sentences in this experiment had a structure similar to sentence (\ref{ExpSPRExample}), in which the head noun of the relative clause (`\emph{football player'}/'\emph{fan'}) performs the function of the subject of the embedded verb (\emph{`hit'}). The grammatical object of all relative clauses was the reciprocal pronoun \emph{each other}. RC attachment was disambiguated by the grammatical number of the nouns in the complex noun phrase \emph{'fan(s) of the football player(s)'}. In (\ref{ExpSPRExample}), for instance, the relative clause \emph{'hit each other'} can attach to the NP headed by \emph{fans} because it is plural, but not to the NP headed by'\emph{football player'}, because it is singular and therefore cannot bind the reciprocal '\emph{each other'}.
 
 \begin{exe}
 \ex \label{ExpSPRExample}
@@ -937,7 +710,7 @@ In order to address these potential shortcomings, we asked only occasional super
 \textit{`The fan(s) of the football player(s) who hit each other left the stadium.'}
 \end{exe}
 
-We used the fact that relative clauses with a reciprocal as a grammatical object can only attach to plural noun phrases to create three attachment conditions: NP1 attachment, NP2 attachment and ambiguous attachment, as illustrated in (\ref{ExpSPRExperimental}). Because plurals were formed through addition of the plural suffix \emph{-ler/-lar}, reading times for plurals and singulars may vary due to word length. In order to control for possible effects of length, we created three control conditions illustrated in (\ref{ExpSPRControl}) in which the complex noun phrase was modified by an adjective which could only attach to NP1. In the examples in (\ref{ExpSPRControl}) it is \emph{`Fenerbahçeli'} (meaning \emph{`of Fenerbahçe'}, a well-known Turkish football team). These additional conditions served as a baseline, and any differences between experimental conditions in (\ref{ExpSPRExperimental}) and control conditions in (\ref{ExpSPRControl}) may be considered effects of RC attachment.
+We used the fact that relative clauses with a reciprocal as a grammatical object can only attach to plural noun phrases to create three attachment conditions: NP1 attachment, NP2 attachment and ambiguous attachment, as illustrated in (\ref{ExpSPRExperimental}). Because plurals were formed through the addition of the plural suffix \emph{-ler/-lar}, reading times for plurals and singulars may vary due to word length. In order to control for possible effects of length, we created three control conditions illustrated in (\ref{ExpSPRControl}) in which the complex noun phrase was modified by an adjective which could only attach to NP1. In the examples in (\ref{ExpSPRControl}) it is \emph{`Fenerbahçeli'} (meaning \emph{`of Fenerbahçe'}, a well-known Turkish football team). These additional conditions served as a baseline, and any differences between experimental conditions in (\ref{ExpSPRExperimental}) and control conditions in (\ref{ExpSPRControl}) may be considered effects of RC attachment.
 
 As in experiment 1, both underspecification accounts are compatible with a speed-up in the ambiguous condition at the second noun, compared to the NP1 attachment condition. This prediction translates into an interaction between modifier type and the grammatical number of the second noun. That is, NP1 attachment sentences should exhibit a larger slowdown relative to their controls than the ambiguous condition relative to its control. In contrast, the SMCM as well as the late underspecification account, predict the absence of such an interaction. It predicts the absence of an ambiguity advantage, which means that there should not be any significant interaction between modifier type and the grammatical number of the second noun in the RC attachment conditions.
 
@@ -1000,7 +773,7 @@ As in experiment 1, both underspecification accounts are compatible with a speed
 
 \subsubsection{Materials}
 
-Forty-two experimental sentence sets like (\ref{ExpSPRExperimental}) and (\ref{ExpSPRControl}) were constructed. All relative clauses comprised between two and three words and always started with a reciprocal pronoun. Sentences were divided into different lists according to a latin-square design, such that every participant read exactly one sentence from each sentence set, and seven sentences from every condition. Experimental sentences were mixed with 65 filler sentences, so that every participant read 107 sentences during the course of the experiment. Each list was randomized prior to presentation.
+Forty-two experimental sentence sets like (\ref{ExpSPRExperimental}) and (\ref{ExpSPRControl}) were constructed. All relative clauses comprised between two and three words and always started with a reciprocal pronoun. Sentences were divided into different lists according to a Latin-square design, such that every participant read exactly one sentence from each sentence set, and seven sentences from every condition. Experimental sentences were mixed with 65 filler sentences, so that every participant read 107 sentences during the course of the experiment. Each list was randomized prior to presentation.
 
 \subsubsection{Participants}
 
@@ -1010,7 +783,7 @@ Participants provided informed consent and the procedures in this study were com
 
 \subsubsection{Procedure}
 
-The task was self-paced non-cumulative word-by-word reading. Presentation and recording was done with the Linger software package, version 2.94 by Doug Rohde. At the beginning of a trial all words, masked by underscores, appeared. Participants pressed the spacebar to reveal the next word. As the next word appeared, the current one was masked by underscores again. The time between key-presses was recorded as the reading time for the word.
+The task was self-paced non-cumulative word-by-word reading. Presentation and recording was done with the Linger software package, version 2.94 by Doug Rohde. At the beginning of a trial, all words, masked by underscores, appeared. Participants pressed the space bar to reveal the next word. As the next word appeared, the current one was masked by underscores again. The time between key presses was recorded as the reading time for the word.
 Each participant read five practice sentences before the start of the experiment.
 %<!-- Our 42 sentence sets were divided into different lists according to a latin-square design, %and randomly intermixed with 65 filler sentences, such that every participant read 107 %sentences during the course of the experiment. 
 %-->
@@ -1099,8 +872,6 @@ p <- ggplot(mrt, aes(attachment, M, group=attachment:modifier,
       scale_x_discrete(labels = NULL, breaks = NULL) + 
       theme(legend.position='top')
 p <- p + scale_color_discrete(name="") + scale_linetype_discrete(name="") + scale_shape_discrete(name="")
-
-# print(p)
 
 ggsave(p, file = "./figure/sprAverageRTs.pdf", height = 3)
 
@@ -1293,78 +1064,7 @@ ggsave(p, file = "./figure/sprModelPlot.pdf", height = 1.5)
 
 
 
-<<r sprRPDBayesF, eval=F, results='hide', message=FALSE, warning=FALSE>>=
 
-fname_bf <- "../workspace/models_spr_bf/bfs.rda"
-
-if (!file.exists(fname_bf))
-{
-  # save_all_pars=T and large number of iterations needed for Bayes factors
-  brm_template_bf_spr <- function(formula, file, df) {
-        brms::brm(formula = formula, 
-                  chains = 4, cores = 4, iter = 21000, warmup = 1000, save_all_pars = TRUE,
-                  family = brms::lognormal(),
-                  prior = c(set_prior("normal(0, 0.2)", lb = 0.01)),
-                  data = df, file = file)
-  }
-
-  m_original <- brm_template_bf_spr( RT ~ cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen +
-                                          (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen + 1|subject) +
-                                          (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + 1|item),
-                  file = "../workspace/models_spr_bf/m_full_n2",
-                  df = reading_rc_np2)
-  
-
-  
-  # save_all_pars=T and large number of iterations needed for Bayes factors
-  brm_template_bf_spr <- function(formula, file, df) {
-        brms::brm(formula = formula, 
-                  chains = 4, cores = 4, iter = 21000, warmup = 1000, save_all_pars = TRUE,
-                  family = brms::lognormal(),
-                  prior = c(set_prior("normal(0, 0.2)", lb = 0.01)),
-                  data = df, file = file)
-  }
-
-  m_original <- brm_template_bf_spr( RT ~ cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen +
-                                          (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen + 1|subject) +
-                                          (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + 1|item),
-                  file = "../workspace/models_spr_bf/m_full_n2",
-                  df = reading_rc_np2)
-  
-  m_alt_onlyN2 <- brm_template_bf_spr( RT ~ cExperimental * (cN2attachmentVsAmb) + cN1attachmentVsAmb + clWlen +
-                                            (cExperimental * (cN2attachmentVsAmb) + cN1attachmentVsAmb + clWlen + 1|subject) +
-                                            (cExperimental * (cN2attachmentVsAmb) + cN1attachmentVsAmb + 1|item),
-                  file = "../workspace/models_spr_bf/m_onlyN2_n2",
-                  df = reading_rc_np2)
-  
-  m_alt_onlyN1 <- brm_template_bf_spr( RT ~ cExperimental * (cN1attachmentVsAmb) + cN2attachmentVsAmb + clWlen +
-                                            (cExperimental * (cN1attachmentVsAmb) + cN2attachmentVsAmb + clWlen + 1|subject) +
-                                            (cExperimental * (cN1attachmentVsAmb) + cN2attachmentVsAmb + 1|item),
-                  file = "../workspace/models_spr_bf/m_onlyN1_n2",
-                  df = reading_rc_np2)
- 
-  m_alt_null <- brm_template_bf_spr( RT ~ cExperimental + cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen +
-                                            (cExperimental + cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + 1|subject) +
-                                            (cExperimental + cN1attachmentVsAmb + cN2attachmentVsAmb + 1|item),
-                  file = "../workspace/models_spr_bf/m_null_n2",
-                  df = reading_rc_np2)
- 
-  bf1_spr_n2 <- bayes_factor(m_original, m_alt_onlyN2)
-  # Estimated Bayes factor in favor of m_original over m_alt_onlyN2: 0.00007 (inv: 15011)
-  
-  bf2_spr_n2 <- bayes_factor(m_original, m_alt_onlyN1)
-  # Estimated Bayes factor in favor of m_original over m_alt_onlyN1: 0.59675 (inv: 1.7)
-  
-  bf3_spr_n2 <- bayes_factor(m_original, m_alt_null)
-  # Estimated Bayes factor in favor of m_original over m_alt_null: 0.00003 (inv: 33649)
-
-
-  save(bf1_spr_n2, bf2_spr_n2, bf3_spr_n2, file = fname_bf)
-}
-
-
-load(fname_bf)
-@
 
 
 
@@ -1425,49 +1125,37 @@ Importantly, our data did not indicate the presence of an ambiguity advantage. W
 
 \section{General Discussion}
 
-We conducted two reading experiments to test a prediction made by the strategic underspecification account: If readers strategically underspecify ambiguous sentences, they should do so even when RCs are pre-nominal, as they are in Turkish. Therefore, under the assumption of strategic underspecification, we should have expected to see an ambiguity advantage in such cases as well. Under a race-based account such as the SMCM, however, no ambiguity advantage was expected.
+We conducted two reading experiments to test a prediction made by the strategic underspecification account: If readers strategically underspecify ambiguous sentences, they should do so even when RCs are prenominal, as they are in Turkish. Therefore, under the assumption of strategic underspecification, we should have expected to see an ambiguity advantage in such cases as well. Under a race-based account such as the SMCM, however, no ambiguity advantage was expected.
 
 In experiment 1, we tested this prediction in an eye tracking experiment in which a relative clause attachment ambiguity was disambiguated by means of plausibility. We did not find clear-cut evidence for or against an ambiguity advantage in this experiment. While the first-pass reading time and the total fixation time at the critical region did not indicate shorter processing times in ambiguous sentences compared to the preferred NP1 attachment conditions, the regression path duration as well as the number of first-pass regressions pointed to a potential, albeit small speedup. This finding is consistent with the absence of an ambiguity advantage, as well as with the presence of a relatively small ambiguity advantage. In experiment 2, we tested the same prediction as in experiment 1 with a different experiment design. We found no evidence for the presence of an ambiguity advantage.
 
 These findings are unexpected under both interpretations of the underspecification account by Swets et al.~(2008). When task demands do not encourage disambiguation, \emph{early underspecification} predicts an ambiguity advantage at NP2. This is because RC attachment is initially underspecified and later resolved in the NP2 attachment condition, but remains underspecified in the NP1 attachment condition. This should lead to a speedup in the ambiguous condition relative to the unambiguous NP1 condition. \emph{Late underspecification} predicts that the parser delays the process of attaching the RC until such a point where it knows with certainty whether the structure is ambiguous. Based on that information, it decides to underspecify RC attachment in ambiguous conditions, and to attach the RC in unambiguous attachment conditions. This is expected to happen either at the second noun or at the spill-over region. Thus, the absence of an ambiguity advantage in our findings is at odds with the underspecification account.
 
-Importantly, race-based models such as the SMCM \citep{LogacevVasishth:2016} do not predict an ambiguity advantage in ambiguous structures with pre-nominal RCs because they assume that RC attachment begins at the earliest opportunity, which means that an attempt to attach the RC to NP2 must begin with a significant delay relative to the attempt to attach it to NP1. As a result the chance that attachment to NP2 will be completed first, and no ambiguity advantage is expected. Thus, our findings are compatible with the SMCM, but not with the underspecification account.
+Importantly, race-based models such as the SMCM \citep{LogacevVasishth:2016} do not predict an ambiguity advantage in ambiguous structures with prenominal RCs because they assume that RC attachment begins at the earliest opportunity, which means that an attempt to attach the RC to NP2 must begin with a significant delay relative to the attempt to attach it to NP1. As a result the chance that attachment to NP2 will be completed first, and no ambiguity advantage is expected. Thus, our findings are compatible with the SMCM, but not with the underspecification account.
 
+% Importantly, 
+
+% While it is possible, in principle, that for some reason, the parser requires clear evidence of ambiguity in order to decide to underspecify, and therefore requires both attachment sites to be available simulataneously in order to notice that the sentence is ambiguous, it is presently clear why that would be so. 
 
 %language-specific mechanisms?
 
-%- Consider stating in every results section that every speed-up or slowdown is relative to the ambiguous condition. Currently there’s too many instances of “compared/relative to the ambiguous condition”, which is good for readers who just scan the text, but it’s also awfully tedious to read.
 
 
 %<!-- Discuss the underspecification mechanism somewhere, and that the 'underspecification' might actually be at the semantic or mental model level. Maybe place this in the general discussion, since that's where speculation most natually lives. 
--->
 
-% we'll most likely assume that that must mean that it *doesn't* specify (cf. Logacev and Vasishth, 2016b), since there is no reason why a proper syntactic underspecification (cite) would actually save time.
-
-% <!-- The analysis showed a significant slowdown at the first noun in the RC attachment conditions compared to the control conditions. This finding is not surprising considering that relative clauses are syntactically more complex than the adverbial modifiers in this experiment, which always consisted of one word. -->
-
-%<!-- The underspecification account predicted an interaction between modifier type and the N2 singular contrast. Because we expected a slowdown of approximately $50\,ms$ in the non-local condition relative to the ambiguous condition, we predicted an interaction the *RC* $\times$  *N2 singular* of approximately $50\,ms$, reflecting slower reading times for sentences with only one attachment option due to underspecification in ambiguous conditions. No such effect was found. Moreover, the confidence interval for this interaction ($[-35\,ms;\,8\,ms]$) is not compatible with a predicted slowdown of this magnitude. -->
-%<!-- More importantly, neither is the Bayesian credible interval of $[-75\,ms;\,15\,ms]$, which was computed for this parameter. -->
-%<!-- Our finding is clearly incompatible with an ambiguity advantage of the expected magnitude. -->
-%<!-- However, this finding is compatible with the URM, because it predicted the lack of an ambiguity advantage in Turkish and thus the lack of a significant interaction between modifier type and the *N2 singular* contrast, which is what we found. -->
 
 %<!-- Furthermore, the interaction *RC $\times$ N1 singular* provided evidence for a RC attachment-related slowdown at the second noun when attachment was non-local, but no such effect was found on the first noun. This finding is compatible with the URM and the underspecification model. -->
 %<!-- Under the assumptions of the URM, the parser first attempts to attach the RC to the first noun. In the non-local attachment condition, it fails at doing so because such an attachment is unavailable. In the other two conditions, it succeeds. Subsequently, it moves on to the next word, and the relative clause is attached to the second noun in the non-local attachment condition, at some processing cost compared to the two other conditions, where RC attachment was already completed during the reading of the first noun. A necessary assumption is that the failure to attach the RC at the first noun comes at no processing cost, i.e. that attempting to attach a relative clause and succeeding requires the same amount of time as attempting to do so and failing. Although such an assumption may appear somewhat surprising and is certainly worth further investigation, the parser has good reasons to expect a potential attachment site at the next word because of the genitive maker on the first noun. Therefore, it does not need to treat the unavailability of the first noun for RC attachment as an anomaly, and may simply move on to the next word once RC attachment has failed. -->
-%<!-- Under the assumptions of the underspecification parser, relative clause attachment is delayed until the second noun (*fans*) is read. At this point RC attachment is carried out in both unambiguous conditions. The underspecification parser can explain the longer reading times in the non-local condition under the assumption that (i) non-local attachment is inherently more difficult because it involves retrieval of the last noun from memory, or (ii) the parser always attempts to carry out local attachment first, and only after failing to do so, it attaches the RC non-locally. -->
-
-  
 
 
-%<!-- <put at the end, general discussion>
-While it is possible, in principle, that for some reason, the parser requires clear evidence of ambiguity in order to decide to underspecify, and therefore requires both attachment sites to be available simulataneously in order to notice that the sentence is ambiguous, it is not clear why that would be so. 
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
 
-We are the first to look at the presence of an ambiguity advantage in a language with pre-nominal relative clauses. We found that there isn't one
-
-
-
+Here, we proposed two different interpretations of the Swets et al. (2008) strategic underspecification account and discussed how the admbiguity advantage follows from their specific sets of assumptions.  
+We argued that in contrast to race-based theories, both implementations of the strategic underspecification account predict an ambiguity advantage not only in languages with postnominal RC, like English, but also in languages with prenominal RC, such as Turkish.
+We further presented the results of two reading time experiments which failed to show an ambiguity advantage comparable in magnitude with previously attested instances of the ambiguity advantage. 
+We argue that our findings present a major challenge for the strategic underspecification account, but are compatible with race-based models such as the SMCM.
 
 \bibliographystyle{apacite} 
 \bibliography{library.bib}
