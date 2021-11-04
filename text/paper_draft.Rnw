@@ -1,4 +1,4 @@
-\documentclass[english, man]{apa7}
+\documentclass[english, doc]{apa7}
 
 \usepackage[]{graphicx}
 \usepackage[]{color}
@@ -18,7 +18,7 @@
 \usepackage{graphicx}
 
 
-\usepackage[utf8]{inputenc}
+\usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[natbibapa]{apacite}
 
@@ -103,14 +103,12 @@ knitr::opts_chunk$set(encoding = 'UTF-8',
                       echo = FALSE,
                       results = 'hide',
                       cache = './cache/')
-
-
 @
 
 <<r init_packages, warning=FALSE, message=FALSE>>=
 
 library(plyr)
-library(dplyr)
+library(dplyr) 
 library(tidyverse)
 library(magrittr)
 library(ggplot2)
@@ -123,9 +121,11 @@ library(xtable)
 library(ggpubr)
 library(knitcitations)
 
+library(emmeans)
+
 
 source("../scripts/misc.R")
-source("../scripts/format_fn.r")
+source("../chunks/format_fn.r")
 
 options(dplyr.summarise.inform = FALSE)
 
@@ -136,7 +136,7 @@ options(dplyr.summarise.inform = FALSE)
 
 
 \abstract{
-Traxler et al. (1998) have found that relative clauses with ambiguous attachment are sometimes read faster than their unambiguous counterparts. Two broad classes of theories account for this phenomenon: Race-based models posit that ambiguous sentences are read faster due to a ‘race’ between several permissible analyses of the sentence. In contrast, the strategic underspecification account maintains that, under the right conditions, readers underspecify ambiguities in order to save time. We show the two accounts make qualitatively different predictions for structures with pre-nominal relative clauses, such as in Turkish. While the underspecification account predicts an ambiguity in Turkish, race-based accounts predict the absence of such an effect. 
+Traxler et al. (1998) have found that relative clauses with ambiguous attachment are sometimes read faster than their unambiguous counterparts. Two broad classes of theories account for this phenomenon: Race-based models posit that ambiguous sentences are read faster due to a ‘race’ between several permissible analyses of the sentence. In contrast, the strategic underspecification account maintains that, under the right conditions, readers underspecify ambiguities in order to save time. We show the two accounts make qualitatively different predictions for structures with pre-nominal relative clauses, such as in Turkish. While the underspecification account predicts an ambiguity advantage in Turkish, race-based accounts predict the absence of such an effect. 
 We present data from two reading experiments in Turkish in which we find no evidence for an ambiguity advantage in the processing of ambiguous sentences with prenominal relative clauses and argue that this finding poses a major challenge for the strategic underspecification account.
 
 % long version
@@ -251,36 +251,49 @@ It is currently not entirely clear what the predictions of surprisal \citep{Levy
 
 In sum, the underspecification account predicts an ambiguity advantage in sentences like (4), while the SMCM predicts the absence of such an effect. We conducted two experiments to test these predictions. In both experiments, task demands were kept superficial. In experiment 1, we disambiguated RC attachment by means of animacy, while in experiment 2, RC attachment was disambiguated morphosyntactically.
 
+Because the SMCM predicts no significant attachment-related speed-up in ambiguous conditions, which corresponds to a statistical null result, we need to quantify the expected magnitude of an ambiguity advantage. We operationalized an ambiguity advantage as the observation of a speed-up in the ambiguous condition relative to the preferred NP1 attachment conditions and its magnitude as the difference between the fastest unambiguous condition and the ambiguous condition. Since the smallest previously observed ambiguity advantage effect in the prior literature \citep{SwetsEtAl:2008, TraxlerEtAl:1998, vanGompelEtAl:2005, vanGompelEtAl:2001} amounted to a 22\emph{ms} difference between the preferred unambiguous condition and the ambiguous condition (median: $55\,ms$, SD: $30\,ms$, range: $22\,ms - 120\,ms$), we expected an effect of at least that magnitude. On the log-scale, which will be used in our analyses, the smallest effect size was $0.03$  (mean: $0.08$, SD: $0.043$, range: $0.03 - 0.17$).
+
+
 \section{Experiment 1}
 
 We conducted experiment 1 with the aim of testing for the presence of an ambiguity advantage at the second noun (N2). The presence of an ambiguity advantage would be compatible with both types of underspecification, but not with the SMCM (or the URM). In order to create task demands which encourage underspecification, participants were asked comprehension questions occasionally, most of which were superficial. To discourage participants from skipping over the relative clause, we asked five RC-related comprehension questions in unambiguous attachment conditions over the course of the experiment.
-
-Because the SMCM predicts no significant attachment-related speed-up in ambiguous conditions, which corresponds to a statistical null result, we need to quantify the expected magnitude of an ambiguity advantage. We operationalized an ambiguity advantage as the observation of a speed-up in the ambiguous condition relative to the preferred NP1 attachment conditions and its magnitude as the difference between the fastest unambiguous condition and the ambiguous condition. Since the smallest previously observed ambiguity advantage effect in the prior literature \citep{SwetsEtAl:2008, TraxlerEtAl:1998, vanGompelEtAl:2005, vanGompelEtAl:2001} amounted to a 26\emph{ms} difference between the preferred unambiguous condition and the ambiguous condition (range: 26\emph{ms -} 122\emph{ms}), we expected an effect of at least that magnitude.
-
 
 % Expected magnitude of the ambiguity advantage:
 % 
 %% Comparison is complicated by the fact that all experiments involved other manipulations too, such as attachment bias based on plausibility of certain attachments
 % ambiguity advantage = preferred (fastest) unambiguous minus ambiguous 
 %
-%TraxlerEtAl:1998 
-%   - 92 ms (TFT), at disambiguating (moustache), Experiment 1 (RCs)
-%   - 27 ms (TFT), at disambiguating (herself), Experiment 2 (RCs)
+%TraxlerEtAl:1998
+%   - 82 ms (TFT), at disambiguating (moustache), Experiment 1 (RCs) | percentage: 0.16 = 82*3/(529+547+447) -> log(1.16) = 0.15
+%   - 27 ms (TFT), at disambiguating (herself), Experiment 2 (RCs) | percentage: 0.073 = 27*3/(376+392+349) -> log(1.073) = 0.07
 %VanGompelPickeringTraxler2001,
-%   - 122 ms (TFT), at spill-over, Experiment 1 (PP)
-%   - 41 ms (TFT) at spill-over, 120 ms (RPD) at spill-over, Experiment 2 (PP)
+%   - 22 ms (TFT), at spill-over, Experiment 1 (PP) | percentage: 0.029 = 22*3/(699+721+829) -> log(1.03) = 0.03
+%   - 41 ms (TFT) at spill-over, Experiment 2 (PP) | percentage: 0.062 = 41*3/(633+681+674) -> log(1.062) = 0.06
+%   - 120 ms (RPD) at spill-over, Experiment 2 (PP) | percentage: 0.19 = 120*3/(562+693+682) -> log(1.19) = 0.17
 %vanGompelEtAl:2005
-%   - 26 ms (RPD) at disambiguating, 50 ms (TFT) at disambiguating, 
-%   - 86 ms (RPD) at spill-over, 79 ms (TFT) at spill-over, Experiment 1 (PP)
-%   - 31 ms (RPD), spill-over, 36 ms (TFT) disambiguating, 
-%   - 83 ms (TFT), spill-over, Experiment 2 (RCs) 
+%   - 26 ms (RPD) at disambiguating, Experiment 1 (PP) | percentage: 0.063 = 26*3/(384+410+439) -> log(1.063) = 0.061
+%   - 50 ms (TFT) at disambiguating, Experiment 1 (PP) | percentage: 0.11 = 50*3/(403+458+453) -> log(1.11) = 0.1
+%   - 86 ms (RPD) at spill-over, Experiment 1 (PP) | percentage: 0.12 = 86*3/(660+757+746) -> log(1.12) = 0.11
+%   - 79 ms (TFT) at spill-over, Experiment 1 (PP) | percentage: 0.1 = 79*3/(738+817+824) -> log(1.1) = 0.095
+%   - 36 ms (TFT), spill-over, Experiment 2 (RCs) | percentage: 0.063 = 36*3/(542+578+601) -> log(1.063) = 0.061
+%   - 31 ms (RPD), spill-over, Experiment 2 (RCs) | percentage: 0.041 = 31*3/(723+754+801) -> log(1.041) = 0.04
+%   - 83 ms (TFT), spill-over, Experiment 2 (RCs) | percentage: 0.097 = 83*3/(797+880+899) -> log(1.097) = 0.093
 % SwetsEtAl:2008
-%   - 52 ms (superficial)
-%   - 36 ms (occasional superficial) [both SPR] 
+%   - 52 ms (superficial) | percentage: 0.047 = 52*3/(1152+1118+1066) -> log(1.047) = 0.046
+%   - 36 ms (occasional superficial) [both SPR] | percentage: 0.031 = 36*3/(1203+1182+1146) -> log(1.031) = 0.031
 
-<<r emPriorEffectSize, results='hide', message=FALSE, warning=FALSE>>=
-prior_amb_adv_ms <- c(92,27,122,41,26,86,31,83,52,36)
+<<r priorAmbAdv, eval=TRUE, results='hide'>>=
+prior_amb_adv_ms <- c(82, 27, 22, 41, 120, 26, 50, 86, 79, 36, 31, 83, 52, 36)
+prior_amb_adv_log <- c(.15, .07, .03, .06, .17, .061, .1, .11, .095, .061, .04, .093, .031)
+prior_amb_adv_perc <- c(.16, .073, .03, .062, .19, .063, .11, .12, .1, .063, .041, .097, .031)
+
+round( c(M=mean(prior_amb_adv_log), SD=sd(prior_amb_adv_log)), 3)
+
+#df_prior_amb_adv <- data.frame(label = "Reading Time", eff = prior_amb_adv_ms) %>% bind_rows( data.frame(label = "log(Reading Time)", eff = prior_amb_adv_log) )
+#ggplot(df_prior_amb_adv, aes(eff)) + geom_histogram() + facet_wrap(~label, scales = "free")
+
 @
+
 
 \subsection{Method}
 
@@ -288,19 +301,36 @@ prior_amb_adv_ms <- c(92,27,122,41,26,86,31,83,52,36)
 
 We constructed 36 experimental sentences such as in (\ref{StimExp1}), i.e., twelve for each attachment condition. Disambiguation was effected by means of animacy. Relative clauses always comprised two words. The critical region and the spillover region were approximately equal in length across the three conditions: (cf.~Table \ref{tab:r eyeStimuliStats}).
 
-<<r eyeStimuliStats, eval=TRUE, results='asis'>>=
+<<r eyeStimuliStats, eval=FALSE, results='asis'>>=
 
 stimulus_lengths <- 
     data.frame('pre-critical' = c("7.4 (1.2; 6-10)", "6.7 (0.9; 5-8)", "7.8 (1.1; 7-10)"), 
-               'Noun 1'    = c("5.8 (1.1; 4-7)", "5.7 (1.2; 4-8)", "5.7 (1.2; 3-7)"), 
-               'Noun 2'    = c("5.4 (1.0; 4-7)", "5.3 (1.2; 3-7)", "5.3 (1.2; 3-7)"),
+               'noun 1'    = c("5.8 (1.1; 4-7)", "5.7 (1.2; 4-8)", "5.7 (1.2; 3-7)"), 
+               'noun 2'    = c("5.4 (1.0; 4-7)", "5.3 (1.2; 3-7)", "5.3 (1.2; 3-7)"),
                'spillover' = c("5.5 (2.0; 3-9)", "5.5 (1.7; 3-8)", "5.7 (3.1; 3-13)")
               )
-colnames(stimulus_lengths) <- c("pre-critical", "noun 1", "noun 2", "spillover")
-
+rownames(stimulus_lengths) <- c("ambiguous", "N1 attachment", "N2 attachment")
 
 knitr::kable(stimulus_lengths, caption = "Average word length by condition and position in the sentence. We considered the positions pre-critical ('shouting'), noun 1 ('principal'), noun 2 ('voice'), and spill-over ('street'). (Standard deviations and range in parentheses.)") %>% print()
 @
+
+
+
+\begin{table}
+\caption{\label{tab:r eyeStimuliStats}Average word length by condition and position in the sentence. We considered the positions pre-critical ('shouting'), noun 1 ('principal'), noun 2 ('voice'), and spill-over ('street'). (Standard deviations and range in parentheses.)}
+\centering
+\begin{tabular}[t]{l|l|l|l|l}
+\hline
+  & pre-critical & noun 1 & noun 2 & spill-over\\
+\hline
+ambiguous & 7.4 (1.2; 6-10) & 5.8 (1.1; 4-7) & 5.4 (1.0; 4-7) & 5.5 (2.0; 3-9)\\
+\hline
+N1 attachment & 6.7 (0.9; 5-8) & 5.7 (1.2; 4-8) & 5.3 (1.2; 3-7) & 5.5 (1.7; 3-8)\\
+\hline
+N2 attachment & 7.8 (1.1; 7-10) & 5.7 (1.2; 3-7) & 5.3 (1.2; 3-7) & 5.7 (3.1; 3-13)\\
+\hline
+\end{tabular}
+\end{table}
 
 
 \subsubsection{Participants}
@@ -314,25 +344,97 @@ Participants provided informed consent and the procedures in this study were com
 
 \subsubsection{Procedure}
 
-All experiments took place at Ankara University Linguistics Laboratory, with each participant individually in a single session. The participants were required to perform the sentence processing task in a dimly lit room and seated within $60\,cm$ distance from a 1680 x 1050 pixels 22-inch LCD desktop monitor with 60 Hz refresh rate. During the performance of the sentence processing task, the eye-tracker device (RED 500 by SensoMotoric Instruments, SMI) with chin rest recorded the participants' binocular eye movements at a sampling rate of 500\emph{Hz}, but only the left eye was analyzed. Before beginning the sentence processing task, participants were told that they would read Turkish sentences and answer comprehension questions on the computer screen while the eye-tracker recorded their eye movements. Each participant was given a practice session to get used to the dynamics of the task. A 5-point calibration was executed before and after the practice. During the testing phase, each participant read forty-eight sentences (36 test sentences and 12 filler sentences) in two sentence blocks of twenty-four sentences each. Before each sentence, a fixation cross appeared for 500 ms trigger duration, in order to help the participants to fixate their eyes on the initial point of each sentence on the screen. The sentences appeared on the screen one at a time in one line in a grey background. The degree of angle per character was 0.074 cm (Courier New, 36 point).
+All experiments took place at Ankara University Linguistics Laboratory, with each participant individually in a single session. The participants were required to perform the sentence processing task in a dimly lit room and seated within $60\,cm$ distance from a 1680 x 1050 pixels 22-inch LCD desktop monitor with 60 Hz refresh rate. The degree of angle per character was 0.074 cm (Courier New, 36 point). During the performance of the sentence processing task, the eye-tracker device (RED 500 by SensoMotoric Instruments, SMI) with a chin rest recorded the participants' binocular eye movements at a sampling rate of 500\emph{Hz}, but only the left eye was analyzed. 
+%
+Before beginning the sentence processing task, participants were told that they would read Turkish sentences and answer comprehension questions on the computer screen while the eye-tracker recorded their eye movements. 
+Each participant was given a practice session to get used to the dynamics of the task. The practice session began with a 5-point calibration, followed by a 4-point validation procedure. The calibration procedure was repeated when necessary or when the validation resulted in an average error of more than 0.5 degrees.
 
+During the testing phase, each participant read forty-eight sentences (36 test sentences and 12 filler sentences) in two sentence blocks of twenty-four sentences each. Before each sentence, a fixation cross appeared for 500 ms trigger duration, in order to help the participants to fixate their eyes on the initial point of each sentence on the screen. The sentences appeared on the screen one at a time in one line in a grey background. 
+%
 Comprehension questions about the sentence were asked on every second trial: 19 of the 24 questions were superficial, and 5 questions were about the RC attachment ambiguity. All RC questions were asked in unambiguous attachment conditions. Participants answered questions by selecting one of two options shown on the screen. Each session lasted about 25 minutes.
 
 \subsubsection{Statistical Analysis}
 
 We excluded all fixations which were shorter than 80 ms or longer than 1200 ms prior to using the \emph{em2} package \citep{LogacevVasishth:2013} in R \citep{R-base} for computing reading time measures from the eye movement record. We used the \emph{tidyverse} and \emph{ggplot2} packages
-\citep{R-tidyr, R-ggplot2} for data processing and plotting, and the R packages \emph{brms} \citep{R-brms_a} and \emph{rstan} \citep{R-rstan} to fit Bayesian generalized hierarchical linear models \citep[e.g.,][]{GelmanHill:2007, McElreath:2016, Kruschke:2015, VasishthEtAl:2019} to the eye-tracking measures of interest. 
-The discrete dependent measure regression probability were modeled with generalized hierarchical linear models with a logit-link.
-All reading time measures were modeled using generalized hierarchical linear models assuming log-normally distributed residuals.
-We used normal priors for all coefficients for both, log-normal models (\(\mu=0\), \(\sigma=0.2\)), as well as logit models (\(\mu=0\), \(\sigma=1\)). All models were fitted using four chains with \(2,500\) post-warmup samples each.
+\citep{R-tidyr, R-ggplot2} for data processing and plotting, and the R packages \emph{brms} \citep{R-brms_a} and \emph{rstan} \citep{R-rstan} to fit Bayesian generalized hierarchical linear models \citep[e.g.,][]{GelmanHill:2007, McElreath:2016, Kruschke:2015, VasishthEtAl:2019} to the eye-tracking measures of interest.
+Reading-time measures were modeled using generalized hierarchical linear models assuming log-normally distributed residuals. Regression probability was modeled with generalized hierarchical linear models with a logit link function.
 
-All models presented below included fixed effects of attachment coded using orthogonal simple contrasts (comparing each of the unambiguous attachment conditions to the ambiguous condition), and controlled for centered log word length. Word length was used as a covariate in order to account for any differences in critical word length between our experimental sentences. We included random intercepts for participants and items, as well as maximal by-participant random slopes and correlations between random effects.
+%We used normal priors for all coefficients for both, log-normal models (\(\mu=0\), \(\sigma=0.2\)), as well as logit models (\(\mu=0\), \(\sigma=1\)). 
+%fitted two sets of models to each dependent variable: Models for the estimation of the effect size used symmetrical priors for all model slopes while models serving as a basis for calculating Bayes Factors for or against the presence of an ambiguity advantage constrained the difference between the preferred N1 attachment condition and the ambiguous attachment condition to be either positive, thus corresponding to an ambiguity advantage effect, or assumed no difference between N1 attachment and ambiguous conditions for the null model. 
 
-While all coefficients for reading time measures were estimated using sum contrasts on a log-scale, we used the model's posterior MCMC samples to construct 95\% credible intervals for the pairwise differences between each of the unambiguous conditions and the ambiguous condition on the original scale (in \emph{milliseconds}). Doing so allowed us to compare the size of the effects we found with previously attested instances of the ambiguity advantage.
+All models were fitted using four chains with \(2,000\) warmup samples and \(5,000\) post-warmup samples. We used a normal prior ($N(\mu=5.75, \sigma=1)$) for the intercept of the log-normal models of reading time and the symmetrical prior $N(0, 0.2)$ for all slope coefficients. In the logit model of regression probability, $N(0, 3)$ was used as the intercept prior, while all slope coefficients received the prior $N(0, 1)$. All models included fixed effects of attachment coded using centered simple contrasts comparing each of the unambiguous attachment conditions to the ambiguous condition. Centered log word length was used as a covariate in order to account for any differences in critical word length between our experimental sentences. We included random intercepts for participants and items, as well as maximal by-participant random slopes and correlations between random effects.
+
+While all coefficients for reading time measures were estimated on the log-scale, we used the model's posterior MCMC samples to construct 95\% credible intervals for the pairwise differences between each of the unambiguous conditions and the ambiguous condition on the original scale (in \emph{milliseconds}). Doing so allowed us to compare the size of the effects we found with previously attested instances of the ambiguity advantage.
+
+%In addition to estimation models, we fitted several models for the purpose of computing Bayes Factors \citep[e.g.,][]{RouderEtAl:2009} quantifying evidence against the presence of an ambiguity advantage. All such models were fitted with \(4\) chains with \(2,000\) warmup samples and \(15,000\) post-warmup samples in order to ensure stable Bayes Factor estimates using the \textit{bridgesampling} package \citep{bridgesampling}. 
+
+%In order calculate the Bayes Factor for a range of priors for the magnitude of the ambiguity advantage effect, we fitted four ambiguity advantage-compatible models with different priors for each region and dependent variable. The model specification was identical to the estimation models described above with the exception of the prior for the difference between N1 attachment and ambiguous conditions: All ambiguity advantage-compatible models used half-normal priors of different width, constraining the difference to be positive, as is expected under the assumption of an ambiguity advantage. The priors used used were $1.0, 0.5, 0.25,$ and $0.1$ times the width of the original prior, that is $\sigma=0.2/0.1/0.05/0.02$ for reading-time models, and $\sigma=1.0/0.5/0.25/0.1$ for the regression-probability model.
+
+We calculated Bayes Factors quantifying the evidence against the presence of an ambiguity advantage for a range of priors \citep[e.g.,][]{LeeWagenmakers:2014, SchonbrodtWagenmakers:2018, NicenboimEtAl:2021}. The Bayes Factor $BF_{01}$ for two models $M_0$ and $M_1$ quantifies the amount of evidence the data provides for model $M_0$ relative to $M_1$. It represents the ratio of posterior odds of the two models, after seeing the data, to their prior odds. Assuming equal prior odds for models $M_0$ and $M_1$, $BF_{01}$ corresponds to the ratio of the marginal likelihoods of the data, given the models, as in equation \ref{eq:BF}.
+
+\begin{equation}
+    BF_{01} = \frac{p(data|M_0)}{p(data|M_1)}
+    \label{eq:BF}
+\end{equation}
+
+Importantly, Bayes Factors depend on the prior distribution of the parameter of interest, and thus require a specific hypothesis about the size of the effect in order to quantify the evidence for its absence. As table \ref{tab:prior_widths} shows, the prior we used for the estimation of slope coefficients ($N(0, 0.2)$) is rather wide, as it assigns a $95\%$ prior probability to an effect size between $-33\%$ and $+49\%$ of the overall intercept, and a $68\%$ prior probability to an effect size between $-18\%$ and $+22\%$ of the overall intercept.\footnote{The specification of an effect size as a percentage of the intercept is a consequence of the fact that additive effects on the log-scale are multiplicative in their original units.} That is, when the average reading time is $400\,ms$, the prior stipulates that the effect is most likely to be between $-132\,ms$ and $196\,ms$, and more likely than not between $-72\,ms$ and $88\,ms$.
+
+In order to quantify the evidence against the hypothesis of a reading time difference between ambiguous and N1 attachment conditions, we fitted all reading-time models for a range of different priors \textit{for the difference between the preferred N1 attachment condition and the ambiguous condition} ($\sigma=0.2$, $\sigma=0.1$, $\sigma=0.05$, $\sigma=0.02$), which correspond to different assumptions about hypothesized effect sizes (cf. Table \ref{tab:prior_widths}). We then used the Savage-Dickey method implemented in \emph{brms} \citep{R-brms_a} in order to compute Bayes Factors.
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{c||c|c}
+        Prior Width & {Central $68\%$ of Probability Mass} & {Central $95\%$ of Probability Mass} \\
+        \hline
+         $\sigma = 0.2$ & $[-18\%; +22\%]$ & $[-33\%; +49\%]$ \\
+         $\sigma = 0.1$ & $\pm 10\%$ & $[-18\%; +22\%]$ \\
+         $\sigma = 0.05$ & $\pm 5\%$ & $\pm 10\%$ \\
+         $\sigma = 0.02$ & $\pm 2\%$ & $\pm 4\%$
+    \end{tabular}
+    \caption{Allocation of probability mass over effect sizes for different prior widths.}
+    \label{tab:prior_widths}
+\end{table}
+
+\subsection{Data Availability}
+All data and R code used in the data analysis is available at \url{https://osf.io/r8dm7/}.
 
 \subsection{Results}
 
-The average comprehension questions accuracy was \(78.8\%\). Figures \ref{fig:EyeRTsPlot} show a summary of the eye-tracking measures computed for the the critical regions:
+<<r eyeResults.load, results='hide'>>=
+load("../workspace/stats_eye.rda")
+@
+
+
+% to-do: Mention here and in the text that this plot also takes care of potential length confounding, in contrast to raw averages. -- and also partial pooling to reduce the effect of outlying subjects or items
+% to-do: Drop the "estimated marginal mean" label
+% to-do: Do the same for the other figure.
+% to-do: Figure out how to plot the equivalent to the Cosineau's within-particpant CIs using brms models.
+\begin{figure}
+\includegraphics[width=\maxwidth]{figure/eyeEMM.pdf} 
+\caption{Estimated marginal means and 95\% credible intervals of first-pass regression probabilities and back-transformed log-reading time measures FPRT, RPD, and TFT for the critical regions by condition. All estimates and credible intervals were obtained using the \emph{emmeans} package 
+\protect{\citep{emmeans}}.
+}
+\label{fig:EyeRTsPlot}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=\maxwidth]{figure/emStandardMeasuresModelCoefPlot} 
+\caption{Estimates and $95\%$ credible intervals (thin lines) as well as $90\%$ credible intervals (thick lines)  for the analyses of first-pass reading time, regression-path duration, total fixation time, and regression probability.}
+\label{fig:emStandardMeasuresModelCoefPlot}
+\end{figure}
+
+
+
+\begin{figure}
+\includegraphics[width=\maxwidth]{./figure/exp1_BFs.pdf} 
+\caption{Bayes Factors in favor of the absence of a difference in reading times between the ambiguous attachment condition and the N1 attachment condition, at two positions in the sentence: noun 2 and the spill-over region. Classification of evidence strength following \citet{Jeffreys:1961} as cited in \citet{LeeWagenmakers:2014}. }
+\label{fig:EyeBFs1}
+\end{figure}
+
+
+
+
+The average comprehension questions accuracy was \(78.8\%\). Figure \ref{fig:EyeRTsPlot} show a summary of the estimated marginal means and 95\% credible intervals of the eye-tracking measures computed for the the critical regions:
 (i) \emph{First-pass reading time} (FPRT), which is the amount of time spent reading a word for the first time when that the first fixation on that word was \emph{progressive} (i.e., the reader has not yet read anything to the right of this word).
 (ii) \emph{Regression-path duration} (RPD), which is the amount of time spent on the word starting with a progressive first fixation, until the gaze moves to the right of that word.
 (iii) \emph{Total fixation time} (TFT), which is the total amount of time spent fixating the critical word, including re-reading.
@@ -341,352 +443,74 @@ The average comprehension questions accuracy was \(78.8\%\). Figures \ref{fig:Ey
 %The percentage of *regressive refixations*, which is the proportion of times readers re-inspect %a word after looking at another word further to its right.
 %-->
 
-<<r Eye.LoadData, results='hide', message=FALSE, warning=FALSE>>=
-
-crit_em_rc <- read.csv("../data/experiment_eye/corrected_data_em.csv")
-crit_em_rc$roiLabel %<>% factor(levels = c("pre-critical", "N1", "N2", "spillover"))
-
-# # # exclude the 5 participants with the least numbers of regions fixated
-# subj_missing_fixations = c("P08", "P22", "P01", "P14", "P07")
-# crit_em_rc %<>% subset(!subj %in% subj_missing_fixations) %T>% { .$subj %<>% as.factor() }
-crit_em_rc$subject %<>% as.factor()
-
-crit_em_rc %<>% within({
-  # compares the N2 attachment condition to the average
-  attachment %>% recode_char2double( c('ambiguous'=-1/3, 'N2 attachment'=-1/3, 'N1 attachment'=2/3) ) -> cN1attachmentVsAmb
-  # compares the N1 attachment condition to the average
-  attachment %>% recode_char2double( c('ambiguous'=-1/3, 'N2 attachment'=2/3, 'N1 attachment'=-1/3) ) -> cN2attachmentVsAmb
-
-  clWlen <- scale(log(wlen))
-  clPrevWlen <- scale(log(prev_wlen))
-  clNextWlen <- scale(log(next_wlen))
-  refixation = as.numeric(RRTR!=0)
-  regression = as.numeric(as.logical(RBRC))
-  fp_skip = as.numeric(FFP==0)
-})
-
-@
-
-<<r EyeRTsPlot, results='hide', message=FALSE, warning=FALSE>>=
-
-crit_em_rc %<>% mutate(log_FPRT = log(FPRT), log_RPD = log(RPD), log_TFT = log(TFT) )
-
-fprt <- subset(crit_em_rc, FPRT!=0) %>% 
-        se_cousineau_bygroup( bygroup = "roiLabel", n_conditions=3, subject = subj, 
-                              DV = log_FPRT, group = "attachment", is_proportion = F)
-rpd <- subset(crit_em_rc, RPD!=0) %>% 
-        se_cousineau_bygroup( bygroup = "roiLabel", n_conditions=3, subject = subj, 
-                              DV = log_RPD, "attachment", is_proportion = F)
-tft <- subset(crit_em_rc, TFT!=0) %>% 
-        se_cousineau_bygroup( bygroup = "roiLabel", n_conditions=3, subject = subj, 
-                              DV = log_TFT, "attachment", is_proportion = F)
-
-crit_em_rc %<>% mutate( RBR = as.logical(RBRC) )
-rp <- subset(crit_em_rc, FFP==1) %>% 
-       se_cousineau_bygroup( bygroup = "roiLabel", n_conditions=3, subject = subj, 
-                             DV = regression, "attachment", is_proportion = T)
-
-RTs = rbind(cbind(fprt, measure="First Pass\nReading Time"), 
-            cbind(rpd, measure="Regression\nPath Duration"), 
-            cbind(tft, measure="Total Fixation\nTime"))
-
-RTs$attachment %<>% as.factor
-p_avg_rt_exp1 <- RTs %>% ggplot(aes(attachment, exp(M), group = attachment, color = attachment)) + 
-                          geom_point() + 
-                          geom_errorbar(aes(ymin=exp(M-1.96*SE), ymax=exp(M+1.96*SE)), width = 0.2) + 
-                          ylab("Reading Time") + xlab("") +
-                          facet_grid(measure ~ roiLabel, scales = "free_y") + 
-                          scale_y_continuous(breaks = seq(200, 500, by=25)) +
-                          scale_x_discrete(labels = NULL, breaks = NULL) +
-                          #scale_x_discrete(guide = guide_axis(angle = 45)) + 
-                          theme(legend.position='top') + 
-                          theme(  strip.background = element_rect(fill="white") )
-
-probs = cbind(rp, measure="First-pass\nRegressions") # rbind( )
-
-probs$attachment %<>% as.factor 
-p_avg_prob_exp2 <- ggplot(probs, aes(attachment, M, group = attachment, color = attachment)) + 
-                        geom_point() + 
-                        geom_errorbar(aes(ymin=(M-1.96*SE), ymax=(M+1.96*SE)), width = 0.2) + 
-                        scale_y_continuous(labels = function(...) scales::percent(accuracy=1, ...) ) +
-                        ylab("% Regressions") + xlab("") +
-                        facet_grid(measure ~ roiLabel, scales = "free_y") + 
-                        scale_x_discrete(labels = NULL, breaks = NULL) +
-                        #scale_x_discrete(guide = guide_axis(angle = 45)) + 
-                        theme(legend.position='none') + 
-                        theme(  strip.background = element_rect(fill="white") )
- 
-
-# print(p_avg_prob_exp2)
-p_avgs <- ggarrange(p_avg_rt_exp1, p_avg_prob_exp2, ncol = 1, heights = c(2.5,1))
-
-ggsave(p_avgs, file = "./figure/EyeRTsPlot.pdf", height = 5)
-
-@
-
-<<r Eye.brms, results='hide', message=FALSE, warning=FALSE>>=
-
-brm_reading <- function(DV, data, file, prior = NULL, family = brms::lognormal() )
-{
-  print(DV)
-  data %<>% dplyr::rename_( "DV" = DV )
-  brm(DV ~ cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + clPrevWlen + clNextWlen +
-            (cN1attachmentVsAmb + cN2attachmentVsAmb + clWlen + clPrevWlen + clNextWlen + 1|subj) +
-            (1|stimulus),
-            data = data, family = family,
-            prior = prior, 
-            #stanvars = stanvars_lognormalParamMeanSigma,
-            #control = list(adapt_delta = .95),
-            # family = brms::lognormal(),
-            #sample_prior = "only",
-            chains = n_chains, cores = n_cores, 
-            seed = 1234, iter = n_iter, 
-            file = file
-            )
-}
-
-brm_models <- function(data, fname)
-{
-    lst <- list()
-    
-    DV = "FPRT"
-    lst$fprt <- brm_reading(DV, data = subset(data, FFP==1),
-                                file = paste(fname, DV, sep = "_"),
-                                prior = c(prior_string("normal(5.75, 1)", class = "Intercept"),
-                                          prior_string("normal(0, 0.2)", class = "b"))
-                               )
-    
-    DV = "RPD"
-    lst$rpd <- brm_reading(DV, data = subset(data, FFP==1),
-                               file = paste(fname, DV, sep = "_"),
-                               prior = c(prior_string("normal(5.75, 1)", class = "Intercept"),
-                                         prior_string("normal(0, 0.2)", class = "b"))
-                               )
-    
-    DV = "TFT"
-    lst$tft <- brm_reading(DV, data = subset(data, TFT!=0),
-                               file = paste(fname, DV, sep = "_"),
-                               prior = c(prior_string("normal(5.75, 1)", class = "Intercept"),
-                                        prior_string("normal(0, 0.2)", class = "b"))
-                               )
-    
-    DV = "regression"
-    lst$rp <- brm_reading(DV, data = subset(data, FFP==1),
-                              file = paste(fname, DV, sep = "_"),
-                              prior = c(prior_string("normal(0, 3)", class = "Intercept"),
-                                        prior_string("normal(0, 1)", class = "b")),
-                              family="bernoulli"
-                              )
-    lst
-}
+Figure \ref{fig:emStandardMeasuresModelCoefPlot} shows the estimated differences between the unambiguous conditions and the ambiguous condition for each word position and eye-tracking measure. It also shows the upper and lower boundaries of the $95\%$ and $90\%$ credible interval for each position (noun 1, noun 2, spill-over region).\footnote{The posterior probability that the parameter is smaller than (or larger than) zero is larger than $97.5\%$ if the $95\%$ credible interval excludes zero and larger than $95\%$ if the $90\%$ credible interval excludes zero.}
 
 
-n_cores <- 4
-n_chains <- 4
-n_iter <- 5000
-
-# to-do: (i) Fit each measure in a single model, to make sure that the slopes for all effects of word length 
-#        are the same across regions, and use fillers for priors on this. Or at least (ii) just do the fillers for priors.
-eye_np1 <- brm_models(data = crit_em_rc %>% subset(roiLabel == "N1"), 
-                      fname = '../workspace/models_eye_np1')
-
-eye_np2 <- brm_models(data = crit_em_rc %>% subset(roiLabel == "N2"), 
-                      fname = '../workspace/models_eye_np2')
-
-eye_spillover <- brm_models(data = crit_em_rc %>% subset(roiLabel == "spillover"), 
-                      fname = '../workspace/models_eye_spillover')
-
-@
-
-<<r emStandardMeasuresModelPlot.prepare>>=
-
-# note: + sigma^2/2 is to get the mean instead of the median
-# note 2: not using + sigma^2/2 for the sake of consistency -- the plots show an estimate of exp(log-mean), not of the mean 
-transformations_emrts_means <- c(mean_amb_ms = "exp(b_Intercept - 1/3*b_cN1attachmentVsAmb - 1/3*b_cN2attachmentVsAmb)", # 
-                                 mean_n1_ms  = "exp(b_Intercept + 2/3*b_cN1attachmentVsAmb - 1/3*b_cN2attachmentVsAmb)", #
-                                 mean_n2_ms  = "exp(b_Intercept - 1/3*b_cN1attachmentVsAmb + 2/3*b_cN2attachmentVsAmb)" #
-                                )
-transformations_emrts <- c(transformations_emrts_means,
-                           delta_n1attachment_m_amb_ms = "mean_n1_ms - mean_amb_ms",
-                           delta_n2attachment_m_amb_ms = "mean_n2_ms - mean_amb_ms"
-                          )
-
-m_eye_fprt <- list("noun 1" = eye_np1$fprt, "noun 2" = eye_np2$fprt, "spill-over" = eye_spillover$fprt)
-p_fprt <- m_eye_fprt %>% { plot_coefs(., transformations = transformations_emrts)  + xlab("Estimate (ms)")  }
-
-m_eye_rpd <- list("noun 1" = eye_np1$rpd, "noun 2" = eye_np2$rpd, "spill-over" = eye_spillover$rpd)
-p_rpd <- m_eye_rpd %>% { plot_coefs(., transformations = transformations_emrts)  + xlab("Estimate (ms)")  }
-
-m_eye_tft <- list("noun 1" = eye_np1$tft, "noun 2" = eye_np2$tft, "spill-over" = eye_spillover$tft)
-p_tft <- m_eye_tft %>% { plot_coefs(., transformations = transformations_emrts)  + xlab("Estimate (ms)")  }
-
-
-transformations_emprop_means <- c(mean_amb_ms = "plogis(b_Intercept - 1/3*b_cN1attachmentVsAmb - 1/3*b_cN2attachmentVsAmb)", 
-                                  mean_n1_ms  = "plogis(b_Intercept + 2/3*b_cN1attachmentVsAmb - 1/3*b_cN2attachmentVsAmb)",
-                                  mean_n2_ms  = "plogis(b_Intercept - 1/3*b_cN1attachmentVsAmb + 2/3*b_cN2attachmentVsAmb)"
-                                 )
-transformations_emprop <- c(delta_n1attachment_m_amb_ms = "b_cN1attachmentVsAmb",
-                            delta_n2attachment_m_amb_ms = "b_cN2attachmentVsAmb"
-                           )
- 
-m_eye_rp <- list("noun 1" = eye_np1$rp, "noun 2" = eye_np2$rp, "spill-over" = eye_spillover$rp)
-p_rp <- m_eye_rp %>% { plot_coefs(., transformations = transformations_emprop)  + xlab("Estimate (log-odds)")  }
-
-# m_eye_rfp <- list("noun 1" = eye_np1$rfp, "noun 2" = eye_np2$rfp, "spill-over" = eye_spillover$rfp)
-# p_rfp <- m_eye_rfp %>% { plot_coefs(., transformations = transformations_emprop)  + xlab("Estimate (log-odds)") }
-
-@
-
-<<r emStandardMeasuresModelCoefPlot, results='hide', message=FALSE, warning=FALSE>>=
-
-p <- 
-  ggarrange(add_title(p_fprt, "First-pass reading time", hjust=-.6), 
-               add_title(p_rpd, "Regression-path duration", hjust=-.635), 
-               add_title(p_tft, "Total fixation time", hjust=-.52),
-               add_title(p_rp, "% Regressions", hjust=-.50),
-               # add_title(p_rfp, "% Refixations", hjust=-.5),
-               labels = NULL,
-               ncol = 1, nrow = 4, vjust = -.2, hjust = 0)
-
-ggsave(p, file = "./figure/emStandardMeasuresModelCoefPlot.pdf", height = 5.5)
-
-@
-
-
-
-
-
-\begin{figure}
-\includegraphics[width=\maxwidth]{figure/EyeRTsPlot.pdf} 
-\caption{Average first-pass regression probabilities and back-transformed log-reading time measures FPRT, RPD, and TFT for the critical regions by condition. Within-participants standard errors in parentheses.
-\protect{\citep{Cousineau:2005, Morey:2008}}.}
-\label{fig:EyeRTsPlot}
-\end{figure}
-
-
-
-\begin{figure}
-\includegraphics[width=\maxwidth]{figure/emStandardMeasuresModelCoefPlot} 
-\caption{Estimates and $90\%$ credible intervals (thin lines) as well as $80\%$ credible intervals (thick lines)  for the analyses of first-pass reading time, regression-path duration, total fixation time, and regression probability. The posterior probability that the parameter is smaller than (or larger than) zero is larger than $90\%$ if the $80\%$ credible interval excludes zero, and larger than $95\%$ if the $90\%$ credible interval excludes zero.}\label{fig:emStandardMeasuresModelCoefPlot}
-\end{figure}
-
-
-
-
-
-The average comprehension questions accuracy was $79\%$. Figure 1 shows a summary of the eye-tracking measures computed for the the critical regions:
-(i) \emph{First-pass reading time} (FPRT), which is the amount of time spent reading a word for the first time when that the first fixation on that word was \emph{progressive} (i.e., the reader has not yet read anything to the right of this word).
-(ii) \emph{Regression-path duration} (RPD), which is the amount of time spent on the word starting with a progressive first fixation, until the gaze moves to the right of that word.
-(iii) \emph{Total fixation time} (TFT), which is the total amount of time spent fixating the critical word, including re-reading.
-(iv) The percentage of \emph{first-pass regressions}, which is the proportion of trials on which readers regress after reading the critical word.
-
-Figure \ref{fig:emStandardMeasuresModelCoefPlot} shows the estimated differences between the unambiguous conditions and the ambiguous condition for each word position and eye-tracking measure. It also shows the upper and lower boundaries of the $90\%$ credible interval for each position (noun 1, noun 2, spill-over region).
-
-The estimates show a moderate amount of evidence for a slowdown in NP2 attachment conditions in first-pass reading times
+The estimates indicate a slowdown in NP2 attachment conditions in first-pass reading times
 (\textit{N2:} 
-\Sexpr{ effect_summary_string(p=p_fprt, model="noun 2", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F) }
+\Sexpr{ effect_summary_string(coefs_tbl=stats_eye$coefs_tbl_fprt, model="noun 2", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F) }
 ;
+% to-do: Fix all space-semicolon, and space-right parenthesis situations in the paper
 \textit{spill-over:} 
-\Sexpr{ effect_summary_string(p=p_fprt, model="spill-over", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F) }
+\Sexpr{ effect_summary_string(coefs_tbl=stats_eye$coefs_tbl_fprt, model="spill-over", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F) }
 ),
 with stronger evidence for a slowdown in regression-path duration
 (\textit{N2:} 
-\Sexpr{ effect_summary_string(p=p_rpd, model="noun 2", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F) }
+\Sexpr{ effect_summary_string(coefs_tbl=stats_eye$coefs_tbl_rpd, model="noun 2", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F) }
 ,
 \textit{spill-over:} 
-\Sexpr{ effect_summary_string(p=p_rpd, model="spill-over", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F) }
+\Sexpr{ effect_summary_string(coefs_tbl=stats_eye$coefs_tbl_rpd, model="spill-over", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F) }
 ).
 In total fixation time, we found a slowdown in NP2 attachment conditions at N2
 (
-\Sexpr{ effect_summary_string(p=p_tft, model="noun 2", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F) }
+\Sexpr{ effect_summary_string(coefs_tbl=stats_eye$coefs_tbl_tft, model="noun 2", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F) }
 ),
-and a weaker effect in the same direction at the
+and an indication of an effect in the same direction at the spill-over region 
 (
-\Sexpr{ effect_summary_string(p=p_tft, model="spill-over", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F) }
+\Sexpr{ effect_summary_string(coefs_tbl=stats_eye$coefs_tbl_tft, model="spill-over", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F) }
 ).
 We further found an NP2 attachment-related slowdown in regression probability at N2
 (
-\Sexpr{ effect_summary_string(p=p_tft, model="noun 2", coef="N2 attachment - ambiguous", fmt="%0.1f", lower = F) }
+\Sexpr{ effect_summary_string(coefs_tbl=stats_eye$coefs_tbl_tft, model="noun 2", coef="N2 attachment - ambiguous", fmt="%0.1f", lower = F) }
 ).
 
 While most eye tracking measures at most regions reflected an NP2 attachment-related slowdown, only regression path duration and regression probability suggested a slowdown in NP1 attachment conditions: RPD at N2
 (
-\Sexpr{ effect_summary_string(p=p_rpd, model="noun 2", coef="N1 attachment - ambiguous", fmt="%0.1f", lower = F) }
+\Sexpr{ effect_summary_string(coefs_tbl=stats_eye$coefs_tbl_rpd, model="noun 2", coef="N1 attachment - ambiguous", fmt="%0.0f", lower = F)}
 )
 and at the spill-over region
 (
-\Sexpr{ effect_summary_string(p=p_rpd, model="spill-over", coef="N1 attachment - ambiguous", fmt="%0.1f", lower = F) }
+\Sexpr{ effect_summary_string(coefs_tbl=stats_eye$coefs_tbl_rpd, model="spill-over", coef="N1 attachment - ambiguous", fmt="%0.0f", lower = F) }
 ),
 as well as regression probability at N2
 (
-\Sexpr{ effect_summary_string(p=p_rp, model="noun 2", coef="N1 attachment - ambiguous", fmt="%0.1f", lower = F) }
+\Sexpr{ effect_summary_string(coefs_tbl=stats_eye$coefs_tbl_rp, model="noun 2", coef="N1 attachment - ambiguous", fmt="%0.1f", lower = F) }
 ).
 
-<<r emEffectSize, results='asis', message=FALSE, warning=FALSE>>=
+Figure \ref{fig:EyeBFs1} shows the Bayes Factors in favor of the hypothesis of no difference between NP1 attachment conditions and ambiguous conditions. While the Bayes Factor indicates a small amount of evidence for hypothesis of no difference between ambiguous and N1 attachment conditions for all priors, it fails to provide unambiguous evidence in favor of that hypothesis.
 
-all_plots <- list("fprt"=p_fprt, "rpd"=p_rpd, "tft"=p_tft, "rp"=p_rp) # , "rfp"=p_rfp
-all_cis <- ldply(1:length(all_plots), function(i) { all_plots[[i]]$data %>% data.frame(measure=names(all_plots)[i], .) })
-all_cis %<>% arrange(PAboveZero)
-
-# plot the posterior prob of an ambiguity advantage larger than a specific effect
-samples_eye_np2_rpd <- brms::posterior_samples(eye_np2$rpd)
-samples_eye_spillover_rpd <- brms::posterior_samples(eye_spillover$rpd)
-
-for (i in seq_along(transformations_emrts)) {
-  transformation_code <- paste(names(transformations_emrts)[i], transformations_emrts[i], sep = "=" ) %>% 
-                          parse(text = .)
-  samples_eye_np2_rpd %<>% within(eval(transformation_code) )
-  samples_eye_spillover_rpd %<>% within(eval(transformation_code) )
-}
-
-@
+% The posterior probability of the difference between NP1 attachment and the ambiguous being larger than the smallest observed ambiguity advantage so far was 
+% \(P(\beta \geq 22\,ms)=
+% \ Sexpr{ mean(samples_eye_np2_rpd$delta_n1attachment_m_amb_ms >= 22) }
+% \),
+% while the posterior probability of the difference between NP2 attachment and the ambiguous being larger than the smallest observed ambiguity advantage so far was 
+% \(P(\beta \geq 22\,ms)=
+% \ Sexpr{ mean(samples_eye_np2_rpd$delta_n2attachment_m_amb_ms >= 22) }
+% \).
 
 
-
-The posterior probability of the difference between NP1 attachment and the ambiguous being larger than the smallest observed ambiguity advantage so far was 
-\(P(\beta \geq 26\,ms)=
-\Sexpr{ mean(samples_eye_np2_rpd$delta_n1attachment_m_amb_ms >= 26) }
-\),
-while the posterior probability of the difference between NP2 attachment and the ambiguous being larger than the smallest observed ambiguity advantage so far was 
-\(P(\beta \geq 26\,ms)=
-\Sexpr{ mean(samples_eye_np2_rpd$delta_n2attachment_m_amb_ms >= 26) }
-\).
-
-
-%<!--
 %There wasn't any clear indication of a slowdown or a speedup in the N1 attachment condition %relative to the ambiguous condition 
 %(in all measures, and all regions $`-r min( subset(all_cis, coef == "N1 attachment - ambiguous")%$PAboveZero )` \leq P(\beta > 0) \leq `-r max( subset(all_cis, coef == "N1 attachment - %ambiguous")$PAboveZero )`$). 
 %-->
 %<!--
-%The posterior probability that the ambiguity advantage effect (the difference between the %preferred N1 attachment condition and the ambiguous condition) was larger than $\Sexpr{ %min(prior_amb_adv_ms) }\,ms$ (the smallest ambiguity effect attested in the literature) was \Sexpr{ %mean( samples_eye_np2_rpd$delta_n1attachment_m_amb_ms > min(prior_amb_adv_ms) )} at N2, and \Sexpr{ %mean( samples_eye_spillover_rpd$delta_n1attachment_m_amb_ms > min(prior_amb_adv_ms) )} at %spillover.
-
-
-
-
+%The posterior probability that the ambiguity advantage effect (the difference between the %preferred N1 attachment condition and the ambiguous condition) was larger than $\ Sexpr{ %min(prior_amb_adv_ms) }\,ms$ (the smallest ambiguity effect attested in the literature) was \ Sexpr{ %mean( samples_eye_np2_rpd$delta_n1attachment_m_amb_ms > min(prior_amb_adv_ms) )} at N2, and \ Sexpr{ %mean( samples_eye_spillover_rpd$delta_n1attachment_m_amb_ms > min(prior_amb_adv_ms) )} at %spillover.
 
 % The models presented above were agnostic about the direction of the differences between the unambiguous conditions and the ambiguous condition. We further fitted several constrained models in order to compare the relative posterior probabilities of (i) an ambiguity advantage (a positive difference between the preferred N1 attachment condition and the ambiguous condition) vs (ii) the absence of an ambiguity advantage (no such difference between the ambiguous and N1 attachment condition).
 % We did so for the two combination of region and eye tracking measure with the highest posterior probability of a slowdown in N1 attachment conditions compared to the ambiguous condition: (i) the regression probability at the N2 region, and (ii) the regression path duration at the spill-over region.
 % Using the same priors as previously, we constrained all predictors to be strictly positive ($>0.01$). This resulted in a half-normal
 % prior for the RPD model ($\mu=0, \sigma=0.2$), and the regression probability ($\mu=0, \sigma=1$).
 % We fitted two models to each measure: model 1 included the predictors (i) the difference between the N1 attachment and the ambiguous attachment conditions, (ii) the difference between the N2 attachment and the ambiguous attachment conditions, and (iii) word length. The predictors used in model 2 were only (ii) and (iii). In including predictor (i), model 1 encoded the assumption of an ambiguity advantage, while model 2 encoded the assumption of its absence in not including it.
-
-%The models were fitted in *brms*, with $20,000$ post-warmup iterations ($1,000$ iterations %warmup) and Bayes factors [e.g., @LeeWagenmakers:2014] were computed using the *bridgesampling* %package  citep(citation("bridgesampling")).
 %
-%For regression path duration, a Bayes factor quantifying the evidence for model 2 relative to %model 1 ($BF_{21} = ` r round(1/bf1_eye_spillover_rpd$bf,1)`$) provided *'strong evidence'* for %model 2, and thus *against* a slowdown in N1 attachment conditions. 
-%<!-- 
-%The Bayes factor for model 1 relative to model 3 was $BF_{13} = ` r %round(bf2_eye_spillover_rpd$bf,1)`$), and  provided *'moderate evidence'* in favor of model 1 %and thus in favor of a slowdown in N2 attachment conditions. ->
-%For regression probability, the Bayes factor quantifying the evidence for model 2 relative to %model 1 ($BF_{21} = ` r round(1/bf1_eye_spillover_rp_n2$bf,1)`$) provided *'moderate evidence'* %for model 2, and thus *in favor* of a slowdown in N1 attachment conditions. 
-%
-%...
-%-->
-%
-%<!-- Use NP1/2 attachment as a label if submitting to Glossa. If submitting to a psychology %journal, explain what the difference is between N and NP is, and why we say that attachment %happens to an NP. -->
-%
-%
-%<!--
-%While the results are 
-%
-%XXX
 %
 %These results do not suggest the presence of a large ambiguity advantage. In order to quantify %the amount of evidence in favor or against the presence of an ambiguity advantage Turkish %provided by our findings, we analyzed the regression path duration at the spill-over region, %which showed the numerically largest slowdown in the preferred unambiguous condition relative %to the ambiguous condition, which we operationalized as the estimate of the magnitude of the %ambiguity advantage.
 %-->
@@ -695,13 +519,14 @@ while the posterior probability of the difference between NP2 attachment and the
 
 We found evidence for substantial processing difficulty in unambiguous NP2 attachment sentences relative to the ambiguous attachment condition, while the effect of unambiguous NP1 attachment was less clear. In the NP2 attachment condition, we found indications of processing difficulty in most eye-tracking measures starting with regression path duration on N1, suggesting that reading in NP2 attachment sentences is initially slowed by the the fact that the RC cannot be attached to the first structurally available noun phrase, headed by N1. The subsequent slowdown relative to the ambiguous baseline may be due to the time the parser spends in carrying out RC attachment to the noun phrase headed by N2.
 
-The results concerning the relative difficulty of the NP1 attachment sentences are less clear-cut: We found no appreciable slowdown in first-pass reading time or total fixation time at N2 in the NP1 attachment condition relative to the ambiguous condition. However, the regression path duration as well as the regression probability indicated somewhat higher processing difficulty in the NP1 attachment conditions compared to the ambiguous conditions. Since the posterior probability of a slowdown is \(0.72\), while the posterior probability that the slowdown was at least as large as the smallest previously observed ambiguity advantage was \(0.32\), the results of this experiment do not provide unambiguous evidence for or against the presence of an ambiguity advantage in Turkish. However, they do suggest that it is more likely that there is no ambiguity advantage of a previously attested magnitude than that there is one.
+The results concerning the relative difficulty of the NP1 attachment sentences are much less clear-cut: We found no appreciable slowdown in first-pass reading time or total fixation time at N2 in the NP1 attachment condition relative to the ambiguous condition. However, the regression path duration as well as the regression probability indicated somewhat higher processing difficulty in the NP1 attachment conditions compared to the ambiguous conditions. While the Bayes Factor analysis indicated weak evidence in favor of an absence of an ambiguity advantage, it failed to provide unambiguous evidence in favor of this hypothesis.
 
-\section{Experiment 2}
+
+\section{Experiments 2A \& 2B}
 
 The second experiment was designed to address three issues which may complicate the interpretation of the first experiment: Firstly, although participants in experiment 1 were asked only 5 comprehension questions about relative clause attachment, and only in unambiguous conditions, their presence may still have discouraged underspecification. Secondly, the analysis of multiple eye tracking measures at multiple regions increases the chances that one of them exhibits a theoretically interesting effect purely by chance, even in the absence of such an effect \cite[e.g.,][]{vonderMalsburgAngele:2017}. Lastly, a plausibility-based disambiguation of RC attachment may have caused between-participant or between-item variability in the time course of disambiguation, thus making its effect more difficult to detect.
 
-In order to address these potential shortcomings, we asked only occasional superficial questions (on one third of the trials), and used a different stimulus design. The experimental sentences in this experiment had a structure similar to sentence (\ref{ExpSPRExample}), in which the head noun of the relative clause (`\emph{football player'}/'\emph{fan'}) performs the function of the subject of the embedded verb (\emph{`hit'}). The grammatical object of all relative clauses was the reciprocal pronoun \emph{each other}. RC attachment was disambiguated by the grammatical number of the nouns in the complex noun phrase \emph{'fan(s) of the football player(s)'}. In (\ref{ExpSPRExample}), for instance, the relative clause \emph{'hit each other'} can attach to the NP headed by \emph{fans} because it is plural, but not to the NP headed by'\emph{football player'}, because it is singular and therefore cannot bind the reciprocal '\emph{each other'}.
+In order to address these potential shortcomings, we conducted a self-paced reading experiment in which we asked only occasional superficial questions (on one third of the trials), and used a different stimulus design. The experimental sentences in this experiment had a structure similar to sentence (\ref{ExpSPRExample}), in which the head noun of the relative clause (`\emph{football player'}/'\emph{fan'}) performs the function of the subject of the embedded verb (\emph{`hit'}). The grammatical object of all relative clauses was the reciprocal pronoun \emph{each other}. RC attachment was disambiguated by the grammatical number of the nouns in the complex noun phrase \emph{'fan(s) of the football player(s)'}. In (\ref{ExpSPRExample}), for instance, the relative clause \emph{'hit each other'} can attach to the NP headed by \emph{fans} because it is plural, but not to the NP headed by'\emph{football player'}, because it is singular and therefore cannot bind the reciprocal '\emph{each other'}.
 
 \begin{exe}
 \ex \label{ExpSPRExample}
@@ -776,352 +601,148 @@ As in experiment 1, both underspecification accounts are compatible with a speed
 Forty-two experimental sentence sets like (\ref{ExpSPRExperimental}) and (\ref{ExpSPRControl}) were constructed. All relative clauses comprised between two and three words and always started with a reciprocal pronoun. Sentences were divided into different lists according to a Latin-square design, such that every participant read exactly one sentence from each sentence set, and seven sentences from every condition. Experimental sentences were mixed with 65 filler sentences, so that every participant read 107 sentences during the course of the experiment. Each list was randomized prior to presentation.
 
 \subsubsection{Participants}
+The experiment was conducted in the lab (Experiment 2A) and online  (Experiment 2B) using the same stimuli. 
+Participants in both experiments provided informed consent and the procedures in this study were compliant with the ethical principles outlined in the Helsinki Declaration on research involving human subjects.
 
-Thirty-six students of Anadolu University in Eskişehir, Turkey participated in the experiment. All participants were native speakers of Turkish; their age range was 19-29 years. One experimental session took approximately 40 minutes to complete. Participants were paid 15 Turkish Lira for participation.
+\emph{\uline{Experiment 2A}.}
+Thirty-six students of Anadolu University in Eskişehir, Turkey participated in the experiment. All participants were native speakers of Turkish, with an age range of 19-29 years. 
 
-Participants provided informed consent and the procedures in this study were compliant with the Anadolu University research ethics requirements as well as with the ethical principles outlined in the Helsinki Declaration on research involving human subjects.
+%Participants provided informed consent and the procedures in this study were compliant with the Anadolu University research ethics requirements as well as with the ethical principles outlined in the Helsinki Declaration on research involving human subjects.
+
+% to-do: In the acknowledgements, mention Özlem for participants and Shravan for input on earlier versions of the draft. 
+\emph{\uline{Experiment 2B}.}
+A total of 148 students of four universities in Turkey participated in the experiment on-line in exchange for course credit (Boğaziçi University: 116, Ankara University: 13, Muğla Sıtkı Koçman University: 13, İstanbul Medipol Üniversitesi: 6). 
+All participants were native speakers of Turkish, with an age range of 17-47 years (mean: 22 years). 
+%
+%We excluded seven participants' data from further analysis because they failed to answer more than $25\%$ of the comprehension questions correctly.
+
 
 \subsubsection{Procedure}
-
-The task was self-paced non-cumulative word-by-word reading. Presentation and recording was done with the Linger software package, version 2.94 by Doug Rohde. At the beginning of a trial, all words, masked by underscores, appeared. Participants pressed the space bar to reveal the next word. As the next word appeared, the current one was masked by underscores again. The time between key presses was recorded as the reading time for the word.
+The task was self-paced non-cumulative word-by-word reading. At the beginning of a trial, all words, masked by underscores, appeared. Participants pressed the space bar to reveal the next word. As the next word appeared, the current one was masked by underscores again. The time between key presses was recorded as the reading time for the word.
 Each participant read five practice sentences before the start of the experiment.
-%<!-- Our 42 sentence sets were divided into different lists according to a latin-square design, %and randomly intermixed with 65 filler sentences, such that every participant read 107 %sentences during the course of the experiment. 
-%-->
-Questions about the sentence were asked on one third of all trials (14 questions about experimental sentences, 21 questions about fillers). Participants answered questions with \texttt{yes\textquotesingle{}\ or}no' by pressing the corresponding button on the keyboard.
+Questions about the sentence were asked on one third of all trials (14 questions about experimental sentences, 21 questions about fillers). Participants answered questions with \texttt{`yes'} or \texttt{`no'} by pressing the corresponding button on the keyboard.
+
+\emph{\uline{Experiment 2A}.}
+Presentation and recording was done in a quiet room, using the Linger software package, version 2.94 by Doug Rohde. One experimental session took approximately 40 minutes to complete. Participants were paid 15 Turkish Lira for participation.
+
+\emph{\uline{Experiment 2B}.}
+The experiment was run online, using the web-based platform PCI Farm \citep{pcibex}. One experimental session took approximately 30 minutes to complete. 
 
 \subsubsection{Statistical Analysis}
 
-We used the \emph{tidyverse} and \emph{ggplot2} packages 
-\citep{R-tidyr, R-ggplot2}
-for data processing and plotting, and the R packages \emph{brms} 
-\citep{R-brms_a}
-and \emph{rstan} 
-\citep{R-rstan}
-.
+We excluded the data of seven participants from Experiment 2B from further analysis because they failed to answer more than 25\% of the comprehension questions correctly. 
+%All were participants in Experiment 2B. 
+We also excluded all trials in which the reading time on one of the words between the pre-critical region and the spill-over region was shorter than $150\,ms$ or longer than $6000\,ms$, resulting in exclusion of further $1.2\%$ of the data ($95$ out of $7,644$ trials).
+
+The data analysis followed the same logic as in Experiment 1:
 All reading time measures were modeled using Bayesian generalized hierarchical linear models assuming log-normally distributed residuals 
-\citep[e.g.,][]{GelmanHill:2007, McElreath:2016, Kruschke:2015, VasishthEtAl:2019}.
-We used normal priors for all coefficients (\(\mu=0\), \(\sigma=0.2\)). All models were fitted using four chains with \(2500\) post-warmup samples each.
+%\citep[e.g.,][]{GelmanHill:2007, McElreath:2016, Kruschke:2015, VasishthEtAl:2019}.
+We used a normal prior ($N(\mu=6, \sigma=1)$) for all model intercepts, and a symmetrical prior for all slope coefficients ($N(0, 0.2)$). All models were fitted using four chains with \(2,000\) warmup samples  \(5,000\) post-warmup samples each.
 
-All models included fixed effects of (i) centered log-word length, (ii) the availability of NP1 and N2 for RC attachment, (iii) the presence of a relative clause (\emph{relative clause} vs.~\emph{control}), as well as (iv) the interactions between the presence of a relative clause and the availability of NP1 and NP2 for RC attachment. Log word length was used as a covariate in order to account for any differences in critical word length between our experimental sentences. For word length at critical regions N1 and N2, the word length of the singular form was used. All contrasts were centered.
+All models included fixed effects of 
+%(i) centered log-word length, 
+(i) the availability of NP1 and N2 for RC attachment, (ii) the presence of a relative clause (\emph{relative clause} vs.~\emph{control}), as well as (iii) the interactions between the presence of a relative clause and the availability of NP1 and NP2 for RC attachment.
+%Log word length was used as a covariate in order to account for any differences in critical word length between our experimental sentences. For word length at critical regions N1 and N2, the word length of the singular form was used. All contrasts were centered.
+%
+We included varying intercepts for participants and items, as well as maximal by-participant and near-maximal by-item slopes and correlations between random intercepts and slopes. 
+%By-item random slopes of word length were not included in the models for critical regions N1 and N2, because they would be collinear with the effect of the grammatical number of those nouns.
 
-We included varying intercepts for participants and items, as well as maximal by-participant and near-maximal by-item slopes, as well as correlations between random intercepts and slopes. By-item random slopes of word length were not included in the models for critical regions N1 and N2, because they would be collinear with the effect of the grammatical number of those nouns.
+The grammatical number of N1 and N2 which determined the potential availability of NP1 and NP2 for RC attachment when an RC was present was coded using centered contrasts. As a result, the relative difficulty of RC attachment in the three attachment conditions corresponded to the interactions between N1 and N2 number and the presence of a relative clause: (i) The interaction between the presence of an RC and N1 number corresponded to the difference between the effect of N1 number in the RC conditions ((\ref{ExpSPRExperimental}b) vs. (\ref{ExpSPRExperimental}a)) and its effect in the control conditions ((\ref{ExpSPRControl}b) vs. (\ref{ExpSPRControl}a)), that is, \emph{effect of NP1 attachment - effect of ambiguous attachment}.
+(ii) Similarly, the interaction between the presence of an RC and N2 number corresponded to the difference between the effect of N2 number in the RC conditions ((\ref{ExpSPRExperimental}c) vs. (\ref{ExpSPRExperimental}a)) and its effect in the control conditions ((\ref{ExpSPRControl}c) vs. (\ref{ExpSPRControl}a)), that is \emph{effect of NP2 attachment - effect of ambiguous attachment}.
+In sum, because the coefficients associated with the interaction contrasts represent the differences in the effect of NP1 and NP2 availability associated with the presence of a relative clause, they can be interpreted as the respective effects of unambiguous NP1 and NP2 attachment, relative to the ambiguous condition.
 
-The availability of NP1 and NP2 for RC attachment was coded using (orthogonal) contrasts comparing (i) the average of (\ref{ExpSPRExperimental}b) and (\ref{ExpSPRControl}b) to the average of (\ref{ExpSPRExperimental}a) and (\ref{ExpSPRControl}a) (\emph{effect of NP1 attachment - effect of ambiguous attachment}), as well as (ii) the average of (\ref{ExpSPRExperimental}c) and (\ref{ExpSPRExperimental}c) to the average of (\ref{ExpSPRExperimental}a) and (\ref{ExpSPRControl}a) (\emph{effect of NP2 attachment - effect of ambiguous attachment}). Because the coefficients associated with the interaction contrasts represent the differences in the effect of NP1 and NP2 availability associated with the presence of a relative clause, they can be interpreted as the respective effects of unambiguous NP1 and NP2 attachment, relative to the ambiguous condition.
+While all coefficients for reading time measures were on a log-scale, we used the model's posterior MCMC samples to construct 95\% credible intervals on the original scale (in \emph{milliseconds}).
+% for (i) the main effect of relative clause attachment, as well as for (ii) the interactions between NP1 and NP2 unavailability and the presence of a relative clause, which correspond to the pairwise differences between each of the unambiguous conditions and the ambiguous condition. 
+Doing so allowed us to compare the size of the effects we found with previously attested instances of the ambiguity advantage.
 
-While all coefficients for reading time measures were on a log-scale, we used the model's posterior MCMC samples to construct 95\% credible intervals on the original scale (in \emph{milliseconds}) for (i) the main effect of relative clause attachment, as well as for (ii) the interactions between NP1 and NP2 unavailability and the presence of a relative clause, which correspond to the pairwise differences between each of the unambiguous conditions and the ambiguous condition. Doing so allowed us to compare the size of the effects we found with previously attested instances of the ambiguity advantage.
+As in Experiment 1, we used the Savage-Dickey method to calculate Bayes Factors quantifying the evidence against the presence of an ambiguity advantage for a range of priors. To this end, we fitted all models with priors with $\sigma=0.2$, $\sigma=0.1$, $\sigma=0.05$, $\sigma=0.02$ for the difference between the preferred N1 attachment condition and the ambiguous condition.
+
+\subsection{Data Availability}
+All data and R code used in the data analysis is available at \url{https://osf.io/r8dm7/}.
+
 
 \subsection{Results}
 
-<<r SPR.LoadData>>=
-
-dir_base <- ".."
-(source("../scripts/load_spr.R"))
-
-spr1_res <- load_SPR1()
-reading_rc <- spr1_res$reading_rc %<>% subset(posLabel %in% c('V/Adj','N1','N2','spillover'))
-
-# represent as factors
-reading_rc %<>% mutate(subject = subject %>% as.factor(),
-                         item = item %>% as.factor(),
-                         nps = nps %>% ordered(levels = c('sg pl','pl pl','pl sg'))
-                        )
-
-reading_rc %<>% within({
-  clWlen <- scale(log(wlen))[,1]
-  clWlen.n1.sg <- scale(log(wlen.n1.sg))[,1]
-  clWlen.n2.sg <- scale(log(wlen.n2.sg))[,1]
-})
-
-mrt <- plyr::ddply(reading_rc, .(posLabel), function(d) {
-  d$log_RT <- log(d$RT)
-  se_cousineau(d, n_conditions=6, subject, log_RT, group = c("modifier", "attachment"), is_proportion = FALSE) %T>% 
-      {.$upper <- exp(.$M + 1.96*.$SE); .$lower <- exp(.$M - 1.96*.$SE); .$M <- exp(.$M); .$SE <- NULL} %>%
-      dplyr::select(-Var)
-})
-
+<<r sprResults.load, results='hide', message=FALSE, warning=FALSE>>=
+load("../workspace/stats_spr.rda")
 @
-
-<<r sprAverageRTs, results='hide', message=FALSE, warning=FALSE>>=
-
-new_pos_labels = c('V/Adj'='pre-critical', 
-                 'N1'='noun 1', 
-                 'N2'='noun 2', 
-                 'spillover'='spill-over')
-new_attachment_labels = c("ambiguous"="ambiguous", 
-                          "n1"="N1 attachment",
-                          "n2"="N2 attachment")
-
-mrt$posLabel %<>% as.character %>% dplyr::recode(!!!new_pos_labels)
-mrt$posLabel %<>% ordered(levels=new_pos_labels)
-#mrt$M.SE <- with(mrt, sprintf("%.0f (%.0f)", M, SE))
-mrt$modifier %<>% as.character %>% dplyr::recode('rc'='rc', 'adj'='control')
-
-mrt$attachment %<>% dplyr::recode(!!!new_attachment_labels) %>% factor(levels=new_attachment_labels)
-mrt$modifier %<>% as.character %>% factor(levels = c("rc", "control"))
-
-dodge <- position_dodge(width = .5)
-p <- ggplot(mrt, aes(attachment, M, group=attachment:modifier,
-                     color=attachment, linetype=modifier)) + 
-      geom_point(aes(shape=modifier), position = dodge) + #geom_line() + 
-      geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = dodge) +
-      theme_bw() + 
-      theme(axis.text.x = element_text(angle=45, hjust=1)) +
-      ylab("Reading Time") + xlab("") +
-      facet_wrap(~posLabel, nrow = 1) + 
-      theme(  strip.background =element_rect(fill="white") ) + 
-      scale_x_discrete(labels = NULL, breaks = NULL) + 
-      theme(legend.position='top')
-p <- p + scale_color_discrete(name="") + scale_linetype_discrete(name="") + scale_shape_discrete(name="")
-
-ggsave(p, file = "./figure/sprAverageRTs.pdf", height = 3)
-
-@
-
 
 \begin{figure}
-\includegraphics[width=\maxwidth]{./figure/sprAverageRTs} 
-\caption{Average backtransformed log-reading times for the critical regions by condition. Within-participants $95\%$-confidence intervals in brackets. \protect{\citep{Cousineau:2005, Morey:2008}} }
+\includegraphics[width=\maxwidth]{./figure/sprEMM} 
+\caption{Estimated marginal means and 95\% credible intervals of first-pass regression probabilities and back-transformed log-reading time measures FPRT, RPD, and TFT for the critical regions by condition. All estimates and credible intervals were obtained using the \emph{emmeans} package 
+\protect{\citep{emmeans}}.
 \label{fig:sprAverageRTs}
 \end{figure}
 
 
-
-
-
-<<r SPR.LMER>>=
-
-n_cores <- 4
-n_chains <- 4
-n_iter <- 5000
-
-
-exp2_contrasts <-
-    data.frame( condition          = c('a', 'b', 'c',  'd', 'e', 'f'),
-                cN1attachmentVsAmb = c(-1,  -1,   2,   -1,   -1,   2) / 3,
-                cN2attachmentVsAmb = c(-1,   2,  -1,   -1,    2,  -1) / 3,
-                cExperimental = rep(c(1, -1), each = 3) / 2,
-                stringsAsFactors = F)
-
-
-# # identify trials with potential outliers
-# rt_lower = 150; rt_upper = 3000
-# data_too_fast <- subset(reading_rc, posLabel %in% c("N1", "N2", "spillover") & RT < rt_lower ) %>% arrange(subject)
-# data_too_slow <- subset(reading_rc, posLabel %in% c("N1", "N2", "spillover") & RT > rt_upper ) %>% arrange(subject)
-# 
-# # too fast: 4 out of 5 extremely fast reading times are due to participant 10031, of those 2 are due to one trial 
-# # data.rt.critical %>% subset(subject == 10031) %>% ggplot(aes(pos, RT)) + geom_point() + facet_wrap(~item) # nothing out of the ordinary
-# with(data_too_fast, xtabs(~modifier+attachment))
-# 
-# # too slow: a large proportion of extremely slow reading times are due to participant 10003
-# # data.rt.critical %>% subset(subject == 10003) %>% ggplot(aes(pos, RT)) + geom_point() + facet_wrap(~item, scales = "free_y") # nothing out of the ordinary
-# # with(data_too_slow, xtabs(~RC+attachment)) # all super-slow reading times are for the controls of unambiguous conditions; 
-
-# # exclude trials with too fast RTs
-# data_problematic <- data_too_fast #rbind(data_too_fast, data_too_slow)
-# d_to_be_excluded <- data_problematic %>% dplyr::select(subject, experiment, item, condition) %>% unique %T>% {.$exclude <- T}
-# reading_rc %<>% left_join(d_to_be_excluded, by = c("subject", "experiment", "item", "condition"))
-reading_rc$exclude <- NA
-
-# merge in the contrasts and slice the data by position for analysis
-reading_rc %<>% left_join(exp2_contrasts, by = "condition")
-reading_rc_np1 = subset(reading_rc, posLabel =='N1' & is.na(exclude) )
-reading_rc_np2 = subset(reading_rc, posLabel =='N2' & is.na(exclude) )
-reading_rc_spillover = subset(reading_rc, posLabel == 'spillover' & is.na(exclude) )
-
-fname_models_spr_np1 <- '../workspace/models_spr_np1'
-fname_models_spr_np2 <- '../workspace/models_spr_np2'
-fname_models_spr_spillover <- '../workspace/models_spr_spillover'
-
-
-####################
-# POSITION: noun 1 #
-####################
-m.np1 = brm(RT ~ cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen.n1.sg + 
-                    (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen.n1.sg + 1|subject) +
-                    (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + 1|item),
-            family = brms::lognormal(), 
-            prior = c(prior_string("normal(0, 0.2)", class = "b")),
-            chains = n_chains, cores = n_cores, 
-            seed = 1234, iter = n_iter, 
-            data = reading_rc_np1, 
-            file = fname_models_spr_np1)
-
-####################
-# POSITION: noun 2 #
-####################
-
-m.np2 = brm(RT ~ cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen.n2.sg +
-                    (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen.n2.sg + 1|subject) +
-                    (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + 1|item),
-            family = brms::lognormal(), 
-            prior = c(prior_string("normal(0, 0.2)", class = "b")),
-            chains = n_chains, cores = n_cores, 
-            seed = 1234, iter = n_iter, 
-            data = reading_rc_np2, 
-            file = fname_models_spr_np2)
-
-
-#######################
-# POSITION: spillover #
-#######################
-m.spillover = brm(RT ~ cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen +
-                        (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + clWlen + 1|subject) +
-                        (cExperimental * (cN1attachmentVsAmb + cN2attachmentVsAmb) + 1|item),
-            family = brms::lognormal(), 
-            prior = c(prior_string("normal(0, 0.2)", class = "b")),
-            chains = n_chains, cores = n_cores, 
-            seed = 1234, iter = n_iter, 
-            data = reading_rc_spillover, 
-            file = fname_models_spr_spillover)
-
-@
-
-<<r sprModelPlot, results='hide', message=FALSE, warning=FALSE>>=
-
-map_names <- c( "clWlen.n1.sg"="word length",
-                "clWlen.n2.sg"="word length",
-                "clWlen"="word length",
-                "cN1attachmentVsAmb"="N1 singular",
-                "cN2attachmentVsAmb"="N2 singular",
-                "cExperimental"="RC attachment - control",
-                "cExperimental:cN1attachmentVsAmb"="N1 attachment - ambiguous",
-                "cExperimental:cN2attachmentVsAmb"="N2 attachment - ambiguous"
-                )
-
-models <- list("noun 1" = m.np1, "noun 2" = m.np2, "spill-over" = m.spillover)
-p_exp2_coef_appendix <- 
-  create_model_coefs_plot( models, plot_stats = F, map_names = map_names
-                           #expand_right = 2.5, x_stat_adjust = -20 
-                         ) + xlab("Estimate") +
-                    theme(  strip.background = element_rect(fill="white") )
-
-
-# note: + sigma^2/2 is to get the mean instead of the median
-# note 2: not using + sigma^2/2 for the sake of consistency -- the plots show an estimate of exp(log-mean), not of the mean 
-transformations_rts <- c(mean_amb_ctrl_ms = "exp(b_Intercept - 0.5*b_cExperimental - 1/3*b_cN1attachmentVsAmb - 1/3*b_cN2attachmentVsAmb + 
-                                                (-0.5*-1/3)*`b_cExperimental:cN1attachmentVsAmb` +
-                                                (-0.5*-1/3)*`b_cExperimental:cN2attachmentVsAmb`)",
-                         mean_n1_ctrl_ms  = "exp(b_Intercept - 0.5*b_cExperimental + 2/3*b_cN1attachmentVsAmb - 1/3*b_cN2attachmentVsAmb +
-                                                 (-0.5*2/3)*`b_cExperimental:cN1attachmentVsAmb` +
-                                                 (-0.5*-1/3)*`b_cExperimental:cN2attachmentVsAmb`)",
-                         mean_n2_ctrl_ms  = "exp(b_Intercept - 0.5*b_cExperimental - 1/3*b_cN1attachmentVsAmb + 2/3*b_cN2attachmentVsAmb +
-                                                 (-0.5*-1/3)*`b_cExperimental:cN1attachmentVsAmb` +
-                                                 (-0.5*2/3)*`b_cExperimental:cN2attachmentVsAmb`)",
-
-                         mean_amb_rc_ms = "exp(b_Intercept + 0.5*b_cExperimental - 1/3*b_cN1attachmentVsAmb - 1/3*b_cN2attachmentVsAmb  +
-                                                  (0.5*-1/3)*`b_cExperimental:cN1attachmentVsAmb` +
-                                                  (0.5*-1/3)*`b_cExperimental:cN2attachmentVsAmb`)",
-                         mean_n1_rc_ms  = "exp(b_Intercept + 0.5*b_cExperimental + 2/3*b_cN1attachmentVsAmb - 1/3*b_cN2attachmentVsAmb  +
-                                                  (0.5*2/3)*`b_cExperimental:cN1attachmentVsAmb` +
-                                                  (0.5*-1/3)*`b_cExperimental:cN2attachmentVsAmb`)",
-                         mean_n2_rc_ms  = "exp(b_Intercept + 0.5*b_cExperimental - 1/3*b_cN1attachmentVsAmb + 2/3*b_cN2attachmentVsAmb  +
-                                                  (0.5*-1/3)*`b_cExperimental:cN1attachmentVsAmb` +
-                                                  (0.5*2/3)*`b_cExperimental:cN2attachmentVsAmb`)",
-                         
-                         delta_amb_attachment_ms = "mean_amb_rc_ms - mean_amb_ctrl_ms",
-                         delta_n1_attachment_ms  = "mean_n1_rc_ms - mean_n1_ctrl_ms",
-                         delta_n2_attachment_ms  = "mean_n2_rc_ms - mean_n2_ctrl_ms",
-
-                         # delta_n1singular = "",
-                         # delta_n2singular = "",
-                         
-                         delta_rc_m_control_ms = "(mean_amb_rc_ms+mean_n1_rc_ms+mean_n2_rc_ms)/3-(mean_amb_ctrl_ms+mean_n1_ctrl_ms+mean_n2_ctrl_ms)/3 ",
-                         delta_n1attachment_m_amb_ms = "delta_n1_attachment_ms - delta_amb_attachment_ms",
-                         delta_n2attachment_m_amb_ms = "delta_n2_attachment_ms - delta_amb_attachment_ms"
-                       )
- 
-p <-   create_model_coefs_plot( models, plot_stats = F,
-                           map_names = c("delta_rc_m_control_ms"="RC attachment - control",
-                                         "delta_n1attachment_m_amb_ms"="N1 attachment - ambiguous", 
-                                         "delta_n2attachment_m_amb_ms"="N2 attachment - ambiguous"),
-                           transformations = transformations_rts,
-                           exclude_names = c("mean_amb_ctrl_ms", "mean_n1_ctrl_ms", "mean_n2_ctrl_ms", "mean_amb_rc_ms", "mean_n1_rc_ms",
-                                             "mean_n2_rc_ms", "delta_amb_attachment_ms", 
-                                             "delta_n1_attachment_ms", "delta_n2_attachment_ms",
-                                             "clWlen.n1.sg", "clWlen.n2.sg", "clWlen", "cN1attachmentVsAmb", "cN2attachmentVsAmb", "cExperimental",
-                                             "cExperimental:cN1attachmentVsAmb", "cExperimental:cN2attachmentVsAmb")
-                         ) + xlab("Estimate (ms)") + 
-                        theme(  strip.background = element_rect(fill="white") )
-
-#suppressWarnings({
-#  print(p)
-#})
-
-ggsave(p, file = "./figure/sprModelPlot.pdf", height = 1.5)
-
-@
-
-
-
-
 \begin{figure}
 \includegraphics[width=\maxwidth]{figure/sprModelPlot} 
-\caption{Estimates and $90\%$ credible intervals (thin lines) as well as $80\%$ credible intervals (thick lines) for the effect (in milliseconds) of unambiguous RC attachment relative to ambiguous attachment on reading times at the critical regions. The posterior probability that the parameter is smaller than (or larger than) zero is larger than $90\%$ if the $80\%$ credible interval excludes zero, and larger than $95\%$ if the $90\%$ credible interval excludes zero.}
+\caption{Estimates and $95\%$ credible intervals (thin lines) as well as $90\%$ credible intervals (thick lines) for the effect (in milliseconds) of unambiguous RC attachment relative to ambiguous attachment on reading times at the critical regions.}
 \label{fig:sprModelPlot}
 \end{figure}
 
-
-
-
-
-
-
-
-
-
-Figure \ref{fig:sprAverageRTs} shows the average log-reading times transformed back to the original scale (milliseconds) and figure \ref{fig:sprModelPlot} shows the estimates and credible intervals for the key contrasts at the critical regions in milliseconds. The effects of attachment shown in it correspond to the interactions between the presence of a relative clause and the contrasts encoding the grammatical number of NP1 and NP2, thus accounting for the effect of RC attachment when a relative clause is present.
-
-As figure \ref{fig:sprModelPlot} shows, we found moderate evidence for a slowdown in the relative clause attachment conditions relative to the control conditions which occurred at both, N1
-(\Sexpr{ effect_summary_string(p=p , model="noun 1", coef="RC attachment - control", fmt="%0.0f", lower = F) })
-and N2
-(\Sexpr{ effect_summary_string(p=p , model="noun 2", coef="RC attachment - control", fmt="%0.0f", lower = F) }).
-In the \emph{NP1 attachment condition}, relative to the ambiguous condition, we found moderate evidence for a speedup at N2
-(\Sexpr{ effect_summary_string(p=p , model="noun 2", coef="N1 attachment - ambiguous", fmt="%0.0f", lower = T) })
-, which did not persist until the the spill-over region
-(\Sexpr{ effect_summary_string(p=p , model="spill-over", coef="N1 attachment - ambiguous", fmt="%0.0f", lower = T) }).
-Meanwhile, there was weak evidence of a slowdown in the \emph{NP2 attachment condition} relative to the ambiguous condition at N2
-(\Sexpr{ effect_summary_string(p=p , model="noun 2", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F) })
-and nearly no indication of such an effect at the spill-over region
-(\Sexpr{ effect_summary_string(p=p, model="spill-over", coef="N2 attachment - ambiguous", fmt="%0.0f", lower = F) }).
-
-<<r sprEffectSize, results='asis', message=FALSE, warning=FALSE>>=
-
-# for the posterior prob of an ambiguity advantage larger than a specific effect
-samples_spr_np2 <- brms::posterior_samples(m.np2)
-samples_spr_spillover <- brms::posterior_samples(m.spillover)
-
-for (i in seq_along(transformations_rts)) {
-  transformations_code <- paste(names(transformations_rts)[i], transformations_rts[i], sep = "=" ) %>% 
-                          parse(text = .)
-  samples_spr_np2 %<>% within(eval(transformations_code) )
-  samples_spr_spillover %<>% within(eval(transformations_code) )
+\begin{figure}
+\includegraphics[width=\maxwidth]{./figure/exp2_BFs.pdf} 
+\caption{Bayes Factors in favor of the absence of a difference in reading times between the ambiguous attachment condition and the N1 attachment condition, at two positions in the sentence: noun 2 and the spill-over region. Classification of evidence strength following \citet{Jeffreys:1961} as cited in \citet{LeeWagenmakers:2014}.
 }
+\label{fig:EyeBFs2}
+\end{figure}
 
-@
 
+Figure \ref{fig:sprAverageRTs} shows the average log-reading times transformed back to the original scale (milliseconds). Figure \ref{fig:sprModelPlot} shows the estimates and $95\%$ and $90\%$ credible intervals for the key contrasts at the critical regions in milliseconds.
+The effects of RC attachment correspond to the interactions between the presence of a relative clause and the contrasts encoding the grammatical number of N1 and N2.\footnote{The posterior probability that the parameter is smaller than (or larger than) zero is larger than $97.5\%$ if the $95\%$ credible interval excludes zero and larger than $95\%$ if the $90\%$ credible interval excludes zero.}
+
+As figure \ref{fig:sprModelPlot} shows, 
+we found that N1 and N2 were read faster in their singular form than in in their plural forms 
+(\emph{N1:} 
+\Sexpr{ effect_summary_string(coefs_tbl=stats_spr$coefs_tbl , model="noun 1", coef="delta_n1_singular", fmt="%0.0f", lower = F) },
+\emph{N2:} 
+\Sexpr{ effect_summary_string(coefs_tbl=stats_spr$coefs_tbl , model="noun 1", coef="delta_n2_singular", fmt="%0.0f", lower = F) }). 
+%
+Moreover, it shows an across-the-board slowdown in reading in RC attachment conditions compared to control conditions
+(\emph{N1:}
+\Sexpr{ effect_summary_string(coefs_tbl=stats_spr$coefs_tbl , model="noun 1", coef="delta_rc_m_control_ms", fmt="%0.0f", lower = F) },
+\emph{N2:}
+\Sexpr{ effect_summary_string(coefs_tbl=stats_spr$coefs_tbl , model="noun 2", coef="delta_rc_m_control_ms", fmt="%0.0f", lower = F) },
+\emph{spill-over:}
+\Sexpr{ effect_summary_string(coefs_tbl=stats_spr$coefs_tbl , model="spillover", coef="delta_rc_m_control_ms", fmt="%0.0f", lower = F) }
+).
+
+We found no indication of differences in reading time between the \emph{NP1 attachment condition} and the ambiguous attachment condition.
+%
+However, we observed a slowdown in the \emph{NP2 attachment condition} relative to the ambiguous condition at N2
+(\Sexpr{ effect_summary_string(coefs_tbl=stats_spr$coefs_tbl, model="noun 2", coef="delta_n2attachment_m_amb_ms", fmt="%0.0f", lower = F) })
+and at the spill-over region
+(\Sexpr{ effect_summary_string(coefs_tbl=stats_spr$coefs_tbl, model="spillover", coef="delta_n2attachment_m_amb_ms", fmt="%0.0f", lower = F) }).
 
 The posterior probability that the ambiguity advantage effect (the difference between the NP1 attachment and the ambiguous condition) was larger than the smallest ambiguity advantage attested in the literature was
-\(P(\beta \geq 26\,ms ) = 
-    \Sexpr{ mean(samples_spr_np2[["delta_n1attachment_m_amb_ms"]] > min(prior_amb_adv_ms)) }
+\(P(\beta \geq 22\,ms ) = 
+    \Sexpr{ sprintf("%0.3f", mean(stats_spr$samples_spr_np2[["delta_n1attachment_m_amb_ms"]] > min(prior_amb_adv_ms))) }
   \)
 at N2, and
-\(P(\beta \geq 26\,ms ) = 
-    \Sexpr{ mean(samples_spr_spillover[["delta_n1attachment_m_amb_ms"]] > min(prior_amb_adv_ms)) }
+\(P(\beta \geq 22\,ms ) = 
+    \Sexpr{ mean(stats_spr$samples_spr_spillover[["delta_n1attachment_m_amb_ms"]] > min(prior_amb_adv_ms)) }
   \)
 at the spill-over region.
 
+Figure \ref{fig:EyeBFs2} shows Bayes Factors for the absence of a difference between ambiguous and N1 attachment conditions.
+The analysis shows a moderate amount of evidence against a model with a $N(0, 0.2)$ prior for the difference between ambiguous and N1 attachment, as well as against a model with a $N(0, 0.1)$ prior. While the evidence against models with the priors $N(0, 0.05)$ and $N(0, 0.02)$ is weaker, it points in the same direction.
+
+
 \subsection{Discussion}
 
-We found an across-the-board slowdown in relative clause attachment conditions compared to the control conditions, which likely reflects the increased processing difficulty associated with the processing and attachment of relative clauses, compared to adjectives. While we did not find strong evidence for a slowdown at N2 in NP2 attachment sentences, the finding of an effect in the range of
-\Sexpr{ effect_ci90(p=p, coef="N2 attachment - ambiguous", fmt="%0.0f", model="noun 2")}
-(90\% CrI) was consistent with the slowdown in NP2 attachment sentences in RPD at N2 in experiment 1, which was in the range of
-\Sexpr{ effect_ci90(p=p_rpd, model="noun 2", coef="N2 attachment - ambiguous", fmt="%0.1f") }´ (90\% CrI) for RPD. As in experiment 1, this slowdown likely reflects late RC attachment in the NP2 attachment condition. The speedup at N2 in NP1 attachment sentences relative to ambiguous sentences suggests that the parser may \emph{sometimes} consider attaching the RC to NP2 in ambiguous conditions, but not in NP1 attachment conditions. As a result, reading may be slowed in ambiguous conditions, compared to their unambiguous counterparts.
+We found an across-the-board slowdown in relative clause attachment conditions compared to the control conditions, which likely reflects the increased processing difficulty associated with the processing and attachment of relative clauses, compared to adjectives. We further found evidence for a slowdown at N2 and the spill-over region in NP2 attachment sentences. As in experiment 1, this finding likely reflects late RC attachment in the NP2 attachment condition. 
+%The speedup at N2 in NP1 attachment sentences relative to ambiguous sentences suggests that the parser may \emph{sometimes} consider attaching the RC to NP2 in ambiguous conditions, but not in NP1 attachment conditions. As a result, reading may be slowed in ambiguous conditions, compared to their unambiguous counterparts.
 
 Importantly, our data did not indicate the presence of an ambiguity advantage. We had hypothesized that such an effect would occur either at N2 or at the spillover position. The posterior probability of an ambiguity advantage of the expected magnitude at N2 was very low
-($\Sexpr{ mean(samples_spr_np2[["delta_n1attachment_m_amb_ms"]] > min(prior_amb_adv_ms)) }$), and while it was noteworthy at the spill-over region
-($\Sexpr{ mean(samples_spr_spillover[["delta_n1attachment_m_amb_ms"]] > min(prior_amb_adv_ms)) }$), its magnitude at the spill-over region would need to compensate for the NP1 attachment speedup in order to yield a net ambiguity advantage.
+($\Sexpr{ sprintf("%0.3f", mean(stats_spr$samples_spr_np2[["delta_n1attachment_m_amb_ms"]] > min(prior_amb_adv_ms))) }$), and 
+% to-do: XXX from here!
+preferred it was noteworthy at the spill-over region ($\Sexpr{ mean(stats_spr$samples_spr_spillover[["delta_n1attachment_m_amb_ms"]] > min(prior_amb_adv_ms)) }$).
 
 
+%Importantly, our data did not indicate the presence of an ambiguity advantage. We had hypothesized that such an effect would occur either at N2 or at the spillover position. The posterior probability of an ambiguity advantage of the expected magnitude at N2 was very low
+($\Sexpr{ sprintf("%0.3f", mean(stats_spr$samples_spr_np2[["delta_n1attachment_m_amb_ms"]] > min(prior_amb_adv_ms))) }$), and while it was noteworthy at the spill-over region
+($\Sexpr{ mean(stats_spr$samples_spr_spillover[["delta_n1attachment_m_amb_ms"]] > min(prior_amb_adv_ms)) }$), its magnitude at the spill-over region would need to compensate for the NP1 attachment speedup in order to yield a net ambiguity advantage.
 
 \section{General Discussion}
 
@@ -1149,10 +770,9 @@ Importantly, race-based models such as the SMCM \citep{LogacevVasishth:2016} do 
 
 
 
-\hypertarget{conclusion}{%
-\section{Conclusion}\label{conclusion}}
+\section{Conclusion}
 
-Here, we proposed two different interpretations of the Swets et al. (2008) strategic underspecification account and discussed how the admbiguity advantage follows from their specific sets of assumptions.  
+Here, we proposed two different interpretations of the Swets et al. (2008) strategic underspecification account and discussed how the ambiguity advantage follows from their specific sets of assumptions.  
 We argued that in contrast to race-based theories, both implementations of the strategic underspecification account predict an ambiguity advantage not only in languages with postnominal RC, like English, but also in languages with prenominal RC, such as Turkish.
 We further presented the results of two reading time experiments which failed to show an ambiguity advantage comparable in magnitude with previously attested instances of the ambiguity advantage. 
 We argue that our findings present a major challenge for the strategic underspecification account, but are compatible with race-based models such as the SMCM.
@@ -1161,14 +781,6 @@ We argue that our findings present a major challenge for the strategic underspec
 \bibliography{library.bib}
 
 
-% # Appendix
-% ```{r sprModelPlotAppendix, eval=F, results='asis', fig.height = 2, fig.cap="Estimates and $90\%$ credible intervals (thin lines) as well as $80\%$ credible intervals (thick lines) for the effect (in log-units) of unambiguous RC attachment relative to ambiguous attachment on reading times at the critical regions. The posterior probability that the parameter is smaller than (or larger than) zero is larger than $0.9$ if the $80\%$ credible interval excludes zero, and larger than $0.95$ if the $90\%$ credible interval excludes zero."}
-% 
-% suppressWarnings({
-%   print(p_exp2_coef_appendix)
-% })
-% 
-% ```
 
 
 \end{document}

@@ -20,6 +20,15 @@ library(magrittr)
 library(brms)
 library(ggplot2)
 
+remove_intercept_variance <- function(m) {
+  n_chains <- length(m$fit@sim$samples)
+  b_Intercept <- sapply(1:n_chains, function(i) { m$fit@sim$samples[[i]][["b_Intercept"]] } ) %>% median
+  for (i in 1:n_chains) {
+    m$fit@sim$samples[[i]][["b_Intercept"]] <- b_Intercept
+  }
+  m
+}
+
 # TODO: Figure out how to treat missing data in this function
 # TODO: Make sure this is strictly a within-participants design. Strange things happen to the means if
 #       one tries to process two experiments at once, even if the experiment is used as a grouping factor in the group argument
@@ -291,12 +300,12 @@ create_model_coefs_plot <- function(m,
     p <- p + geom_vline(xintercept = 0, color = "grey")
   }
   p <- p + geom_point() + 
-    geom_errorbarh(aes(xmin = lower90, xmax = upper90), height=0) + 
-    geom_errorbarh(aes(xmin = lower80, xmax = upper80), size = 1.5, height=0)
+    geom_errorbarh(aes(xmin = lower95, xmax = upper95), height=0) + 
+    geom_errorbarh(aes(xmin = lower90, xmax = upper90), size = 1.5, height=0)
   
   if (plot_stats)
   {
-    tbl$xmax <- with(tbl, max(c(Estimate, lower90, upper90))) + x_stat_adjust
+    tbl$xmax <- with(tbl, max(c(Estimate, lower95, upper95))) + x_stat_adjust
     
     p <- p + scale_y_discrete(expand = expansion(mult = c(.05, .15*expand_top), add = c(0, 0)) )
     p <- p + scale_x_continuous(expand = expansion(mult = c(.05, .15*expand_right),  add = c(0, 0)) )
